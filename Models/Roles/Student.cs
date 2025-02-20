@@ -5,7 +5,7 @@ namespace EdufyAPI.Models.Roles
     public class Student : User
     {
         // List of courses the student is enrolled in
-        public virtual List<Course> EnrolledCourses { get; set; } = new List<Course>();
+        public virtual List<StudentCourse> EnrolledCourses { get; set; } = new List<StudentCourse>(); // Many-to-Many
 
         // List of progress records tracking student advancement in courses
         public virtual List<Progress> ProgressRecords { get; set; } = new List<Progress>();

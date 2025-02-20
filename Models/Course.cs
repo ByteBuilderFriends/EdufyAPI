@@ -38,5 +38,9 @@ namespace EdufyAPI.Models
         [ForeignKey("Instructor")]
         public int InstructorId { get; set; }
         public Instructor Instructor { get; set; }
+
+
+        // Many-to-Many
+        public virtual List<StudentCourse> StudentCourses { get; set; } = new List<StudentCourse>();
     }
 }
