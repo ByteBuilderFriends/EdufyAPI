@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using EdufyAPI.Models.Roles;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EdufyAPI.Models
 {
@@ -30,5 +32,11 @@ namespace EdufyAPI.Models
         /// Tracks students' progress in the course.
         /// </summary>
         public virtual List<Progress> CourseProgress { get; set; } = new List<Progress>();
+
+        // Foreign Key - Instructor
+
+        [ForeignKey("Instructor")]
+        public int InstructorId { get; set; }
+        public Instructor Instructor { get; set; }
     }
 }
