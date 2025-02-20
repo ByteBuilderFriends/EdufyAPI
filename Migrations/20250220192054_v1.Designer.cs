@@ -4,6 +4,7 @@ using EdufyAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EdufyAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250220192054_v1")]
+    partial class v1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -54,19 +57,19 @@ namespace EdufyAPI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "1ec40b0b-3c82-4096-adb1-d0499fb33402",
+                            Id = "42d48e0a-26ce-4767-821a-c59945bab704",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "4f9c1556-67c5-4f93-8e07-e68da79d954e",
+                            Id = "3883e269-ae43-4090-acd6-be6571431f24",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "af243fd6-29fb-451f-bd65-55cce3f07886",
+                            Id = "12beac71-7482-4788-80d2-2a24137bc324",
                             Name = "SuperAdmin",
                             NormalizedName = "SUPERADMIN"
                         });
