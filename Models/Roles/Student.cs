@@ -1,10 +1,14 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 
 namespace EdufyAPI.Models.Roles
 {
     public class Student : IdentityUser
     {
+        [Required]
         public string FirstName { get; set; }
+
+        [Required]
         public string LastName { get; set; }
         public DateTime? DateOfBirth { get; set; }
         public string ProfilePictureUrl { get; set; }

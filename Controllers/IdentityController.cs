@@ -3,6 +3,7 @@ using EdufyAPI.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Mail;
 using System.Security.Claims;
@@ -69,9 +70,20 @@ namespace EdufyAPI.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var user = await _userManager.FindByEmailAsync(model.Email);
+            // Determine if the input is an email
+            bool isEmail = new EmailAddressAttribute().IsValid(model.Email);
+
+            // Retrieve the user using email or username
+            var user = isEmail
+                ? await _userManager.FindByEmailAsync(model.Email)
+                : await _userManager.FindByNameAsync(model.Email);
+
             if (user == null)
                 return Unauthorized(new { Message = "Invalid credentials" });
+
+            // Sign in the user with Email or username
+            //var username = new EmailAddressAttribute().IsValid(model.Email) ? new MailAddress(model.Email).User : model.Email;
+
 
             var result = await _signInManager.PasswordSignInAsync(user, model.Password, false, false);
             if (!result.Succeeded)

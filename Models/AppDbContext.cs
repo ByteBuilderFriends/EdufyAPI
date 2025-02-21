@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace EdufyAPI.Models
 {
     // You can Change DbContext to your desired name
-    public class AppDbContext : IdentityDbContext
+    public class AppDbContext : IdentityDbContext // Check This later, it had no IdentityUser
     {
         public AppDbContext()
         {
