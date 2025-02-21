@@ -1,4 +1,5 @@
-﻿using EdufyAPI.Models.Roles;
+﻿using EduConnectAPI.Models;
+using EdufyAPI.Models.Roles;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -28,6 +29,8 @@ namespace EdufyAPI.Models
         public DbSet<Answer> Answers { get; set; }
         public DbSet<QuizResult> QuizResults { get; set; }
         public DbSet<StudentAnswer> StudentAnswer { get; set; }
+        public DbSet<Certificate> Certificate { get; set; }
+
         #endregion
 
         override protected void OnModelCreating(ModelBuilder modelBuilder)

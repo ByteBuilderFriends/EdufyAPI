@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using EduConnectAPI.Models;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EdufyAPI.Models
 {
@@ -32,6 +33,7 @@ namespace EdufyAPI.Models
 
         /// The list of quiz results related to this course progress.
         public virtual List<QuizResult> QuizResults { get; set; } = new List<QuizResult>();
+        public virtual Certificate Certificate { get; set; }
         #endregion
 
 
