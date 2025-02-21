@@ -25,6 +25,15 @@ namespace EdufyAPI.Models
             }
         }
 
+        // Grant a certificate to the student when they complete the course.
+
+        #region Certificate Generation
+        public bool IsCompleted => LessonCompletionRate == 100;
+
+        public bool IsCertified => Certificate != null;
+
+        public string? CertificateNumber => Certificate?.CertificateNumber;
+        #endregion
 
         #region Relationships
         [ForeignKey("Course")]

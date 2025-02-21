@@ -1,10 +1,11 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
+﻿using AutoMapper;
 using EdufyAPI.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace EdufyAPI.Controllers
 {
@@ -18,15 +19,17 @@ namespace EdufyAPI.Controllers
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly IConfiguration _config;
+        private readonly IMapper _mapper;
 
         /// <summary>
         /// Constructor to initialize IdentityController with dependency injection.
         /// </summary>
-        public IdentityController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IConfiguration config)
+        public IdentityController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IConfiguration config, IMapper mapper)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _config = config;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -45,6 +48,10 @@ namespace EdufyAPI.Controllers
 
             if (!result.Succeeded)
                 return BadRequest(result.Errors);
+
+            var studentRole = await _userManager.AddToRoleAsync(user, "Student");
+            if (!studentRole.Succeeded)
+                return BadRequest(studentRole.Errors);
 
             return Ok(new { Message = "User registered successfully!" });
         }
@@ -113,5 +120,8 @@ namespace EdufyAPI.Controllers
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
+
+
+
     }
 }

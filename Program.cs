@@ -1,4 +1,4 @@
-using System.Text;
+using EdufyAPI.DTOs;
 using EdufyAPI.Models;
 using EdufyAPI.Repository;
 using EdufyAPI.Repository.Interfaces; // Add the namespace for repositories
@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -96,6 +97,7 @@ builder.Services.AddAuthentication(options =>
 // 🔹 Register UnitOfWork and Generic Repository for dependency injection
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+builder.Services.AddAutoMapper(typeof(AutoMapperProfiles)); // Register AutoMapper
 #endregion
 
 
