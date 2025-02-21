@@ -98,6 +98,7 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles)); // Register AutoMapper
+//builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 #endregion
 
 
