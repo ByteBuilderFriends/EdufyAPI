@@ -1,20 +1,24 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.AspNetCore.Identity;
 
 namespace EdufyAPI.Models.Roles
 {
-    public class Student : User
+    public class Student : IdentityUser
     {
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public DateTime? DateOfBirth { get; set; }
+        public string ProfilePictureUrl { get; set; }
+        public bool IsActive { get; set; } = true;
+        public DateTime? LastLoginTime { get; set; }
+        public int FailedLoginAttempts { get; set; } = 0;
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime? UpdatedAt { get; set; }
+        public DateTime? DeletedAt { get; set; }
+
+        #region Relationships
         // List of courses the student is enrolled in
-        public virtual List<StudentCourse> EnrolledCourses { get; set; } = new List<StudentCourse>(); // Many-to-Many
+        public virtual List<StudentCourse> StudentCourses { get; set; } = new List<StudentCourse>(); // Many-to-Many
+        #endregion
 
-        // List of progress records tracking student advancement in courses
-        public virtual List<Progress> ProgressRecords { get; set; } = new List<Progress>();
-
-        // List of quiz results showing past quiz performance
-        public virtual List<QuizResult> QuizResults { get; set; } = new List<QuizResult>();
-
-        // Auto-calculated property to get overall average score from all quizzes
-        [NotMapped]
-        public double AverageQuizScore => QuizResults.Any() ? QuizResults.Average(q => q.Score) : 0;
     }
 }

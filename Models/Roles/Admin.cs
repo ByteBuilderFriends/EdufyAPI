@@ -1,10 +1,18 @@
-﻿namespace EdufyAPI.Models.Roles
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace EdufyAPI.Models.Roles
 {
-    public class Admin : User
+    public class Admin : IdentityUser
     {
-        // Add your custom properties here
-        public DateTime? LastSupervisedLogin { get; set; } // Track admin logins
-        public bool CanManageUsers { get; set; } = true; // Admin permissions
-        public bool CanViewReports { get; set; } = true; // Example privilege
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public DateTime? DateOfBirth { get; set; }
+        public string ProfilePictureUrl { get; set; }
+        public bool IsActive { get; set; } = true;
+        public DateTime? LastLoginTime { get; set; }
+        public int FailedLoginAttempts { get; set; } = 0;
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime? UpdatedAt { get; set; }
+        public DateTime? DeletedAt { get; set; }
     }
 }

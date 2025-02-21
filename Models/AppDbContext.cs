@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using EdufyAPI.Models.Roles;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,39 +17,58 @@ namespace EdufyAPI.Models
         }
 
         #region DbSets
-        // Add your DbSets here
+        public DbSet<Admin> Admins { get; set; }
+        public DbSet<Student> Students { get; set; }
+        public DbSet<Instructor> Instructors { get; set; }
+        public DbSet<Course> Courses { get; set; }
+        public DbSet<Lesson> Lessons { get; set; }
+        public DbSet<Progress> Progresses { get; set; }
+        public DbSet<Quiz> Quizzes { get; set; }
+        public DbSet<Question> Questions { get; set; }
+        public DbSet<Answer> Answers { get; set; }
+        public DbSet<QuizResult> QuizResults { get; set; }
+        public DbSet<StudentAnswer> StudentAnswer { get; set; }
         #endregion
 
         override protected void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
             #region Roles Seed
-            modelBuilder.Entity<IdentityRole>(entity =>
-            {
-                // Add Admin Role
-                entity.HasData(new IdentityRole
+            modelBuilder.Entity<IdentityRole>().HasData(
+                new IdentityRole
                 {
+                    Id = "1", // Static GUID or hardcoded value
                     Name = "Admin",
                     NormalizedName = "ADMIN"
-                });
-
-                // Add User Role
-                entity.HasData(new IdentityRole
+                },
+                new IdentityRole
                 {
-                    Name = "User",
-                    NormalizedName = "USER"
-                });
-
-                // Add SuperAdmin Role
-                entity.HasData(new IdentityRole
+                    Id = "2",
+                    Name = "Instructor",
+                    NormalizedName = "INSTRUCTOR"
+                },
+                new IdentityRole
                 {
-                    Name = "SuperAdmin",
-                    NormalizedName = "SUPERADMIN"
-                });
-            });
+                    Id = "3",
+                    Name = "Student",
+                    NormalizedName = "STUDENT"
+                }
+            );
             #endregion
+            modelBuilder.Entity<StudentCourse>(entity =>
+                {
+                    entity.HasKey(sc => new { sc.StudentId, sc.CourseId });
 
-            // Add your model configurations here
+                    entity.HasOne(sc => sc.Student)
+                          .WithMany(s => s.StudentCourses)
+                          .HasForeignKey(sc => sc.StudentId)
+                          .OnDelete(DeleteBehavior.Restrict);
+
+                    entity.HasOne(sc => sc.Course)
+                          .WithMany(c => c.StudentCourses)
+                          .HasForeignKey(sc => sc.CourseId)
+                          .OnDelete(DeleteBehavior.Restrict);
+                });
         }
     }
 }
