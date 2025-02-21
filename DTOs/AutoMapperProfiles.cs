@@ -2,6 +2,7 @@
 using EduConnectAPI.Models;
 using EdufyAPI.DTOs.CertificateDTOs;
 using EdufyAPI.DTOs.CourseDTOs;
+using EdufyAPI.DTOs.LessonDTOs;
 using EdufyAPI.DTOs.StudentDTOs;
 using EdufyAPI.Models;
 using EdufyAPI.Models.Roles;
@@ -12,12 +13,22 @@ namespace EdufyAPI.DTOs
     {
         public AutoMapperProfiles()
         {
+            //The Recommended order for AutoMapper configurations, in terms of Entity and DTO is:
+            //Entity → ReadDTO: Because you're reading data from the database to send to the client.
+            //CreateDTO → Entity: Because you receive data from the client and map it to a new entity to save in the database.
+            //UpdateDTO → Entity: Because you receive updated data from the client to modify an existing entity.
+
+            #region Certificate AutoMapper
             CreateMap<Certificate, GetCertificateDTO>(); // Map GenerateStudentCertificateDTO to Certificate
             CreateMap<GetCertificateDTO, Certificate>();
+            #endregion
 
+            #region Student AutoMapper
             CreateMap<CreateStudentDTO, Student>(); // Map CreateStudentDTO to Student
             CreateMap<Student, CreateStudentDTO>();
+            #endregion
 
+            #region Course AutoMapper
             //It checks if the Instructor is not null.
             //If true, it concatenates FirstName and LastName with a space in between.
             //If Instructor is null, it sets InstructorName to "Unknown".
@@ -29,6 +40,14 @@ namespace EdufyAPI.DTOs
                                : "Unknown"));
             CreateMap<CourseCreateDTO, Course>();
             CreateMap<CourseUpdateDTO, Course>();
+            #endregion
+
+            #region Lesson AutoMapper
+            CreateMap<Lesson, LessonReadDTO>();
+            CreateMap<LessonCreateDTO, Lesson>();
+            CreateMap<LessonUpdateDTO, Lesson>();
+            #endregion
+
         }
     }
 }

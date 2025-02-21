@@ -31,7 +31,7 @@ namespace EdufyAPI.Controllers
 
         // ✅ GET: api/Course/{id}
         [HttpGet("{id}")]
-        public async Task<ActionResult<CourseReadDTO>> GetCourse(int id)
+        public async Task<ActionResult<CourseReadDTO>> GetCourseById(int id)
         {
             var course = await _unitOfWork.CourseRepository.GetByIdAsync(id);
 
@@ -53,7 +53,7 @@ namespace EdufyAPI.Controllers
             await _unitOfWork.SaveChangesAsync();
 
             var courseReadDto = _mapper.Map<CourseReadDTO>(course);
-            return CreatedAtAction(nameof(GetCourse), new { id = course.Id }, courseReadDto);
+            return CreatedAtAction(nameof(GetCourseById), new { id = course.Id }, courseReadDto);
         }
 
         // ✅ PUT: api/Course/{id}
