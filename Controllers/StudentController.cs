@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using EdufyAPI.Models.Roles;
-using EdufyAPI.Repository;
+using EdufyAPI.Repository.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,9 +8,9 @@ namespace EdufyAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class StudentController(UnitOfWork unitOfWork, IMapper mapper, UserManager<Student> userManager, SignInManager<Student> signInManager) : ControllerBase
+    public class StudentController(IUnitOfWork unitOfWork, IMapper mapper, UserManager<Student> userManager, SignInManager<Student> signInManager) : ControllerBase
     {
-        private readonly UnitOfWork _unitOfWork = unitOfWork;
+        private readonly IUnitOfWork _unitOfWork = unitOfWork;
         private readonly IMapper _mapper = mapper;
         private readonly UserManager<Student> _userManager = userManager;
         private readonly SignInManager<Student> _signInManager = signInManager;

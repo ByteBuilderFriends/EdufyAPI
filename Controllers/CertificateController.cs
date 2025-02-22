@@ -1,16 +1,16 @@
 ﻿using AutoMapper;
 using EduConnectAPI.Models;
 using EdufyAPI.DTOs.CertificateDTOs;
-using EdufyAPI.Repository;
+using EdufyAPI.Repository.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EdufyAPI.Controllers
 {
     [Route("api/[controller]/[Action]")]
     [ApiController]
-    public class CertificateController(UnitOfWork unitOfWork, IMapper mapper) : ControllerBase
+    public class CertificateController(IUnitOfWork unitOfWork, IMapper mapper) : ControllerBase
     {
-        private readonly UnitOfWork _unitOfWork = unitOfWork;
+        private readonly IUnitOfWork _unitOfWork = unitOfWork;
         private readonly IMapper _mapper = mapper;
 
         // Create a new certificate for a student who has completed a course.
