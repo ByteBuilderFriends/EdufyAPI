@@ -8,18 +8,20 @@ namespace EdufyAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class StudentController(IUnitOfWork unitOfWork, IMapper mapper, UserManager<Student> userManager, SignInManager<Student> signInManager) : ControllerBase
+    public class StudentController(
+        IUnitOfWork unitOfWork,
+        IMapper mapper,
+        UserManager<AppUser> userManager) : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
         private readonly IMapper _mapper = mapper;
-        private readonly UserManager<Student> _userManager = userManager;
-        private readonly SignInManager<Student> _signInManager = signInManager;
+        private readonly UserManager<AppUser> _userManager = userManager;
 
         // Get all students.
         [HttpGet]
         public async Task<IActionResult> GetSAllStudents()
         {
-            var students = await _unitOfWork.StudentRepository.GetAllAsync();
+            var students = await _userManager.GetUsersInRoleAsync("Student");
 
             if (students == null || !students.Any())
             {
@@ -31,12 +33,9 @@ namespace EdufyAPI.Controllers
 
         // Get a student by their unique identifier.
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetStudentById(int id)
+        public async Task<IActionResult> GetStudentById(string id)
         {
-            if (id == 0)
-            {
-                return BadRequest("Student Id is required");
-            }
+
             var student = await _unitOfWork.StudentRepository.GetByIdAsync(id);
             if (student == null)
             {

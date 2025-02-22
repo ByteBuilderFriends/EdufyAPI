@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace EdufyAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class Started : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -32,46 +32,18 @@ namespace EdufyAPI.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
                     Discriminator = table.Column<string>(type: "nvarchar(13)", maxLength: 13, nullable: false),
-                    Admin_FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Admin_LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Admin_DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Admin_ProfilePictureUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Admin_IsActive = table.Column<bool>(type: "bit", nullable: true),
-                    Admin_LastLoginTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Admin_FailedLoginAttempts = table.Column<int>(type: "int", nullable: true),
-                    Admin_CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Admin_UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Admin_DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Instructor_FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Instructor_LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Instructor_DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Instructor_ProfilePictureUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Instructor_IsActive = table.Column<bool>(type: "bit", nullable: true),
-                    Instructor_LastLoginTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Instructor_FailedLoginAttempts = table.Column<int>(type: "int", nullable: true),
-                    Instructor_CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Instructor_UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Instructor_DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ProfilePictureUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: true),
-                    LastLoginTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    FailedLoginAttempts = table.Column<int>(type: "int", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
                     PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
                     TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
@@ -296,6 +268,28 @@ namespace EdufyAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Certificate",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CertificateNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IssueDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Remarks = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ProgressId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Certificate", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Certificate_Progresses_ProgressId",
+                        column: x => x.ProgressId,
+                        principalTable: "Progresses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "QuizResults",
                 columns: table => new
                 {
@@ -431,6 +425,12 @@ namespace EdufyAPI.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Certificate_ProgressId",
+                table: "Certificate",
+                column: "ProgressId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Courses_InstructorId",
                 table: "Courses",
                 column: "InstructorId");
@@ -492,6 +492,9 @@ namespace EdufyAPI.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Certificate");
 
             migrationBuilder.DropTable(
                 name: "StudentAnswer");

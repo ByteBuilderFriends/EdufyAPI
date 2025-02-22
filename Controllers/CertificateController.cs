@@ -17,9 +17,9 @@ namespace EdufyAPI.Controllers
 
         // !NOTE: I need to check if it's better to use Progress Object or ProgressId
         [HttpPost]
-        public async Task<IActionResult> AutoGenerateCertificate(int progressId)
+        public async Task<IActionResult> AutoGenerateCertificate(string progressId)
         {
-            if (progressId == 0)
+            if (progressId == "")
             {
                 return BadRequest("Progress Id is required");
             }
@@ -55,12 +55,9 @@ namespace EdufyAPI.Controllers
 
         // Get a certificate by its unique identifier.
         [HttpGet]
-        public async Task<IActionResult> GetCertificateById(int id)
+        public async Task<IActionResult> GetCertificateById(string id)
         {
-            if (id == 0)
-            {
-                return BadRequest("Certificate Id is required");
-            }
+
             var certificate = await _unitOfWork.CertificateRepository.GetByIdAsync(id);
             if (certificate == null)
             {
@@ -89,9 +86,9 @@ namespace EdufyAPI.Controllers
 
         // Update a certificate's remarks.
         [HttpPut]
-        public async Task<IActionResult> UpdateCertificateRemarks(int id, string remarks)
+        public async Task<IActionResult> UpdateCertificateRemarks(string id, string remarks)
         {
-            if (id == 0)
+            if (id == "")
             {
                 return BadRequest("Certificate Id is required");
             }

@@ -1,5 +1,6 @@
 using EdufyAPI.DTOs;
 using EdufyAPI.Models;
+using EdufyAPI.Models.Roles;
 using EdufyAPI.Repository;
 using EdufyAPI.Repository.Interfaces; // Add the namespace for repositories
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -61,7 +62,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 #region Identity
 
 // 🔹 Configure Identity with roles
-builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+builder.Services.AddIdentity<AppUser, IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
 
@@ -98,7 +99,6 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles)); // Register AutoMapper
-//builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 #endregion
 
 

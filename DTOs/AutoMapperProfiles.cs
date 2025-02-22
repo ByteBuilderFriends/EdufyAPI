@@ -7,6 +7,7 @@ using EdufyAPI.DTOs.ProgressDTOs;
 using EdufyAPI.DTOs.StudentDTOs;
 using EdufyAPI.Models;
 using EdufyAPI.Models.Roles;
+using EdufyAPI.ViewModels;
 
 namespace EdufyAPI.DTOs
 {
@@ -53,6 +54,13 @@ namespace EdufyAPI.DTOs
             CreateMap<Progress, ProgressReadDTO>();
             CreateMap<ProgressCreateDTO, Progress>();
             CreateMap<ProgressUpdateDTO, Progress>();
+            #endregion
+
+            #region Student AutoMapper
+
+            CreateMap<Student, RegisterViewModel>();
+            CreateMap<RegisterViewModel, Student>();
+
             #endregion
         }
     }

@@ -28,7 +28,7 @@ public class ProgressController : ControllerBase
 
     // ✅ Get progress by Id
     [HttpGet("{id}")]
-    public async Task<ActionResult<ProgressReadDTO>> GetProgressById(int id)
+    public async Task<ActionResult<ProgressReadDTO>> GetProgressById(string id)
     {
         var progress = await _unitOfWork.ProgressRepository.GetByIdAsync(id);
         if (progress == null) return NotFound();
@@ -39,7 +39,7 @@ public class ProgressController : ControllerBase
 
     // ✅ Get progress by Student Id
     [HttpGet("ByStudent/{studentId}")]
-    public async Task<ActionResult<IEnumerable<ProgressReadDTO>>> GetProgressByStudentId(int studentId)
+    public async Task<ActionResult<IEnumerable<ProgressReadDTO>>> GetProgressByStudentId(string studentId)
     {
         var progresses = await _unitOfWork.ProgressRepository.GetAllAsync();
         var filteredProgresses = progresses.Where(p => p.CourseId == studentId).ToList();
@@ -49,7 +49,7 @@ public class ProgressController : ControllerBase
 
     // ✅ Get progress by Course Id
     [HttpGet("ByCourse/{courseId}")]
-    public async Task<ActionResult<IEnumerable<ProgressReadDTO>>> GetProgressByCourseId(int courseId)
+    public async Task<ActionResult<IEnumerable<ProgressReadDTO>>> GetProgressByCourseId(string courseId)
     {
         var progresses = await _unitOfWork.ProgressRepository.GetAllAsync();
         var filteredProgresses = progresses.Where(p => p.CourseId == courseId).ToList();
@@ -74,7 +74,7 @@ public class ProgressController : ControllerBase
 
     // ✅ Update progress
     [HttpPut("{id}")]
-    public async Task<ActionResult> UpdateProgress(int id, [FromBody] ProgressUpdateDTO dto)
+    public async Task<ActionResult> UpdateProgress(string id, [FromBody] ProgressUpdateDTO dto)
     {
         if (!ModelState.IsValid) return BadRequest(ModelState);
 
@@ -90,7 +90,7 @@ public class ProgressController : ControllerBase
 
     // ✅ Delete progress
     [HttpDelete("{id}")]
-    public async Task<ActionResult> DeleteProgress(int id)
+    public async Task<ActionResult> DeleteProgress(string id)
     {
         var deleted = await _unitOfWork.ProgressRepository.DeleteAsync(id);
         if (!deleted) return NotFound();
@@ -101,7 +101,7 @@ public class ProgressController : ControllerBase
 
     // ✅ Mark progress as completed
     [HttpPut("MarkAsCompleted/{id}")]
-    public async Task<ActionResult> MarkProgressAsCompleted(int id)
+    public async Task<ActionResult> MarkProgressAsCompleted(string id)
     {
         var progress = await _unitOfWork.ProgressRepository.GetByIdAsync(id);
         if (progress == null) return NotFound();

@@ -29,7 +29,7 @@ namespace EdufyAPI.Controllers
 
         // GET: api/Lesson/{id}
         [HttpGet("{id}")]
-        public async Task<ActionResult<LessonReadDTO>> GetLessonByID(int id)
+        public async Task<ActionResult<LessonReadDTO>> GetLessonByID(string id)
         {
             var lesson = await _unitOfWork.LessonRepository.GetByIdAsync(id);
             if (lesson == null) return NotFound();
@@ -48,7 +48,7 @@ namespace EdufyAPI.Controllers
 
         // PUT: api/Lesson/{id}
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateLesson(int id, LessonUpdateDTO updateLessonDto)
+        public async Task<IActionResult> UpdateLesson(string id, LessonUpdateDTO updateLessonDto)
         {
             var lesson = await _unitOfWork.LessonRepository.GetByIdAsync(id);
             if (lesson == null) return NotFound();
@@ -60,7 +60,7 @@ namespace EdufyAPI.Controllers
 
         // DELETE: api/Lesson/{id}
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteLesson(int id)
+        public async Task<IActionResult> DeleteLesson(string id)
         {
             var result = await _unitOfWork.LessonRepository.DeleteAsync(id);
             if (result == null) return NotFound();

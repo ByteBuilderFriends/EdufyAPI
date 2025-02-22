@@ -31,7 +31,7 @@ namespace EdufyAPI.Controllers
 
         // ✅ GET: api/Course/{id}
         [HttpGet("{id}")]
-        public async Task<ActionResult<CourseReadDTO>> GetCourseById(int id)
+        public async Task<ActionResult<CourseReadDTO>> GetCourseById(string id)
         {
             var course = await _unitOfWork.CourseRepository.GetByIdAsync(id);
 
@@ -58,7 +58,7 @@ namespace EdufyAPI.Controllers
 
         // ✅ PUT: api/Course/{id}
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCourse(int id, CourseUpdateDTO courseUpdateDto)
+        public async Task<IActionResult> UpdateCourse(string id, CourseUpdateDTO courseUpdateDto)
         {
             var existingCourse = await _unitOfWork.CourseRepository.GetByIdAsync(id);
 
@@ -76,7 +76,7 @@ namespace EdufyAPI.Controllers
 
         // ✅ DELETE: api/Course/{id}
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCourse(int id)
+        public async Task<IActionResult> DeleteCourse(string id)
         {
             var result = await _unitOfWork.CourseRepository.DeleteAsync(id);
 

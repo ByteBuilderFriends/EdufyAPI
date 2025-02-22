@@ -22,7 +22,7 @@ namespace EdufyAPI.Repository
             return await _dbSet.ToListAsync();
         }
 
-        public async Task<T?> GetByIdAsync(int id)
+        public async Task<T?> GetByIdAsync(string id)
         {
             return await _dbSet.FindAsync(id);
         }
@@ -41,7 +41,7 @@ namespace EdufyAPI.Repository
             return entity;
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(string id)
         {
             var entity = await _dbSet.FindAsync(id);
             if (entity == null) return false;

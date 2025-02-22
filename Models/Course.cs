@@ -6,7 +6,7 @@ namespace EdufyAPI.Models
 {
     public class Course
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
 
         /// The title of the course.
         [Required]

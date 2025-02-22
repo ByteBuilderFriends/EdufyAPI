@@ -6,7 +6,7 @@ namespace EdufyAPI.Models
     /// Represents an individual lesson within a course.
     public class Lesson
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
 
         /// The title of the lesson.
         [Required]
@@ -18,7 +18,7 @@ namespace EdufyAPI.Models
         #region Relationships
         /// Foreign key reference to the course this lesson belongs to.
         [ForeignKey("Course")]
-        public int CourseId { get; set; }
+        public string CourseId { get; set; }
         public virtual Course Course { get; set; }
 
         /// The quiz associated with this lesson.

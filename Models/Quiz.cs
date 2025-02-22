@@ -5,12 +5,12 @@ namespace EdufyAPI.Models
 {
     public class Quiz
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         public int TotalQuestions => Questions.Count; // Derived property for convenience
 
         #region Relationships
         [ForeignKey("Lesson")]
-        public int LessonId { get; set; }
+        public string LessonId { get; set; }
         public virtual Lesson Lesson { get; set; }
 
         public virtual List<Question> Questions { get; set; } = new List<Question>();

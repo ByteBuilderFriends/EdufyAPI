@@ -6,7 +6,7 @@ namespace EdufyAPI.Models
     /// Tracks a student's progress in a course.
     public class Progress
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
 
         /// The total number of lessons completed in the course.
         public int TotalLessonsCompleted { get; set; } = 0;
@@ -37,7 +37,7 @@ namespace EdufyAPI.Models
 
         #region Relationships
         [ForeignKey("Course")]
-        public int CourseId { get; set; }
+        public string CourseId { get; set; }
         public virtual Course Course { get; set; }
 
         /// The list of quiz results related to this course progress.

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EdufyAPI.Models.Roles;
 using EdufyAPI.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -18,15 +19,15 @@ namespace EdufyAPI.Controllers
     [ApiController]
     public class IdentityController : ControllerBase
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly SignInManager<AppUser> _signInManager;
         private readonly IConfiguration _config;
         private readonly IMapper _mapper;
 
         /// <summary>
         /// Constructor to initialize IdentityController with dependency injection.
         /// </summary>
-        public IdentityController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IConfiguration config, IMapper mapper)
+        public IdentityController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IConfiguration config, IMapper mapper)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -46,15 +47,30 @@ namespace EdufyAPI.Controllers
                 return BadRequest(ModelState);
 
             // MailAddress.User is used to take the username part of the email.
-            var user = new IdentityUser { UserName = new MailAddress(model.Email).User, Email = model.Email };
+            var user = new AppUser
+            {
+                UserName = new MailAddress(model.Email).User,
+                Email = model.Email,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                PhoneNumber = model.PhoneNumber
+            };
             var result = await _userManager.CreateAsync(user, model.Password);
 
             if (!result.Succeeded)
                 return BadRequest(result.Errors);
 
             var studentRole = await _userManager.AddToRoleAsync(user, "Student");
+
+            //// Now add to Student table
+            //var student = _mapper.Map<Student>(model);
+
+
+
             if (!studentRole.Succeeded)
                 return BadRequest(studentRole.Errors);
+
+
 
             return Ok(new { Message = "User registered successfully!" });
         }
@@ -125,7 +141,7 @@ namespace EdufyAPI.Controllers
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 }),
                 NotBefore = now,
-                Expires = now.AddMinutes(30),
+                Expires = now.AddDays(30),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256),
                 Issuer = jwtSettings["Issuer"],
                 Audience = jwtSettings["Audience"],

@@ -10,7 +10,7 @@ namespace EdufyAPI.Models
         public virtual Student Student { get; set; }
 
         [ForeignKey("Course")]
-        public int CourseId { get; set; }
+        public string CourseId { get; set; }
         public virtual Course Course { get; set; }
     }
 }

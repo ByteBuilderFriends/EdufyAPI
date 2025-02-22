@@ -7,7 +7,7 @@ namespace EduConnectAPI.Models
     public class Certificate
     {
         //Id is used as the primary key for database efficiency and relationships.
-        public int Id { get; set; }
+        public string Id { get; set; }
 
         // Unique identifier for the certificate, generated as a GUID
         //CertificateNumber provides a user-friendly, unique identifier that can be exposed externally.
@@ -22,7 +22,7 @@ namespace EduConnectAPI.Models
         public string? Remarks { get; set; }
         #region Relationships
         [ForeignKey("Progress")]
-        public int ProgressId { get; set; }
+        public string ProgressId { get; set; }
         public virtual Progress Progress { get; set; }
         #endregion
 
