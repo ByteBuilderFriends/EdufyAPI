@@ -12,7 +12,8 @@ namespace EdufyAPI.Models
         public int TotalLessonsCompleted { get; set; } = 0;
 
         /// Calculates the student's average quiz score in this course.
-        public double AverageScore => QuizResults.Any() ? QuizResults.Average(q => q.Score) : 0;
+        /// NOTE: make quiz resylt PK as int
+        //public double AverageScore => QuizResults.Any() ? QuizResults.Average(q => q.Score) : 0;
 
         /// Returns the percentage of lessons completed in the course.
         public DateTime LastUpdated { get; set; } = DateTime.UtcNow;

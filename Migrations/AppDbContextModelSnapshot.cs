@@ -27,11 +27,8 @@ namespace EdufyAPI.Migrations
 
             modelBuilder.Entity("EduConnectAPI.Models.Certificate", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CertificateNumber")
                         .IsRequired()
@@ -40,8 +37,9 @@ namespace EdufyAPI.Migrations
                     b.Property<DateTime>("IssueDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("ProgressId")
-                        .HasColumnType("int");
+                    b.Property<string>("ProgressId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Remarks")
                         .HasColumnType("nvarchar(max)");
@@ -56,17 +54,15 @@ namespace EdufyAPI.Migrations
 
             modelBuilder.Entity("EdufyAPI.Models.Answer", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("IsCorrect")
                         .HasColumnType("bit");
 
-                    b.Property<int>("QuestionId")
-                        .HasColumnType("int");
+                    b.Property<string>("QuestionId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Text")
                         .IsRequired()
@@ -81,11 +77,8 @@ namespace EdufyAPI.Migrations
 
             modelBuilder.Entity("EdufyAPI.Models.Course", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -108,18 +101,16 @@ namespace EdufyAPI.Migrations
 
             modelBuilder.Entity("EdufyAPI.Models.Lesson", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("CourseId")
-                        .HasColumnType("int");
+                    b.Property<string>("CourseId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -134,14 +125,12 @@ namespace EdufyAPI.Migrations
 
             modelBuilder.Entity("EdufyAPI.Models.Progress", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CourseId")
-                        .HasColumnType("int");
+                    b.Property<string>("CourseId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("LastUpdated")
                         .HasColumnType("datetime2");
@@ -158,14 +147,12 @@ namespace EdufyAPI.Migrations
 
             modelBuilder.Entity("EdufyAPI.Models.Question", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("QuizId")
-                        .HasColumnType("int");
+                    b.Property<string>("QuizId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Text")
                         .IsRequired()
@@ -180,14 +167,12 @@ namespace EdufyAPI.Migrations
 
             modelBuilder.Entity("EdufyAPI.Models.Quiz", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("LessonId")
-                        .HasColumnType("int");
+                    b.Property<string>("LessonId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -199,20 +184,19 @@ namespace EdufyAPI.Migrations
 
             modelBuilder.Entity("EdufyAPI.Models.QuizResult", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CompletedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("ProgressId")
-                        .HasColumnType("int");
+                    b.Property<string>("ProgressId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("Score")
-                        .HasColumnType("int");
+                    b.Property<string>("Score")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -307,14 +291,12 @@ namespace EdufyAPI.Migrations
 
             modelBuilder.Entity("EdufyAPI.Models.StudentAnswer", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("QuizResultId")
-                        .HasColumnType("int");
+                    b.Property<string>("QuizResultId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -328,8 +310,8 @@ namespace EdufyAPI.Migrations
                     b.Property<string>("StudentId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("CourseId")
-                        .HasColumnType("int");
+                    b.Property<string>("CourseId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("StudentId", "CourseId");
 

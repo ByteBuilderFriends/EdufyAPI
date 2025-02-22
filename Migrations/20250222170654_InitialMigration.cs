@@ -165,8 +165,7 @@ namespace EdufyAPI.Migrations
                 name: "Courses",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     InstructorId = table.Column<string>(type: "nvarchar(450)", nullable: false)
@@ -186,11 +185,10 @@ namespace EdufyAPI.Migrations
                 name: "Lessons",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CourseId = table.Column<int>(type: "int", nullable: false)
+                    CourseId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -207,11 +205,10 @@ namespace EdufyAPI.Migrations
                 name: "Progresses",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     TotalLessonsCompleted = table.Column<int>(type: "int", nullable: false),
                     LastUpdated = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CourseId = table.Column<int>(type: "int", nullable: false)
+                    CourseId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -229,7 +226,7 @@ namespace EdufyAPI.Migrations
                 columns: table => new
                 {
                     StudentId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    CourseId = table.Column<int>(type: "int", nullable: false)
+                    CourseId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -252,9 +249,8 @@ namespace EdufyAPI.Migrations
                 name: "Quizzes",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    LessonId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    LessonId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -271,12 +267,11 @@ namespace EdufyAPI.Migrations
                 name: "Certificate",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CertificateNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IssueDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Remarks = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ProgressId = table.Column<int>(type: "int", nullable: false)
+                    ProgressId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -293,11 +288,10 @@ namespace EdufyAPI.Migrations
                 name: "QuizResults",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Score = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Score = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CompletedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ProgressId = table.Column<int>(type: "int", nullable: false)
+                    ProgressId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -314,10 +308,9 @@ namespace EdufyAPI.Migrations
                 name: "Questions",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    QuizId = table.Column<int>(type: "int", nullable: false)
+                    QuizId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -334,9 +327,8 @@ namespace EdufyAPI.Migrations
                 name: "StudentAnswer",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    QuizResultId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    QuizResultId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -353,11 +345,10 @@ namespace EdufyAPI.Migrations
                 name: "Answers",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsCorrect = table.Column<bool>(type: "bit", nullable: false),
-                    QuestionId = table.Column<int>(type: "int", nullable: false)
+                    QuestionId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {

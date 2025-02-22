@@ -22,6 +22,7 @@ namespace EdufyAPI.Controllers
         public async Task<IActionResult> GetSAllStudents()
         {
             var students = await _userManager.GetUsersInRoleAsync("Student");
+            //var students = await _unitOfWork.StudentRepository.GetAllAsync();
 
             if (students == null || !students.Any())
             {
@@ -35,8 +36,9 @@ namespace EdufyAPI.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetStudentById(string id)
         {
+            // Don't forget to return the DTO
 
-            var student = await _unitOfWork.StudentRepository.GetByIdAsync(id);
+            var student = await _userManager.FindByIdAsync(id);
             if (student == null)
             {
                 return NotFound();

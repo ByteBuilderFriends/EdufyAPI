@@ -19,14 +19,14 @@ namespace EdufyAPI.Models
 
     public class Question
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
 
         [Required]
         public string Text { get; set; } = string.Empty;
 
         #region Relationships
         [ForeignKey("Quiz")]
-        public int QuizId { get; set; }
+        public string QuizId { get; set; }
         public virtual Quiz Quiz { get; set; }
 
         public virtual List<Answer> Answers { get; set; } = new List<Answer>();
@@ -36,7 +36,7 @@ namespace EdufyAPI.Models
 
     public class Answer
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
 
         [Required]
         public string Text { get; set; } = string.Empty;
@@ -46,7 +46,7 @@ namespace EdufyAPI.Models
         #region Relationships
 
         [ForeignKey("Question")]
-        public int QuestionId { get; set; }
+        public string QuestionId { get; set; }
         public virtual Question Question { get; set; }
         #endregion
 
@@ -54,10 +54,10 @@ namespace EdufyAPI.Models
 
     public class QuizResult
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
 
         [Required]
-        public int Score { get; set; } // Total score of the quiz attempt
+        public string Score { get; set; } // Total score of the quiz attempt
         public DateTime CompletedAt { get; set; } = DateTime.UtcNow; // Timestamp when the quiz was completed
 
         //public bool IsPassed => Score >= PassingScore; // Auto-calculated based on threshold
@@ -69,7 +69,7 @@ namespace EdufyAPI.Models
 
         #region Relationships
         [ForeignKey("Progress")]
-        public int ProgressId { get; set; }
+        public string ProgressId { get; set; }
         public virtual Progress Progress { get; set; }
         public virtual List<StudentAnswer> StudentAnswers { get; set; } = new List<StudentAnswer>();
         #endregion
@@ -77,14 +77,14 @@ namespace EdufyAPI.Models
 
     public class StudentAnswer
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
 
         //[NotMapped]
         //public bool IsCorrect => Answer?.IsCorrect ?? false; // Automatically determine correctness
 
         #region Relationships
         [ForeignKey("QuizResult")]
-        public int QuizResultId { get; set; }
+        public string QuizResultId { get; set; }
         public virtual QuizResult QuizResult { get; set; }
         #endregion
 
