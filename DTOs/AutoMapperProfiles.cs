@@ -3,6 +3,7 @@ using EduConnectAPI.Models;
 using EdufyAPI.DTOs.CertificateDTOs;
 using EdufyAPI.DTOs.CourseDTOs;
 using EdufyAPI.DTOs.LessonDTOs;
+using EdufyAPI.DTOs.ProgressDTOs;
 using EdufyAPI.DTOs.StudentDTOs;
 using EdufyAPI.Models;
 using EdufyAPI.Models.Roles;
@@ -48,6 +49,11 @@ namespace EdufyAPI.DTOs
             CreateMap<LessonUpdateDTO, Lesson>();
             #endregion
 
+            #region Progress AutoMapper
+            CreateMap<Progress, ProgressReadDTO>();
+            CreateMap<ProgressCreateDTO, Progress>();
+            CreateMap<ProgressUpdateDTO, Progress>();
+            #endregion
         }
     }
 }
