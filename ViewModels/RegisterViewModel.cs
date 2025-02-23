@@ -21,6 +21,10 @@ namespace EdufyAPI.ViewModels
         [Display(Name = "Phone Number")]
         public string PhoneNumber { get; set; }
 
+        [Required]
+        [Display(Name = "Role")]
+        public string Role { get; set; }
+
 
         // will be implemented in the future
         //[Display(Name = "Profile Picture")]
