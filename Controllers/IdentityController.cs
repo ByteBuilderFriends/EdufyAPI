@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
 using EdufyAPI.Models.Roles;
+using EdufyAPI.Repository.Interfaces;
 using EdufyAPI.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
@@ -23,16 +26,24 @@ namespace EdufyAPI.Controllers
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IConfiguration _config;
         private readonly IMapper _mapper;
+        private readonly IUnitOfWork _unitOfWork;
+
 
         /// <summary>
         /// Constructor to initialize IdentityController with dependency injection.
         /// </summary>
-        public IdentityController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IConfiguration config, IMapper mapper)
+        public IdentityController(
+            UserManager<AppUser> userManager,
+            SignInManager<AppUser> signInManager,
+            IConfiguration config,
+            IMapper mapper,
+            IUnitOfWork unitOfWork)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _config = config;
             _mapper = mapper;
+            _unitOfWork = unitOfWork;
         }
 
         /// <summary>
@@ -60,16 +71,24 @@ namespace EdufyAPI.Controllers
             if (!result.Succeeded)
                 return BadRequest(result.Errors);
 
-            var studentRole = await _userManager.AddToRoleAsync(user, "Student");
+            // Assign the selected role (Student or Instructor)
+            var roleAssignment = await _userManager.AddToRoleAsync(user, model.Role);
+            if (!roleAssignment.Succeeded)
+                return BadRequest(roleAssignment.Errors);
 
-            //// Now add to Student table
-            //var student = _mapper.Map<Student>(model);
+            // If user is a student, add to Student table
+            if (model.Role == "Student")
+            {
+                var student = _mapper.Map<Student>(model);
+                await _unitOfWork.StudentRepository.AddAsync(student);
+            }
 
-
-
-            if (!studentRole.Succeeded)
-                return BadRequest(studentRole.Errors);
-
+            // If user is an instructor, add to Instructor table
+            if (model.Role == "Instructor")
+            {
+                var instructor = _mapper.Map<Instructor>(model);
+                await _unitOfWork.InstructorRepository.AddAsync(instructor);
+            }
 
 
             return Ok(new { Message = "User registered successfully!" });
@@ -119,6 +138,16 @@ namespace EdufyAPI.Controllers
             await _signInManager.SignOutAsync();
             return Ok(new { Message = "Logged out successfully!" });
         }
+
+        // Get All Users
+        [HttpGet("Users")]
+        [Authorize("Admin")]
+        public async Task<IActionResult> GetAllUsers()
+        {
+            var users = await _userManager.Users.ToListAsync();
+            return Ok(users);
+        }
+
 
         /// <summary>
         /// Generates a JWT token for the authenticated user.
