@@ -2,8 +2,10 @@
 using EdufyAPI.Models.Roles;
 using EdufyAPI.Repository.Interfaces;
 using EdufyAPI.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
@@ -136,6 +138,16 @@ namespace EdufyAPI.Controllers
             await _signInManager.SignOutAsync();
             return Ok(new { Message = "Logged out successfully!" });
         }
+
+        // Get All Users
+        [HttpGet("Users")]
+        [Authorize("Admin")]
+        public async Task<IActionResult> GetAllUsers()
+        {
+            var users = await _userManager.Users.ToListAsync();
+            return Ok(users);
+        }
+
 
         /// <summary>
         /// Generates a JWT token for the authenticated user.
