@@ -3,90 +3,136 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EdufyAPI.Models
 {
-    public class Quiz
+    // Base class for common properties
+    public abstract class BaseEntity
     {
+        [Key]
         public string Id { get; set; }
-        public int TotalQuestions => Questions.Count; // Derived property for convenience
+
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime? UpdatedAt { get; set; }
+
+        public string CreatedBy { get; set; } = "System";
+        public string? UpdatedBy { get; set; }
+    }
+
+    // 1. Main Quiz class - parent container
+    public class Quiz : BaseEntity
+    {
+        [Required]
+        [MaxLength(100)]
+        public string InternalTitle { get; set; } = string.Empty;
+
+        [NotMapped]
+        public string Title
+        {
+            get => string.IsNullOrEmpty(InternalTitle) ? $"{Lesson?.Title ?? "Untitled"} Quiz" : InternalTitle;
+            set => InternalTitle = string.IsNullOrWhiteSpace(value) ? string.Empty : value.Trim();
+        }
+        //public string Title => string.IsNullOrEmpty(InternalTitle) ? $"{Lesson?.Title ?? "Untitled"} Quiz" : InternalTitle;
+
+        public string? Description { get; set; }
+
+        [Range(0, 100)]
+        public int PassingScore { get; set; } = 50;
+
+        [Range(0, 300)]
+        public int TimeLimit { get; set; } = 0;
+
+        public bool IsActive { get; set; } = true;
+        public bool IsDeleted { get; set; } = false;
+
+        public int TotalQuestions => Questions?.Count ?? 0;
+        public int TotalPoints => Questions?.Sum(q => q.Points) ?? 0;
 
         #region Relationships
         [ForeignKey("Lesson")]
         public string LessonId { get; set; }
         public virtual Lesson Lesson { get; set; }
 
-        public virtual List<Question> Questions { get; set; } = new List<Question>();
+        public virtual List<Question> Questions { get; set; } = new();
         #endregion
     }
 
-    public class Question
+    // 2. Question class - contains the actual questions
+    public class Question : BaseEntity
     {
-        public string Id { get; set; }
-
         [Required]
         public string Text { get; set; } = string.Empty;
+
+        public string? Explanation { get; set; }
+
+        [Range(1, 100)]
+        public int Points { get; set; } = 1;
+
+        public QuestionType Type { get; set; } = QuestionType.SingleChoice;
+
+        public int OrderIndex { get; set; }
 
         #region Relationships
         [ForeignKey("Quiz")]
         public string QuizId { get; set; }
         public virtual Quiz Quiz { get; set; }
 
-        public virtual List<Answer> Answers { get; set; } = new List<Answer>();
+        public virtual List<Answer> Answers { get; set; } = new();
         #endregion
-
     }
 
-    public class Answer
+    // 3. Answer class - possible answers for each question
+    public class Answer : BaseEntity
     {
-        public string Id { get; set; }
-
-        [Required]
         public string Text { get; set; } = string.Empty;
 
         public bool IsCorrect { get; set; } = false;
 
-        #region Relationships
+        public string? Explanation { get; set; }
 
+        public int OrderIndex { get; set; }
+
+        #region Relationships
         [ForeignKey("Question")]
         public string QuestionId { get; set; }
         public virtual Question Question { get; set; }
         #endregion
-
     }
 
-    public class QuizResult
+    // 4. QuizResult class - stores overall quiz attempt results
+    public class QuizResult : BaseEntity
     {
-        public string Id { get; set; }
-
         [Required]
-        public string Score { get; set; } // Total score of the quiz attempt
-        public DateTime CompletedAt { get; set; } = DateTime.UtcNow; // Timestamp when the quiz was completed
+        public int Score { get; set; }
 
-        //public bool IsPassed => Score >= PassingScore; // Auto-calculated based on threshold
+        //public double ScorePercentage => Quiz?.TotalPoints == 0 ? 0 : (double)Score / Quiz?.TotalPoints * 100;
+        //public bool IsPassed => ScorePercentage >= Quiz?.PassingScore;
 
-        //public int TotalCorrectAnswers => StudentAnswers.Count(sa => sa.IsCorrect);
+        public DateTime StartedAt { get; set; } = DateTime.UtcNow;
+        public DateTime? CompletedAt { get; set; }
 
-        //[NotMapped]
-        //public int PassingScore => Quiz.TotalQuestions / 2; // Pass threshold (50% correct)
+        public TimeSpan Duration => (CompletedAt ?? DateTime.UtcNow) - StartedAt;
 
         #region Relationships
         [ForeignKey("Progress")]
         public string ProgressId { get; set; }
         public virtual Progress Progress { get; set; }
-        public virtual List<StudentAnswer> StudentAnswers { get; set; } = new List<StudentAnswer>();
+
+        public virtual List<StudentAnswer> StudentAnswers { get; set; } = new();
         #endregion
     }
 
-    public class StudentAnswer
+    // 5. StudentAnswer class - stores individual student responses
+    public class StudentAnswer : BaseEntity
     {
-        public string Id { get; set; }
+        public string? SubmittedAnswer { get; set; }
 
+        public DateTime SubmittedAt { get; set; } = DateTime.UtcNow;
+
+        public bool IsCorrect { get; set; }
         //[NotMapped]
         //public bool IsCorrect => Answer?.IsCorrect ?? false; // Automatically determine correctness
-
         #region Relationships
         [ForeignKey("QuizResult")]
         public string QuizResultId { get; set; }
         public virtual QuizResult QuizResult { get; set; }
         #endregion
-
     }
 }
