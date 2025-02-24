@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
 using EdufyAPI.DTOs.StudentDTOs;
-using EdufyAPI.Models.Roles;
 using EdufyAPI.Repository.Interfaces;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EdufyAPI.Controllers
@@ -11,12 +9,10 @@ namespace EdufyAPI.Controllers
     [ApiController]
     public class StudentController(
         IUnitOfWork unitOfWork,
-        IMapper mapper,
-        UserManager<AppUser> userManager) : ControllerBase
+        IMapper mapper) : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
         private readonly IMapper _mapper = mapper;
-        private readonly UserManager<AppUser> _userManager = userManager;
 
 
         // TODO: Implement the following methods.
@@ -47,7 +43,7 @@ namespace EdufyAPI.Controllers
         public async Task<IActionResult> GetStudentById(string id)
         {
 
-            var student = await _userManager.FindByIdAsync(id);
+            var student = await _unitOfWork.StudentRepository.GetByIdAsync(id);
             if (student == null)
             {
                 return NotFound();
