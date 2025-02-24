@@ -267,6 +267,20 @@ namespace EdufyAPI.Controllers
             return Ok(new { Message = "Name updated successfully!" });
         }
 
+        [HttpDelete("delete-user/{id}")]
+        public async Task<IActionResult> DeleteUser(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+                return NotFound("User not found.");
+            var result = await _userManager.DeleteAsync(user);
+            if (!result.Succeeded)
+                return BadRequest(result.Errors);
+            return Ok(new { Message = "User deleted successfully!" });
+        }
+
+
+
         /// <summary>
         /// Generates a JWT token for the authenticated user.
         /// </summary>
@@ -287,7 +301,7 @@ namespace EdufyAPI.Controllers
                         new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName ?? string.Empty), // Correct claim for UserName
                         new Claim(JwtRegisteredClaimNames.Email, user.Email ?? string.Empty),      // Email
                         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),         // Unique Token ID
-                    }),
+                }),
                 NotBefore = now,
                 Expires = now.AddDays(30),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256),
