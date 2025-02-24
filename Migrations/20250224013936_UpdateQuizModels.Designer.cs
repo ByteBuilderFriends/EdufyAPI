@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EdufyAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250224003625_UpdateQuizModels")]
+    [Migration("20250224013936_UpdateQuizModels")]
     partial class UpdateQuizModels
     {
         /// <inheritdoc />

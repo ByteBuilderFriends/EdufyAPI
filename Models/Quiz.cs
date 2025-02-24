@@ -7,7 +7,7 @@ namespace EdufyAPI.Models
     public abstract class BaseEntity
     {
         [Key]
-        public string Id { get; set; } = Guid.NewGuid().ToString();
+        public string Id { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedAt { get; set; }
@@ -31,7 +31,6 @@ namespace EdufyAPI.Models
         }
         //public string Title => string.IsNullOrEmpty(InternalTitle) ? $"{Lesson?.Title ?? "Untitled"} Quiz" : InternalTitle;
 
-
         public string? Description { get; set; }
 
         [Range(0, 100)]
@@ -52,7 +51,6 @@ namespace EdufyAPI.Models
         public virtual Lesson Lesson { get; set; }
 
         public virtual List<Question> Questions { get; set; } = new();
-
         #endregion
     }
 
@@ -62,6 +60,15 @@ namespace EdufyAPI.Models
         [Required]
         public string Text { get; set; } = string.Empty;
 
+        public string? Explanation { get; set; }
+
+        [Range(1, 100)]
+        public int Points { get; set; } = 1;
+
+        public QuestionType Type { get; set; } = QuestionType.SingleChoice;
+
+        public int OrderIndex { get; set; }
+
         #region Relationships
         [ForeignKey("Quiz")]
         public string QuizId { get; set; }
@@ -69,7 +76,6 @@ namespace EdufyAPI.Models
 
         public virtual List<Answer> Answers { get; set; } = new();
         #endregion
-
     }
 
     // 3. Answer class - possible answers for each question
@@ -79,28 +85,30 @@ namespace EdufyAPI.Models
 
         public bool IsCorrect { get; set; } = false;
 
-        #region Relationships
+        public string? Explanation { get; set; }
 
+        public int OrderIndex { get; set; }
+
+        #region Relationships
         [ForeignKey("Question")]
         public string QuestionId { get; set; }
         public virtual Question Question { get; set; }
         #endregion
-
     }
 
     // 4. QuizResult class - stores overall quiz attempt results
     public class QuizResult : BaseEntity
     {
         [Required]
-        public string Score { get; set; } // Total score of the quiz attempt
-        public DateTime CompletedAt { get; set; } = DateTime.UtcNow; // Timestamp when the quiz was completed
+        public int Score { get; set; }
 
-        //public double ScorePercentage => (Quiz?.TotalPoints ?? 0) == 0 ? 0 : (double)Score / Quiz.TotalPoints * 100;
-
+        //public double ScorePercentage => Quiz?.TotalPoints == 0 ? 0 : (double)Score / Quiz?.TotalPoints * 100;
         //public bool IsPassed => ScorePercentage >= Quiz?.PassingScore;
 
-        //[NotMapped]
-        //public int PassingScore => Quiz.TotalQuestions / 2; // Pass threshold (50% correct)
+        public DateTime StartedAt { get; set; } = DateTime.UtcNow;
+        public DateTime? CompletedAt { get; set; }
+
+        public TimeSpan Duration => (CompletedAt ?? DateTime.UtcNow) - StartedAt;
 
         #region Relationships
         [ForeignKey("Progress")]
@@ -109,7 +117,6 @@ namespace EdufyAPI.Models
 
         public virtual List<StudentAnswer> StudentAnswers { get; set; } = new();
         #endregion
-
     }
 
     // 5. StudentAnswer class - stores individual student responses
@@ -119,9 +126,9 @@ namespace EdufyAPI.Models
 
         public DateTime SubmittedAt { get; set; } = DateTime.UtcNow;
 
+        public bool IsCorrect { get; set; }
         //[NotMapped]
         //public bool IsCorrect => Answer?.IsCorrect ?? false; // Automatically determine correctness
-
         #region Relationships
         [ForeignKey("QuizResult")]
         public string QuizResultId { get; set; }
