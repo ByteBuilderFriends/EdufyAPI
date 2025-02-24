@@ -165,6 +165,7 @@ namespace EdufyAPI.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
+            // Get the user from DB
             var appUser = await _userManager.FindByIdAsync(model.UserId);
             if (appUser == null)
                 return NotFound("User not found.");
@@ -174,17 +175,32 @@ namespace EdufyAPI.Controllers
             var isAdmin = User.IsInRole("Admin");
 
             if (!isAdmin && loggedInUserId != model.UserId)
-                return Forbid();
+                return Forbid(); // 403 Forbidden
 
-            // Change email & generate confirmation token
-            var token = await _userManager.GenerateChangeEmailTokenAsync(appUser, model.NewEmail);
-            var result = await _userManager.ChangeEmailAsync(appUser, model.NewEmail, token);
+            // Validate new email
+            if (string.IsNullOrWhiteSpace(model.NewEmail) || !new EmailAddressAttribute().IsValid(model.NewEmail))
+                return BadRequest(new { Message = "Invalid email format." });
 
+            // Generate a new username from the email
+            string newUserName = model.NewEmail.Split('@')[0];
+
+            // Check if the username is already taken
+            if (await _userManager.FindByNameAsync(newUserName) != null)
+            {
+                newUserName += new Random().Next(1000, 9999); // Append random number if needed
+            }
+
+            // Update the email and username
+            appUser.Email = model.NewEmail;
+            appUser.UserName = newUserName;
+
+            var result = await _userManager.UpdateAsync(appUser);
             if (!result.Succeeded)
                 return BadRequest(result.Errors);
 
-            return Ok(new { Message = "Email updated successfully. Please verify your new email." });
+            return Ok(new { Message = "Email updated successfully!", UserName = newUserName });
         }
+
 
         [HttpPut("update-password")]
         [Authorize]

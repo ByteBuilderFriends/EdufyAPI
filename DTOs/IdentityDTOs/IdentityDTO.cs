@@ -6,7 +6,7 @@ namespace EdufyAPI.DTOs.IdentityDTOs
     {
         public string UserId { get; set; }
 
-        [Required, EmailAddress]
+        [Required]
         public string NewEmail { get; set; }
     }
 
