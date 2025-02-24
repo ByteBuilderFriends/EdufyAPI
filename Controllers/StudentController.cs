@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EdufyAPI.DTOs.StudentDTOs;
 using EdufyAPI.Models.Roles;
 using EdufyAPI.Repository.Interfaces;
 using Microsoft.AspNetCore.Identity;
@@ -17,67 +18,48 @@ namespace EdufyAPI.Controllers
         private readonly IMapper _mapper = mapper;
         private readonly UserManager<AppUser> _userManager = userManager;
 
+
+        // TODO: Implement the following methods.
+        // 2. Delete a student by their unique identifier, edit it inside the IdenrifierController.
+        // It should also allow the student to update his data.
+        // - It Should Contain the following properties:
+        // -Change Password, Change Email, Change Phone Number. If needed.
+
+        // 3. The student should be able to enroll in a course.Inside CoursesController.
+
         // Get all students.
         [HttpGet]
         public async Task<IActionResult> GetSAllStudents()
         {
-            var students = await _userManager.GetUsersInRoleAsync("Student");
-            //var students = await _unitOfWork.StudentRepository.GetAllAsync();
+            var students = await _unitOfWork.StudentRepository.GetAllAsync();
 
             if (students == null || !students.Any())
-            {
                 return NotFound("No content found");
-            }
 
-            return Ok(students);
+            List<GetStudentsDTO> studentsDTO = _mapper.Map<List<GetStudentsDTO>>(students);
+
+
+            return Ok(studentsDTO);
         }
 
         // Get a student by their unique identifier.
         [HttpGet("{id}")]
         public async Task<IActionResult> GetStudentById(string id)
         {
-            // Don't forget to return the DTO
 
             var student = await _userManager.FindByIdAsync(id);
             if (student == null)
             {
                 return NotFound();
             }
-            return Ok(student);
+
+            var studentDTO = _mapper.Map<GetStudentsDTO>(student);
+
+            return Ok(studentDTO);
 
         }
 
-        // Create a new student.
-        // NOTE: I don't know if i need to Create Student here, as we have the register method in IdentityController
-        // So am thinking to edit it to just add the student role to the user
-
-        //[HttpPost]
-        //public async Task<IActionResult> CreateStudent([FromBody] CreateStudentDTO createStudentDTO)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-
-        //    var student = _mapper.Map<Student>(createStudentDTO);
-        //    // Complete the logic to create a student here
-
-        //    var result = await _userManager.CreateAsync(student, createStudentDTO.Password);
-        //    if (result.Succeeded)
-        //    {
-        //        var studentRole = await _userManager.AddToRoleAsync(student, "Student");
-        //        if (!studentRole.Succeeded)
-        //        {
-        //            return BadRequest(studentRole.Errors);
-        //        }
-
-        //        else
-        //        {
-        //            return BadRequest(result.Errors);
-        //        }
-        //    }
-        //    return Ok();
-        //}
+        // Other methods will be implemented inside: IdentityController.cs, CoursesController.cs, and StudentController.cs
 
     }
 }

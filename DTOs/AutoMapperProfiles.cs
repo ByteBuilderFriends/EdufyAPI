@@ -27,13 +27,9 @@ namespace EdufyAPI.DTOs
             #endregion
 
             #region Student AutoMapper
-            //Old
-            CreateMap<CreateStudentDTO, Student>(); // Map CreateStudentDTO to Student
-            CreateMap<Student, CreateStudentDTO>();
-
-            //New
-            CreateMap<Student, RegisterViewModel>();
-            CreateMap<RegisterViewModel, Student>();
+            //Registeration of Student to StudentReadDTO
+            CreateMap<Student, RegisterViewModel>().ReverseMap();
+            CreateMap<Student, GetStudentsDTO>().ReverseMap();
             #endregion
 
             #region Course AutoMapper
