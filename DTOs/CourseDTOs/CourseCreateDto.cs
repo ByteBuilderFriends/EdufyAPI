@@ -10,6 +10,6 @@ namespace EdufyAPI.DTOs.CourseDTOs
         public string Description { get; set; } = string.Empty;
 
         [Required]
-        public string InstructorId { get; set; } = string.Empty;
+        public string InstructorId { get; set; }
     }
 }

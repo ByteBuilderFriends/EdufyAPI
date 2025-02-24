@@ -41,12 +41,7 @@ namespace EdufyAPI.DTOs
             //It checks if the Instructor is not null.
             //If true, it concatenates FirstName and LastName with a space in between.
             //If Instructor is null, it sets InstructorName to "Unknown".
-            CreateMap<Course, CourseReadDTO>()
-                .ForMember(dest => dest.InstructorName,
-                           opt => opt.MapFrom(src =>
-                               src.Instructor != null
-                               ? $"{src.Instructor.FirstName} {src.Instructor.LastName}"
-                               : "Unknown"));
+            CreateMap<Course, CourseReadDTO>();
             CreateMap<CourseCreateDTO, Course>();
             CreateMap<CourseUpdateDTO, Course>();
             #endregion

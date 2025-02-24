@@ -2,10 +2,10 @@
 {
     public class CourseReadDTO
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
-        public string InstructorName { get; set; } = "Unknown";
+        public string InstructorID { get; set; }
 
         // Add number of students enrolled here
     }
