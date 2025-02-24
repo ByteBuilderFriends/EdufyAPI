@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EdufyAPI.DTOs.IdentityDTOs;
 using EdufyAPI.Models.Roles;
 using EdufyAPI.Repository.Interfaces;
 using EdufyAPI.ViewModels;
@@ -148,6 +149,113 @@ namespace EdufyAPI.Controllers
             return Ok(users);
         }
 
+        [HttpGet("Users/{id}")]
+        [Authorize("Admin")]
+        public async Task<IActionResult> GetUserById(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+                return NotFound();
+            return Ok(user);
+        }
+
+
+        [HttpPut("update-email")]
+        [Authorize]
+        public async Task<IActionResult> UpdateEmail([FromBody] UpdateEmailDTO model)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var appUser = await _userManager.FindByIdAsync(model.UserId);
+            if (appUser == null)
+                return NotFound("User not found.");
+
+            // Ensure only the user or an admin can update the email
+            var loggedInUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var isAdmin = User.IsInRole("Admin");
+
+            if (!isAdmin && loggedInUserId != model.UserId)
+                return Forbid();
+
+            // Change email & generate confirmation token
+            var token = await _userManager.GenerateChangeEmailTokenAsync(appUser, model.NewEmail);
+            var result = await _userManager.ChangeEmailAsync(appUser, model.NewEmail, token);
+
+            if (!result.Succeeded)
+                return BadRequest(result.Errors);
+
+            return Ok(new { Message = "Email updated successfully. Please verify your new email." });
+        }
+
+
+        [HttpPut("update-password")]
+        [Authorize]
+        public async Task<IActionResult> UpdatePassword([FromBody] UpdatePasswordDTO model)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var appUser = await _userManager.FindByIdAsync(model.UserId);
+            if (appUser == null)
+                return NotFound("User not found.");
+
+            var loggedInUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var isAdmin = User.IsInRole("Admin");
+
+            if (!isAdmin && loggedInUserId != model.UserId)
+                return Forbid();
+
+            IdentityResult result;
+
+            if (isAdmin)
+            {
+                // Admins can reset password directly
+                var resetToken = await _userManager.GeneratePasswordResetTokenAsync(appUser);
+                result = await _userManager.ResetPasswordAsync(appUser, resetToken, model.NewPassword);
+            }
+            else
+            {
+                // Regular users must provide old password
+                result = await _userManager.ChangePasswordAsync(appUser, model.OldPassword, model.NewPassword);
+            }
+
+            if (!result.Succeeded)
+                return BadRequest(result.Errors);
+
+            return Ok(new { Message = "Password updated successfully!" });
+        }
+
+
+        [HttpPut("update-name")]
+        [Authorize]
+        public async Task<IActionResult> UpdateName([FromBody] UpdateNameDTO model)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var appUser = await _userManager.FindByIdAsync(model.UserId);
+            if (appUser == null)
+                return NotFound("User not found.");
+
+            var loggedInUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var isAdmin = User.IsInRole("Admin");
+
+            if (!isAdmin && loggedInUserId != model.UserId)
+                return Forbid();
+
+            // Update only the name fields
+            appUser.FirstName = model.FirstName;
+            appUser.LastName = model.LastName;
+
+            var result = await _userManager.UpdateAsync(appUser);
+            if (!result.Succeeded)
+                return BadRequest(result.Errors);
+
+            return Ok(new { Message = "Name updated successfully!" });
+        }
+
+
 
         /// <summary>
         /// Generates a JWT token for the authenticated user.
@@ -179,7 +287,6 @@ namespace EdufyAPI.Controllers
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
-
 
 
     }
