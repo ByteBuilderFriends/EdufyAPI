@@ -58,6 +58,9 @@ namespace EdufyAPI.Models
                 }
             );
             #endregion
+
+
+            #region Relationships
             modelBuilder.Entity<StudentCourse>(entity =>
                 {
                     entity.HasKey(sc => new { sc.StudentId, sc.CourseId });
@@ -72,6 +75,8 @@ namespace EdufyAPI.Models
                           .HasForeignKey(sc => sc.CourseId)
                           .OnDelete(DeleteBehavior.Restrict);
                 });
+
+            #endregion
         }
     }
 }

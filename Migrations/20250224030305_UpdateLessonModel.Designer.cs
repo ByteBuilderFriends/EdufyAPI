@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EdufyAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250223010102_t1")]
-    partial class t1
+    [Migration("20250224030305_UpdateLessonModel")]
+    partial class UpdateLessonModel
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -60,6 +60,13 @@ namespace EdufyAPI.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Explanation")
                         .HasColumnType("nvarchar(max)");
 
@@ -75,6 +82,12 @@ namespace EdufyAPI.Migrations
 
                     b.Property<string>("Text")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedBy")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -121,6 +134,12 @@ namespace EdufyAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -159,6 +178,13 @@ namespace EdufyAPI.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Explanation")
                         .HasColumnType("nvarchar(max)");
 
@@ -178,6 +204,12 @@ namespace EdufyAPI.Migrations
 
                     b.Property<int>("Type")
                         .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -201,6 +233,11 @@ namespace EdufyAPI.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("InternalTitle")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -217,20 +254,11 @@ namespace EdufyAPI.Migrations
                     b.Property<int>("TimeLimit")
                         .HasColumnType("int");
 
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UpdatedBy")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("_title")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
@@ -248,11 +276,14 @@ namespace EdufyAPI.Migrations
                     b.Property<DateTime?>("CompletedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("ProgressId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("QuizId")
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProgressId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
@@ -262,11 +293,15 @@ namespace EdufyAPI.Migrations
                     b.Property<DateTime>("StartedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ProgressId");
-
-                    b.HasIndex("QuizId");
 
                     b.ToTable("QuizResults");
                 });
@@ -360,15 +395,15 @@ namespace EdufyAPI.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("AnswerId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsCorrect")
                         .HasColumnType("bit");
-
-                    b.Property<string>("QuestionId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("QuizResultId")
                         .IsRequired()
@@ -380,11 +415,13 @@ namespace EdufyAPI.Migrations
                     b.Property<DateTime>("SubmittedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
-
-                    b.HasIndex("AnswerId");
-
-                    b.HasIndex("QuestionId");
 
                     b.HasIndex("QuizResultId");
 
@@ -665,38 +702,16 @@ namespace EdufyAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("EdufyAPI.Models.Quiz", "Quiz")
-                        .WithMany("QuizResults")
-                        .HasForeignKey("QuizId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Progress");
-
-                    b.Navigation("Quiz");
                 });
 
             modelBuilder.Entity("EdufyAPI.Models.StudentAnswer", b =>
                 {
-                    b.HasOne("EdufyAPI.Models.Answer", "Answer")
-                        .WithMany("StudentAnswers")
-                        .HasForeignKey("AnswerId");
-
-                    b.HasOne("EdufyAPI.Models.Question", "Question")
-                        .WithMany()
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("EdufyAPI.Models.QuizResult", "QuizResult")
                         .WithMany("StudentAnswers")
                         .HasForeignKey("QuizResultId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Answer");
-
-                    b.Navigation("Question");
 
                     b.Navigation("QuizResult");
                 });
@@ -771,11 +786,6 @@ namespace EdufyAPI.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("EdufyAPI.Models.Answer", b =>
-                {
-                    b.Navigation("StudentAnswers");
-                });
-
             modelBuilder.Entity("EdufyAPI.Models.Course", b =>
                 {
                     b.Navigation("CourseProgress");
@@ -806,8 +816,6 @@ namespace EdufyAPI.Migrations
             modelBuilder.Entity("EdufyAPI.Models.Quiz", b =>
                 {
                     b.Navigation("Questions");
-
-                    b.Navigation("QuizResults");
                 });
 
             modelBuilder.Entity("EdufyAPI.Models.QuizResult", b =>

@@ -15,6 +15,11 @@ namespace EdufyAPI.Models
         /// The content of the lesson.
         public string Content { get; set; } = string.Empty;
 
+        //new
+        public bool IsActive { get; set; } = true;
+        public bool IsDeleted { get; set; } = false;
+
+
         #region Relationships
         /// Foreign key reference to the course this lesson belongs to.
         [ForeignKey("Course")]

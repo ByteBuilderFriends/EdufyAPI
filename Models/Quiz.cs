@@ -3,48 +3,45 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EdufyAPI.Models
 {
-    // 1. Main Quiz class - parent container
-    public class Quiz
+    // Base class for common properties
+    public abstract class BaseEntity
     {
-        public int Id { get; set; }
+        [Key]
+        public string Id { get; set; }
 
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime? UpdatedAt { get; set; }
+
+        public string CreatedBy { get; set; } = "System";
+        public string? UpdatedBy { get; set; }
+    }
+
+    // 1. Main Quiz class - parent container
+    public class Quiz : BaseEntity
+    {
         [Required]
         [MaxLength(100)]
-        public string _title { get; set; } = string.Empty;
+        public string InternalTitle { get; set; } = string.Empty;
 
-        [Required]
+        [NotMapped]
         public string Title
         {
-            get => string.IsNullOrEmpty(_title) ? $"{Lesson?.Title ?? "Untitled"} Quiz" : _title;
-            set
-            {
-                if (string.IsNullOrWhiteSpace(value))
-                {
-                    _title = string.Empty; // Will use default format
-                }
-                else
-                {
-                    _title = value.Trim(); // Delete whitespace and set the value
-                }
-            }
+            get => string.IsNullOrEmpty(InternalTitle) ? $"{Lesson?.Title ?? "Untitled"} Quiz" : InternalTitle;
+            set => InternalTitle = string.IsNullOrWhiteSpace(value) ? string.Empty : value.Trim();
         }
+        //public string Title => string.IsNullOrEmpty(InternalTitle) ? $"{Lesson?.Title ?? "Untitled"} Quiz" : InternalTitle;
 
         public string? Description { get; set; }
 
         [Range(0, 100)]
-        public int PassingScore { get; set; } = 50; // Percentage required to pass
+        public int PassingScore { get; set; } = 50;
 
         [Range(0, 300)]
-        public int TimeLimit { get; set; } = 0; // Time limit in minutes (0 = no limit)
+        public int TimeLimit { get; set; } = 0;
 
         public bool IsActive { get; set; } = true;
-        public bool IsDeleted { get; set; } = false; // Soft deletion flag
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public DateTime? UpdatedAt { get; set; }
-        public string CreatedBy { get; set; } = "System"; // Audit field
-        public string? UpdatedBy { get; set; } // Audit field
+        public bool IsDeleted { get; set; } = false;
 
-        // Computed properties
         public int TotalQuestions => Questions?.Count ?? 0;
         public int TotalPoints => Questions?.Sum(q => q.Points) ?? 0;
 
@@ -53,28 +50,13 @@ namespace EdufyAPI.Models
         public int LessonId { get; set; }
         public virtual Lesson Lesson { get; set; }
 
-        [InverseProperty("Quiz")]
-        public virtual List<Question> Questions { get; set; } = new List<Question>();
-
-        [InverseProperty("Quiz")]
-        public virtual List<QuizResult> QuizResults { get; set; } = new List<QuizResult>();
+        public virtual List<Question> Questions { get; set; } = new();
         #endregion
     }
 
-    // 2. Question Types Enum - defines available question formats
-    public enum QuestionType
+    // 2. Question class - contains the actual questions
+    public class Question : BaseEntity
     {
-        SingleChoice,   //Select only one answer from a list of options.
-        MultipleChoice, //Select more than one answer from a list.
-        TrueFalse,
-        ShortAnswer
-    }
-
-    // 3. Question class - contains the actual questions
-    public class Question
-    {
-        public int Id { get; set; }
-
         [Required]
         public string Text { get; set; } = string.Empty;
 
@@ -92,17 +74,13 @@ namespace EdufyAPI.Models
         public int QuizId { get; set; }
         public virtual Quiz Quiz { get; set; }
 
-        [InverseProperty("Question")]
-        public virtual List<Answer> Answers { get; set; } = new List<Answer>();
+        public virtual List<Answer> Answers { get; set; } = new();
         #endregion
     }
 
-    // 4. Answer class - possible answers for each question
-    public class Answer
+    // 3. Answer class - possible answers for each question
+    public class Answer : BaseEntity
     {
-        public int Id { get; set; }
-
-        [Required]
         public string Text { get; set; } = string.Empty;
 
         public bool IsCorrect { get; set; } = false;
@@ -115,23 +93,17 @@ namespace EdufyAPI.Models
         [ForeignKey("Question")]
         public int QuestionId { get; set; }
         public virtual Question Question { get; set; }
-
-        [InverseProperty("Answer")]
-        public virtual List<StudentAnswer> StudentAnswers { get; set; } = new List<StudentAnswer>();
         #endregion
     }
 
-    // 5. QuizResult class - stores overall quiz attempt results
-    public class QuizResult
+    // 4. QuizResult class - stores overall quiz attempt results
+    public class QuizResult : BaseEntity
     {
-        public int Id { get; set; }
-
         [Required]
         public int Score { get; set; }
 
-        public double ScorePercentage => Quiz.TotalPoints == 0 ? 0 : (double)Score / Quiz.TotalPoints * 100;
-
-        public bool IsPassed => ScorePercentage >= Quiz.PassingScore;
+        //public double ScorePercentage => Quiz?.TotalPoints == 0 ? 0 : (double)Score / Quiz?.TotalPoints * 100;
+        //public bool IsPassed => ScorePercentage >= Quiz?.PassingScore;
 
         public DateTime StartedAt { get; set; } = DateTime.UtcNow;
         public DateTime? CompletedAt { get; set; }
@@ -147,22 +119,20 @@ namespace EdufyAPI.Models
         public int ProgressId { get; set; }
         public virtual Progress Progress { get; set; }
 
-        [InverseProperty("QuizResult")]
-        public virtual List<StudentAnswer> StudentAnswers { get; set; } = new List<StudentAnswer>();
+        public virtual List<StudentAnswer> StudentAnswers { get; set; } = new();
         #endregion
     }
 
-    // 6. StudentAnswer class - stores individual student responses
-    public class StudentAnswer
+    // 5. StudentAnswer class - stores individual student responses
+    public class StudentAnswer : BaseEntity
     {
-        public int Id { get; set; }
-
         public string? SubmittedAnswer { get; set; }
 
         public DateTime SubmittedAt { get; set; } = DateTime.UtcNow;
 
         public bool IsCorrect { get; set; }
-
+        //[NotMapped]
+        //public bool IsCorrect => Answer?.IsCorrect ?? false; // Automatically determine correctness
         #region Relationships
         [ForeignKey("QuizResult")]
         public int QuizResultId { get; set; }

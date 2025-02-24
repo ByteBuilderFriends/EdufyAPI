@@ -6,16 +6,24 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace EdufyAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class t1 : Migration
+    public partial class UpdateQuizModels : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(
-                name: "AnswerId",
+            migrationBuilder.AddColumn<DateTime>(
+                name: "CreatedAt",
                 table: "StudentAnswer",
-                type: "nvarchar(450)",
-                nullable: true);
+                type: "datetime2",
+                nullable: false,
+                defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
+
+            migrationBuilder.AddColumn<string>(
+                name: "CreatedBy",
+                table: "StudentAnswer",
+                type: "nvarchar(max)",
+                nullable: false,
+                defaultValue: "");
 
             migrationBuilder.AddColumn<bool>(
                 name: "IsCorrect",
@@ -23,13 +31,6 @@ namespace EdufyAPI.Migrations
                 type: "bit",
                 nullable: false,
                 defaultValue: false);
-
-            migrationBuilder.AddColumn<string>(
-                name: "QuestionId",
-                table: "StudentAnswer",
-                type: "nvarchar(450)",
-                nullable: false,
-                defaultValue: "");
 
             migrationBuilder.AddColumn<string>(
                 name: "SubmittedAnswer",
@@ -43,6 +44,18 @@ namespace EdufyAPI.Migrations
                 type: "datetime2",
                 nullable: false,
                 defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
+
+            migrationBuilder.AddColumn<DateTime>(
+                name: "UpdatedAt",
+                table: "StudentAnswer",
+                type: "datetime2",
+                nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "UpdatedBy",
+                table: "StudentAnswer",
+                type: "nvarchar(max)",
+                nullable: true);
 
             migrationBuilder.AddColumn<DateTime>(
                 name: "CreatedAt",
@@ -63,6 +76,14 @@ namespace EdufyAPI.Migrations
                 table: "Quizzes",
                 type: "nvarchar(max)",
                 nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "InternalTitle",
+                table: "Quizzes",
+                type: "nvarchar(100)",
+                maxLength: 100,
+                nullable: false,
+                defaultValue: "");
 
             migrationBuilder.AddColumn<bool>(
                 name: "IsActive",
@@ -92,13 +113,6 @@ namespace EdufyAPI.Migrations
                 nullable: false,
                 defaultValue: 0);
 
-            migrationBuilder.AddColumn<string>(
-                name: "Title",
-                table: "Quizzes",
-                type: "nvarchar(max)",
-                nullable: false,
-                defaultValue: "");
-
             migrationBuilder.AddColumn<DateTime>(
                 name: "UpdatedAt",
                 table: "Quizzes",
@@ -110,14 +124,6 @@ namespace EdufyAPI.Migrations
                 table: "Quizzes",
                 type: "nvarchar(max)",
                 nullable: true);
-
-            migrationBuilder.AddColumn<string>(
-                name: "_title",
-                table: "Quizzes",
-                type: "nvarchar(100)",
-                maxLength: 100,
-                nullable: false,
-                defaultValue: "");
 
             migrationBuilder.AlterColumn<int>(
                 name: "Score",
@@ -135,10 +141,17 @@ namespace EdufyAPI.Migrations
                 oldClrType: typeof(DateTime),
                 oldType: "datetime2");
 
-            migrationBuilder.AddColumn<string>(
-                name: "QuizId",
+            migrationBuilder.AddColumn<DateTime>(
+                name: "CreatedAt",
                 table: "QuizResults",
-                type: "nvarchar(450)",
+                type: "datetime2",
+                nullable: false,
+                defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
+
+            migrationBuilder.AddColumn<string>(
+                name: "CreatedBy",
+                table: "QuizResults",
+                type: "nvarchar(max)",
                 nullable: false,
                 defaultValue: "");
 
@@ -148,6 +161,32 @@ namespace EdufyAPI.Migrations
                 type: "datetime2",
                 nullable: false,
                 defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
+
+            migrationBuilder.AddColumn<DateTime>(
+                name: "UpdatedAt",
+                table: "QuizResults",
+                type: "datetime2",
+                nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "UpdatedBy",
+                table: "QuizResults",
+                type: "nvarchar(max)",
+                nullable: true);
+
+            migrationBuilder.AddColumn<DateTime>(
+                name: "CreatedAt",
+                table: "Questions",
+                type: "datetime2",
+                nullable: false,
+                defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
+
+            migrationBuilder.AddColumn<string>(
+                name: "CreatedBy",
+                table: "Questions",
+                type: "nvarchar(max)",
+                nullable: false,
+                defaultValue: "");
 
             migrationBuilder.AddColumn<string>(
                 name: "Explanation",
@@ -176,6 +215,32 @@ namespace EdufyAPI.Migrations
                 nullable: false,
                 defaultValue: 0);
 
+            migrationBuilder.AddColumn<DateTime>(
+                name: "UpdatedAt",
+                table: "Questions",
+                type: "datetime2",
+                nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "UpdatedBy",
+                table: "Questions",
+                type: "nvarchar(max)",
+                nullable: true);
+
+            migrationBuilder.AddColumn<DateTime>(
+                name: "CreatedAt",
+                table: "Answers",
+                type: "datetime2",
+                nullable: false,
+                defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
+
+            migrationBuilder.AddColumn<string>(
+                name: "CreatedBy",
+                table: "Answers",
+                type: "nvarchar(max)",
+                nullable: false,
+                defaultValue: "");
+
             migrationBuilder.AddColumn<string>(
                 name: "Explanation",
                 table: "Answers",
@@ -189,82 +254,32 @@ namespace EdufyAPI.Migrations
                 nullable: false,
                 defaultValue: 0);
 
-            migrationBuilder.CreateIndex(
-                name: "IX_StudentAnswer_AnswerId",
-                table: "StudentAnswer",
-                column: "AnswerId");
+            migrationBuilder.AddColumn<DateTime>(
+                name: "UpdatedAt",
+                table: "Answers",
+                type: "datetime2",
+                nullable: true);
 
-            migrationBuilder.CreateIndex(
-                name: "IX_StudentAnswer_QuestionId",
-                table: "StudentAnswer",
-                column: "QuestionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_QuizResults_QuizId",
-                table: "QuizResults",
-                column: "QuizId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_QuizResults_Quizzes_QuizId",
-                table: "QuizResults",
-                column: "QuizId",
-                principalTable: "Quizzes",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_StudentAnswer_Answers_AnswerId",
-                table: "StudentAnswer",
-                column: "AnswerId",
-                principalTable: "Answers",
-                principalColumn: "Id");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_StudentAnswer_Questions_QuestionId",
-                table: "StudentAnswer",
-                column: "QuestionId",
-                principalTable: "Questions",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+            migrationBuilder.AddColumn<string>(
+                name: "UpdatedBy",
+                table: "Answers",
+                type: "nvarchar(max)",
+                nullable: true);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_QuizResults_Quizzes_QuizId",
-                table: "QuizResults");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_StudentAnswer_Answers_AnswerId",
+            migrationBuilder.DropColumn(
+                name: "CreatedAt",
                 table: "StudentAnswer");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_StudentAnswer_Questions_QuestionId",
-                table: "StudentAnswer");
-
-            migrationBuilder.DropIndex(
-                name: "IX_StudentAnswer_AnswerId",
-                table: "StudentAnswer");
-
-            migrationBuilder.DropIndex(
-                name: "IX_StudentAnswer_QuestionId",
-                table: "StudentAnswer");
-
-            migrationBuilder.DropIndex(
-                name: "IX_QuizResults_QuizId",
-                table: "QuizResults");
 
             migrationBuilder.DropColumn(
-                name: "AnswerId",
+                name: "CreatedBy",
                 table: "StudentAnswer");
 
             migrationBuilder.DropColumn(
                 name: "IsCorrect",
-                table: "StudentAnswer");
-
-            migrationBuilder.DropColumn(
-                name: "QuestionId",
                 table: "StudentAnswer");
 
             migrationBuilder.DropColumn(
@@ -273,6 +288,14 @@ namespace EdufyAPI.Migrations
 
             migrationBuilder.DropColumn(
                 name: "SubmittedAt",
+                table: "StudentAnswer");
+
+            migrationBuilder.DropColumn(
+                name: "UpdatedAt",
+                table: "StudentAnswer");
+
+            migrationBuilder.DropColumn(
+                name: "UpdatedBy",
                 table: "StudentAnswer");
 
             migrationBuilder.DropColumn(
@@ -285,6 +308,10 @@ namespace EdufyAPI.Migrations
 
             migrationBuilder.DropColumn(
                 name: "Description",
+                table: "Quizzes");
+
+            migrationBuilder.DropColumn(
+                name: "InternalTitle",
                 table: "Quizzes");
 
             migrationBuilder.DropColumn(
@@ -304,10 +331,6 @@ namespace EdufyAPI.Migrations
                 table: "Quizzes");
 
             migrationBuilder.DropColumn(
-                name: "Title",
-                table: "Quizzes");
-
-            migrationBuilder.DropColumn(
                 name: "UpdatedAt",
                 table: "Quizzes");
 
@@ -316,16 +339,32 @@ namespace EdufyAPI.Migrations
                 table: "Quizzes");
 
             migrationBuilder.DropColumn(
-                name: "_title",
-                table: "Quizzes");
+                name: "CreatedAt",
+                table: "QuizResults");
 
             migrationBuilder.DropColumn(
-                name: "QuizId",
+                name: "CreatedBy",
                 table: "QuizResults");
 
             migrationBuilder.DropColumn(
                 name: "StartedAt",
                 table: "QuizResults");
+
+            migrationBuilder.DropColumn(
+                name: "UpdatedAt",
+                table: "QuizResults");
+
+            migrationBuilder.DropColumn(
+                name: "UpdatedBy",
+                table: "QuizResults");
+
+            migrationBuilder.DropColumn(
+                name: "CreatedAt",
+                table: "Questions");
+
+            migrationBuilder.DropColumn(
+                name: "CreatedBy",
+                table: "Questions");
 
             migrationBuilder.DropColumn(
                 name: "Explanation",
@@ -344,11 +383,35 @@ namespace EdufyAPI.Migrations
                 table: "Questions");
 
             migrationBuilder.DropColumn(
+                name: "UpdatedAt",
+                table: "Questions");
+
+            migrationBuilder.DropColumn(
+                name: "UpdatedBy",
+                table: "Questions");
+
+            migrationBuilder.DropColumn(
+                name: "CreatedAt",
+                table: "Answers");
+
+            migrationBuilder.DropColumn(
+                name: "CreatedBy",
+                table: "Answers");
+
+            migrationBuilder.DropColumn(
                 name: "Explanation",
                 table: "Answers");
 
             migrationBuilder.DropColumn(
                 name: "OrderIndex",
+                table: "Answers");
+
+            migrationBuilder.DropColumn(
+                name: "UpdatedAt",
+                table: "Answers");
+
+            migrationBuilder.DropColumn(
+                name: "UpdatedBy",
                 table: "Answers");
 
             migrationBuilder.AlterColumn<string>(

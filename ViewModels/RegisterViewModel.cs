@@ -9,8 +9,13 @@ namespace EdufyAPI.ViewModels
         public string LastName { get; set; }
 
         [Required]
-        [Display(Name = "Email or Username")]
+        [EmailAddress]
+        [Display(Name = "Email")]
         public string Email { get; set; }
+
+        //[Required]
+        //[Display(Name = "Username")]
+        //public string UserName { get; set; }
 
         [Required]
         [MinLength(6)]

@@ -2,8 +2,10 @@
 using EduConnectAPI.Models;
 using EdufyAPI.DTOs.CertificateDTOs;
 using EdufyAPI.DTOs.CourseDTOs;
+using EdufyAPI.DTOs.InstructorDTOs;
 using EdufyAPI.DTOs.LessonDTOs;
 using EdufyAPI.DTOs.ProgressDTOs;
+using EdufyAPI.DTOs.QuizModelsDTOs.QuizDTOs;
 using EdufyAPI.DTOs.StudentDTOs;
 using EdufyAPI.Models;
 using EdufyAPI.Models.Roles;
@@ -26,8 +28,13 @@ namespace EdufyAPI.DTOs
             #endregion
 
             #region Student AutoMapper
-            CreateMap<CreateStudentDTO, Student>(); // Map CreateStudentDTO to Student
-            CreateMap<Student, CreateStudentDTO>();
+            //Registeration of Student to StudentReadDTO
+            CreateMap<Student, RegisterViewModel>().ReverseMap();
+            CreateMap<Student, GetStudentsDTO>().ReverseMap();
+            #endregion
+
+            #region Instructor AutoMapper
+            CreateMap<Instructor, InstructorReadDTO>().ReverseMap(); // Updated to use full namespace
             #endregion
 
             #region Course AutoMapper
@@ -56,11 +63,11 @@ namespace EdufyAPI.DTOs
             CreateMap<ProgressUpdateDTO, Progress>();
             #endregion
 
-            #region Student AutoMapper
-
-            CreateMap<Student, RegisterViewModel>();
-            CreateMap<RegisterViewModel, Student>();
-
+            #region Quiz AutoMapper
+            CreateMap<Quiz, QuizReadDTO>()
+                    .ForMember(dest => dest.LessonTitle, opt => opt.MapFrom(src => src.Lesson.Title));
+            CreateMap<QuizCreateDTO, Quiz>();
+            CreateMap<QuizUpdateDTO, Quiz>();
             #endregion
         }
     }
