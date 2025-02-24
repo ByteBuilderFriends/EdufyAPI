@@ -2,6 +2,7 @@
 using EduConnectAPI.Models;
 using EdufyAPI.DTOs.CertificateDTOs;
 using EdufyAPI.DTOs.CourseDTOs;
+using EdufyAPI.DTOs.InstructorDTOs;
 using EdufyAPI.DTOs.LessonDTOs;
 using EdufyAPI.DTOs.ProgressDTOs;
 using EdufyAPI.DTOs.QuizModelsDTOs.QuizDTOs;
@@ -30,6 +31,10 @@ namespace EdufyAPI.DTOs
             //Registeration of Student to StudentReadDTO
             CreateMap<Student, RegisterViewModel>().ReverseMap();
             CreateMap<Student, GetStudentsDTO>().ReverseMap();
+            #endregion
+
+            #region Instructor AutoMapper
+            CreateMap<Instructor, InstructorReadDTO>().ReverseMap(); // Updated to use full namespace
             #endregion
 
             #region Course AutoMapper
