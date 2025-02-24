@@ -29,7 +29,6 @@ namespace EdufyAPI.Controllers
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
 
-
         /// <summary>
         /// Constructor to initialize IdentityController with dependency injection.
         /// </summary>
@@ -91,7 +90,6 @@ namespace EdufyAPI.Controllers
                 await _unitOfWork.InstructorRepository.AddAsync(instructor);
             }
 
-
             return Ok(new { Message = "User registered successfully!" });
         }
 
@@ -106,28 +104,29 @@ namespace EdufyAPI.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            // Determine if the input is an email
+            // Check if input is an email
             bool isEmail = new EmailAddressAttribute().IsValid(model.Email);
 
-            // Retrieve the user using email or username
+            // Find the user by email or username
             var user = isEmail
-                ? await _userManager.FindByEmailAsync(model.Email)
+                ? await _userManager.Users.FirstOrDefaultAsync(u => u.Email == model.Email)
                 : await _userManager.FindByNameAsync(model.Email);
 
             if (user == null)
                 return Unauthorized(new { Message = "Invalid credentials" });
 
-            // Sign in the user with Email or username
-            //var username = new EmailAddressAttribute().IsValid(model.Email) ? new MailAddress(model.Email).User : model.Email;
+            // Ensure correct username is used for sign-in
+            var result = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, false, false);
 
-
-            var result = await _signInManager.PasswordSignInAsync(user, model.Password, false, false);
             if (!result.Succeeded)
                 return Unauthorized(new { Message = "Invalid credentials" });
 
+            // Generate and return JWT token
             var token = GenerateJwtToken(user);
             return Ok(new { Token = token });
         }
+
+
 
         /// <summary>
         /// Logs out the authenticated user.
@@ -159,7 +158,6 @@ namespace EdufyAPI.Controllers
             return Ok(user);
         }
 
-
         [HttpPut("update-email")]
         [Authorize]
         public async Task<IActionResult> UpdateEmail([FromBody] UpdateEmailDTO model)
@@ -187,7 +185,6 @@ namespace EdufyAPI.Controllers
 
             return Ok(new { Message = "Email updated successfully. Please verify your new email." });
         }
-
 
         [HttpPut("update-password")]
         [Authorize]
@@ -226,7 +223,6 @@ namespace EdufyAPI.Controllers
             return Ok(new { Message = "Password updated successfully!" });
         }
 
-
         [HttpPut("update-name")]
         [Authorize]
         public async Task<IActionResult> UpdateName([FromBody] UpdateNameDTO model)
@@ -255,8 +251,6 @@ namespace EdufyAPI.Controllers
             return Ok(new { Message = "Name updated successfully!" });
         }
 
-
-
         /// <summary>
         /// Generates a JWT token for the authenticated user.
         /// </summary>
@@ -265,7 +259,7 @@ namespace EdufyAPI.Controllers
         private string GenerateJwtToken(IdentityUser user)
         {
             var jwtSettings = _config.GetSection("JwtSettings");
-            var key = Encoding.UTF8.GetBytes(jwtSettings["Key"]);
+            var key = Encoding.UTF8.GetBytes(jwtSettings["Key"] ?? throw new ArgumentNullException("JwtSettings:Key"));
             var tokenHandler = new JwtSecurityTokenHandler();
             var now = DateTime.UtcNow;
 
@@ -273,10 +267,11 @@ namespace EdufyAPI.Controllers
             {
                 Subject = new ClaimsIdentity(new[]
                 {
-                    new Claim(JwtRegisteredClaimNames.Sub, user.Id),
-                    new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                }),
+                        new Claim(JwtRegisteredClaimNames.Sub, user.Id ?? string.Empty),            // User ID
+                        new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName ?? string.Empty), // Correct claim for UserName
+                        new Claim(JwtRegisteredClaimNames.Email, user.Email ?? string.Empty),      // Email
+                        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),         // Unique Token ID
+                    }),
                 NotBefore = now,
                 Expires = now.AddDays(30),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256),
@@ -287,7 +282,5 @@ namespace EdufyAPI.Controllers
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
-
-
     }
 }
