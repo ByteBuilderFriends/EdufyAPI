@@ -7,5 +7,7 @@ namespace EdufyAPI.DTOs.LessonDTOs
         [Required]
         public string Title { get; set; } = string.Empty;
         public string Content { get; set; } = string.Empty;
+        public IFormFile? Thumbnail { get; set; }
+
     }
 }
