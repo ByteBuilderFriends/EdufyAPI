@@ -38,31 +38,32 @@ namespace EdufyAPI.DTOs
             #endregion
 
             #region Course AutoMapper
-            //It checks if the Instructor is not null.
-            //If true, it concatenates FirstName and LastName with a space in between.
-            //If Instructor is null, it sets InstructorName to "Unknown".
             CreateMap<Course, CourseReadDTO>();
             CreateMap<CourseCreateDTO, Course>();
-            CreateMap<CourseUpdateDTO, Course>();
+            CreateMap<CourseUpdateDTO, Course>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null)); //This ensures only non-null properties are mapped, preventing overwriting existing values with null.
             #endregion
 
             #region Lesson AutoMapper
             CreateMap<Lesson, LessonReadDTO>();
             CreateMap<LessonCreateDTO, Lesson>();
-            CreateMap<LessonUpdateDTO, Lesson>();
+            CreateMap<LessonUpdateDTO, Lesson>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
             #endregion
 
             #region Progress AutoMapper
             CreateMap<Progress, ProgressReadDTO>();
             CreateMap<ProgressCreateDTO, Progress>();
-            CreateMap<ProgressUpdateDTO, Progress>();
+            CreateMap<ProgressUpdateDTO, Progress>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
             #endregion
 
             #region Quiz AutoMapper
             CreateMap<Quiz, QuizReadDTO>()
                     .ForMember(dest => dest.LessonTitle, opt => opt.MapFrom(src => src.Lesson.Title));
             CreateMap<QuizCreateDTO, Quiz>();
-            CreateMap<QuizUpdateDTO, Quiz>();
+            CreateMap<QuizUpdateDTO, Quiz>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
             #endregion
         }
     }

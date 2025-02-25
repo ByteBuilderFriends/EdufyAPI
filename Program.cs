@@ -135,6 +135,8 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+app.UseStaticFiles();   // It enables requests to the wwwroot folder, making images accessible via URL.
+
 #region Middleware Configuration
 // 🔹 Configure middleware
 

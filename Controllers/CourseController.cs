@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EdufyAPI.DTOs;
 using EdufyAPI.DTOs.CourseDTOs;
+using EdufyAPI.Helpers;
 using EdufyAPI.Models;
 using EdufyAPI.Repository.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -25,7 +26,23 @@ namespace EdufyAPI.Controllers
         public async Task<ActionResult<IEnumerable<CourseReadDTO>>> GetCourses()
         {
             var courses = await _unitOfWork.CourseRepository.GetAllAsync();
+
+            if (!courses.Any())
+            {
+                return Ok(Enumerable.Empty<CourseReadDTO>());
+            }
+
             var courseDtos = _mapper.Map<IEnumerable<CourseReadDTO>>(courses);
+
+            // Add image URLs to each course DTO
+            foreach (var courseDto in courseDtos)
+            {
+                //constructs the full URL for the course image, allowing the frontend to display it easily
+                //Request.Scheme = hhtp/https - Request.Host = localhost:5000 or example.com - Path.GetFileName(course.ThumbnailUrl) = Example: image1.jpg
+                //For example: https://localhost:5000/course-thumbnails/image1.jpg
+                courseDto.ThumbnailUrl = $"{Request.Scheme}://{Request.Host}/course-thumbnails/{Path.GetFileName(courseDto.ThumbnailUrl)}";
+            }
+
             return Ok(courseDtos);
         }
 
@@ -37,18 +54,33 @@ namespace EdufyAPI.Controllers
 
             if (course == null)
             {
-                return NotFound();
+                return NotFound("Course not found.");
             }
 
             var courseDto = _mapper.Map<CourseReadDTO>(course);
+
+            //constructs the full URL for the course image, allowing the frontend to display it easily
+            //Request.Scheme = hhtp/https - Request.Host = localhost:5000 or example.com - Path.GetFileName(course.ThumbnailUrl) = Example: image1.jpg
+            //For example: https://localhost:5000/course-thumbnails/image1.jpg
+            var imageUrl = $"{Request.Scheme}://{Request.Host}/course-thumbnails/{Path.GetFileName(course.ThumbnailUrl)}";
+            courseDto.ThumbnailUrl = imageUrl;
+
             return Ok(courseDto);
         }
 
         // ✅ POST: api/Course
         [HttpPost]
-        public async Task<ActionResult<CourseReadDTO>> CreateCourse(CourseCreateDTO courseCreateDto)
+        public async Task<ActionResult<CourseReadDTO>> CreateCourse([FromForm] CourseCreateDTO courseCreateDto)
         {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            // Save the thumbnail image and get the URL
+            var imageUrl = await ImageHelper.SaveImageAsync(courseCreateDto.Thumbnail, "course-thumbnails");
+
             var course = _mapper.Map<Course>(courseCreateDto);
+            course.ThumbnailUrl = imageUrl; //Since ThumbnailUrl is generated after saving the image, you still need to assign it manually.
+
+
             await _unitOfWork.CourseRepository.AddAsync(course);
             await _unitOfWork.SaveChangesAsync();
 
@@ -58,34 +90,47 @@ namespace EdufyAPI.Controllers
 
         // ✅ PUT: api/Course/{id}
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCourse(string id, CourseUpdateDTO courseUpdateDto)
+        public async Task<IActionResult> UpdateCourse(string id, [FromForm] CourseUpdateDTO courseUpdateDto)
         {
-            var existingCourse = await _unitOfWork.CourseRepository.GetByIdAsync(id);
+            var course = await _unitOfWork.CourseRepository.GetByIdAsync(id);
 
-            if (existingCourse == null)
+            if (course == null)
             {
-                return NotFound();
+                return NotFound("Course not found.");
             }
 
-            _mapper.Map(courseUpdateDto, existingCourse);
-            await _unitOfWork.CourseRepository.UpdateAsync(existingCourse);
+            _mapper.Map(courseUpdateDto, course);
+
+            if (courseUpdateDto.Thumbnail != null)
+            {
+                ImageHelper.DeleteImage(course.ThumbnailUrl, "course-thumbnails");  // Delete the old image if exists
+                var imageUrl = await ImageHelper.SaveImageAsync(courseUpdateDto.Thumbnail, "course-thumbnails");
+                course.ThumbnailUrl = imageUrl;
+            }
+
+            await _unitOfWork.CourseRepository.UpdateAsync(course);
             await _unitOfWork.SaveChangesAsync();
 
-            return NoContent();
+            return Ok(_mapper.Map<CourseReadDTO>(course));
         }
 
         // ✅ DELETE: api/Course/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCourse(string id)
         {
-            var result = await _unitOfWork.CourseRepository.DeleteAsync(id);
-
-            if (!result)
+            var course = await _unitOfWork.CourseRepository.GetByIdAsync(id);
+            if (course == null)
             {
-                return NotFound();
+                return NotFound("Course not found.");
             }
 
+            // Delete the image from the server
+            ImageHelper.DeleteImage(course.ThumbnailUrl, "course-thumbnails");
+
+            // Remove the course from the database
+            await _unitOfWork.CourseRepository.DeleteAsync(course);
             await _unitOfWork.SaveChangesAsync();
+
             return NoContent();
         }
     }
