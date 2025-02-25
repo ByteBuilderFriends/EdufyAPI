@@ -47,7 +47,7 @@ namespace EdufyAPI.Models
 
         #region Relationships
         [ForeignKey("Lesson")]
-        public int LessonId { get; set; }
+        public string LessonId { get; set; }
         public virtual Lesson Lesson { get; set; }
 
         public virtual List<Question> Questions { get; set; } = new();
@@ -71,7 +71,7 @@ namespace EdufyAPI.Models
 
         #region Relationships
         [ForeignKey("Quiz")]
-        public int QuizId { get; set; }
+        public string QuizId { get; set; }
         public virtual Quiz Quiz { get; set; }
 
         public virtual List<Answer> Answers { get; set; } = new();
@@ -91,7 +91,7 @@ namespace EdufyAPI.Models
 
         #region Relationships
         [ForeignKey("Question")]
-        public int QuestionId { get; set; }
+        public string QuestionId { get; set; }
         public virtual Question Question { get; set; }
         #endregion
     }
@@ -111,12 +111,8 @@ namespace EdufyAPI.Models
         public TimeSpan Duration => (CompletedAt ?? DateTime.UtcNow) - StartedAt;
 
         #region Relationships
-        [ForeignKey("Quiz")]
-        public int QuizId { get; set; }
-        public virtual Quiz Quiz { get; set; }
-
         [ForeignKey("Progress")]
-        public int ProgressId { get; set; }
+        public string ProgressId { get; set; }
         public virtual Progress Progress { get; set; }
 
         public virtual List<StudentAnswer> StudentAnswers { get; set; } = new();
@@ -135,16 +131,8 @@ namespace EdufyAPI.Models
         //public bool IsCorrect => Answer?.IsCorrect ?? false; // Automatically determine correctness
         #region Relationships
         [ForeignKey("QuizResult")]
-        public int QuizResultId { get; set; }
+        public string QuizResultId { get; set; }
         public virtual QuizResult QuizResult { get; set; }
-
-        [ForeignKey("Answer")]
-        public int? AnswerId { get; set; }
-        public virtual Answer? Answer { get; set; }
-
-        [ForeignKey("Question")]
-        public int QuestionId { get; set; }
-        public virtual Question Question { get; set; }
         #endregion
     }
 }
