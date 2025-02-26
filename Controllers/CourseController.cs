@@ -75,7 +75,7 @@ namespace EdufyAPI.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
             // Save the thumbnail image and get the URL
-            var imageUrl = await ImageHelper.SaveImageAsync(courseCreateDto.Thumbnail, "course-thumbnails");
+            var imageUrl = await FileUploadHelper.UploadFileAsync(courseCreateDto.Thumbnail, "course-thumbnails");
 
             var course = _mapper.Map<Course>(courseCreateDto);
             course.ThumbnailUrl = imageUrl; //Since ThumbnailUrl is generated after saving the image, you still need to assign it manually.
@@ -103,8 +103,8 @@ namespace EdufyAPI.Controllers
 
             if (courseUpdateDto.Thumbnail != null)
             {
-                ImageHelper.DeleteImage(course.ThumbnailUrl, "course-thumbnails");  // Delete the old image if exists
-                var imageUrl = await ImageHelper.SaveImageAsync(courseUpdateDto.Thumbnail, "course-thumbnails");
+                FileUploadHelper.DeleteFile(course.ThumbnailUrl);  // Delete the old image if exists
+                var imageUrl = await FileUploadHelper.UploadFileAsync(courseUpdateDto.Thumbnail, "course-thumbnails");
                 course.ThumbnailUrl = imageUrl;
             }
 
@@ -125,7 +125,7 @@ namespace EdufyAPI.Controllers
             }
 
             // Delete the image from the server
-            ImageHelper.DeleteImage(course.ThumbnailUrl, "course-thumbnails");
+            FileUploadHelper.DeleteFile(course.ThumbnailUrl);
 
             // Remove the course from the database
             await _unitOfWork.CourseRepository.DeleteAsync(course);
