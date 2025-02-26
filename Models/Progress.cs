@@ -6,7 +6,7 @@ namespace EdufyAPI.Models
     /// Tracks a student's progress in a course.
     public class Progress
     {
-        public string Id { get; set; }
+        public string Id { get; set; } = Guid.NewGuid().ToString();
 
         /// The total number of lessons completed in the course.
         public int TotalLessonsCompleted { get; set; } = 0;

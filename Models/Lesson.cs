@@ -6,7 +6,7 @@ namespace EdufyAPI.Models
     /// Represents an individual lesson within a course.
     public class Lesson
     {
-        public string Id { get; set; }
+        public string Id { get; set; } = Guid.NewGuid().ToString();
 
         /// The title of the lesson.
         [Required]
