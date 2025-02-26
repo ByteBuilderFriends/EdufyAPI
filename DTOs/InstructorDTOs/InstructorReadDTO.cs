@@ -26,13 +26,13 @@ namespace EdufyAPI.DTOs.InstructorDTOs
         // Add courses taught here
         [NotMapped]
         [JsonIgnore]
-        public List<Course> Courses { get; set; } = new();
+        public List<Course> _courses { get; set; } = new();
 
-        public List<string> CoursesTaught
+        public List<string> Courses
         {
             get
             {
-                return Courses.Where(c => c.InstructorId == Id).Select(c => $"{c.Title}: {c.Description}").ToList();
+                return _courses.Where(c => c.InstructorId == Id).Select(c => $"{c.Title}: {c.Description}").ToList();
             }
         }
 
@@ -41,7 +41,7 @@ namespace EdufyAPI.DTOs.InstructorDTOs
         {
             get
             {
-                return CoursesTaught.Count;
+                return Courses.Count;
             }
         }
 

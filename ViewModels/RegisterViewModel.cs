@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using EdufyAPI.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace EdufyAPI.ViewModels
 {
@@ -29,7 +30,7 @@ namespace EdufyAPI.ViewModels
 
         [Required]
         [Display(Name = "Role")]
-        public string Role { get; set; }
+        public Role Role { get; set; }
 
 
         // will be implemented in the future

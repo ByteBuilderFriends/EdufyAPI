@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EdufyAPI.DTOs.IdentityDTOs;
+using EdufyAPI.Enums;
 using EdufyAPI.Models.Roles;
 using EdufyAPI.Repository.Interfaces;
 using EdufyAPI.ViewModels;
@@ -72,22 +73,23 @@ namespace EdufyAPI.Controllers
                 return BadRequest(result.Errors);
 
             // Assign the selected role (Student or Instructor)
-            var roleAssignment = await _userManager.AddToRoleAsync(user, model.Role);
+            var roleAssignment = await _userManager.AddToRoleAsync(user, model.Role.ToString());
             if (!roleAssignment.Succeeded)
                 return BadRequest(roleAssignment.Errors);
 
-            // If user is a student, add to Student table
-            if (model.Role == "Student")
+            // Student and Instructor have different tables for better query performance
+            // Add user to the corresponding table
+            switch (model.Role)
             {
-                var student = _mapper.Map<Student>(model);
-                await _unitOfWork.StudentRepository.AddAsync(student);
-            }
+                case Role.Student:
+                    var student = _mapper.Map<Student>(model);
+                    await _unitOfWork.StudentRepository.AddAsync(student);
+                    break;
 
-            // If user is an instructor, add to Instructor table
-            if (model.Role == "Instructor")
-            {
-                var instructor = _mapper.Map<Instructor>(model);
-                await _unitOfWork.InstructorRepository.AddAsync(instructor);
+                case Role.Instructor:
+                    var instructor = _mapper.Map<Instructor>(model);
+                    await _unitOfWork.InstructorRepository.AddAsync(instructor);
+                    break;
             }
 
             return Ok(new { Message = "User registered successfully!" });
@@ -273,6 +275,22 @@ namespace EdufyAPI.Controllers
             var user = await _userManager.FindByIdAsync(id);
             if (user == null)
                 return NotFound("User not found.");
+
+            // Delete also from Student or Instructor table
+            if (await _userManager.IsInRoleAsync(user, "Student"))
+            {
+                var student = await _unitOfWork.StudentRepository.GetByIdAsync(id);
+                if (student != null)
+                    await _unitOfWork.StudentRepository.DeleteAsync(student);
+            }
+
+            if (await _userManager.IsInRoleAsync(user, "Instructor"))
+            {
+                var instructor = await _unitOfWork.InstructorRepository.GetByIdAsync(id);
+                if (instructor != null)
+                    await _unitOfWork.InstructorRepository.DeleteAsync(instructor);
+            }
+
             var result = await _userManager.DeleteAsync(user);
             if (!result.Succeeded)
                 return BadRequest(result.Errors);
