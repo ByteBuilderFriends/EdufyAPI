@@ -21,7 +21,7 @@ namespace EdufyAPI.Controllers
             var instructors = await _unitOfWork.InstructorRepository.GetAllAsync();
 
             if (instructors == null)
-                return NoContent();
+                return Ok();
 
             var instructorDtos = _mapper.Map<IEnumerable<InstructorReadDTO>>(instructors);
 

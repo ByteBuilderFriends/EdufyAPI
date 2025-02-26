@@ -49,7 +49,7 @@ namespace EdufyAPI.Migrations
                     b.HasIndex("ProgressId")
                         .IsUnique();
 
-                    b.ToTable("Certificate", (string)null);
+                    b.ToTable("Certificate");
                 });
 
             modelBuilder.Entity("EdufyAPI.Models.Answer", b =>
@@ -91,7 +91,7 @@ namespace EdufyAPI.Migrations
 
                     b.HasIndex("QuestionId");
 
-                    b.ToTable("Answers", (string)null);
+                    b.ToTable("Answers");
                 });
 
             modelBuilder.Entity("EdufyAPI.Models.Course", b =>
@@ -119,7 +119,7 @@ namespace EdufyAPI.Migrations
 
                     b.HasIndex("InstructorId");
 
-                    b.ToTable("Courses", (string)null);
+                    b.ToTable("Courses");
                 });
 
             modelBuilder.Entity("EdufyAPI.Models.Lesson", b =>
@@ -135,12 +135,6 @@ namespace EdufyAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
                     b.Property<string>("ThumbnailUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -149,11 +143,15 @@ namespace EdufyAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("VideoUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CourseId");
 
-                    b.ToTable("Lessons", (string)null);
+                    b.ToTable("Lessons");
                 });
 
             modelBuilder.Entity("EdufyAPI.Models.Progress", b =>
@@ -175,7 +173,7 @@ namespace EdufyAPI.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.ToTable("Progresses", (string)null);
+                    b.ToTable("Progresses");
                 });
 
             modelBuilder.Entity("EdufyAPI.Models.Question", b =>
@@ -220,7 +218,7 @@ namespace EdufyAPI.Migrations
 
                     b.HasIndex("QuizId");
 
-                    b.ToTable("Questions", (string)null);
+                    b.ToTable("Questions");
                 });
 
             modelBuilder.Entity("EdufyAPI.Models.Quiz", b =>
@@ -270,7 +268,7 @@ namespace EdufyAPI.Migrations
                     b.HasIndex("LessonId")
                         .IsUnique();
 
-                    b.ToTable("Quizzes", (string)null);
+                    b.ToTable("Quizzes");
                 });
 
             modelBuilder.Entity("EdufyAPI.Models.QuizResult", b =>
@@ -308,7 +306,7 @@ namespace EdufyAPI.Migrations
 
                     b.HasIndex("ProgressId");
 
-                    b.ToTable("QuizResults", (string)null);
+                    b.ToTable("QuizResults");
                 });
 
             modelBuilder.Entity("EdufyAPI.Models.Roles.AppUser", b =>
@@ -430,7 +428,7 @@ namespace EdufyAPI.Migrations
 
                     b.HasIndex("QuizResultId");
 
-                    b.ToTable("StudentAnswer", (string)null);
+                    b.ToTable("StudentAnswer");
                 });
 
             modelBuilder.Entity("EdufyAPI.Models.StudentCourse", b =>
@@ -445,7 +443,7 @@ namespace EdufyAPI.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.ToTable("StudentCourse", (string)null);
+                    b.ToTable("StudentCourse");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

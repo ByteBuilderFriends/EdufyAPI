@@ -1,13 +1,20 @@
 ﻿using EdufyAPI.Models;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace EdufyAPI.DTOs.StudentDTOs
 {
     public class GetStudentsDTO
     {
         public string Id { get; set; }
+
+        [JsonIgnore]
         public string FirstName { get; set; }
+
+        [JsonIgnore]
         public string LastName { get; set; }
+
+        public string FullName { get; set; }
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
 

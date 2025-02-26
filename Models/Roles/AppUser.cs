@@ -6,19 +6,20 @@ namespace EdufyAPI.Models.Roles
     public class AppUser : IdentityUser
     {
         [Required]
-        public string FirstName { get; set; }
+        public string FirstName { get; set; } = string.Empty;
 
         [Required]
-        public string LastName { get; set; }
+        public string LastName { get; set; } = string.Empty;
+
+        public string FullName => $"{FirstName} {LastName}".Trim();
+
 
         [Phone]
         [Display(Name = "Phone Number")]
-        public string PhoneNumber { get; set; }
+        public override string PhoneNumber { get; set; }
 
         [Required]
         [Display(Name = "Email or Username")]
-        public string Email { get; set; }
-
-
+        public override string Email { get; set; }
     }
 }
