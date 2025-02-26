@@ -20,6 +20,12 @@ namespace EdufyAPI.Controllers
             _mapper = mapper;
         }
 
+        // Centralized URL Construction Method
+        private string ConstructFileUrl(string folder, string fileName)
+        {
+            return $"{Request.Scheme}://{Request.Host}/{folder}/{Path.GetFileName(fileName)}";
+        }
+
         // GET: api/Lesson
         [HttpGet]
         public async Task<ActionResult<IEnumerable<LessonReadDTO>>> GetLessons()
@@ -35,10 +41,11 @@ namespace EdufyAPI.Controllers
             // Add image URLs to each lesson DTO
             foreach (var lessonDto in lessonDtos)
             {
-                //constructs the full URL for the lesson image, allowing the frontend to display it easily
+                //constructs the full URL for the lesson file, allowing the frontend to display it easily
                 //Request.Scheme = hhtp/https - Request.Host = localhost:5000 or example.com - Path.GetFileName(lesson.ThumbnailUrl) = Example: image1.jpg
                 //For example: https://localhost:5000/lesson-thumbnails/image1.jpg
-                lessonDto.ThumbnailUrl = $"{Request.Scheme}://{Request.Host}/lesson-thumbnails/{Path.GetFileName(lessonDto.ThumbnailUrl)}";
+                lessonDto.ThumbnailUrl = ConstructFileUrl("lesson-thumbnails", lessonDto.ThumbnailUrl);
+                lessonDto.VideoUrl = ConstructFileUrl("lesson-videos", lessonDto.VideoUrl);
             }
             return Ok(lessonDtos);
         }
@@ -55,8 +62,8 @@ namespace EdufyAPI.Controllers
             //constructs the full URL for the lesson image, allowing the frontend to display it easily
             //Request.Scheme = hhtp/https - Request.Host = localhost:5000 or example.com - Path.GetFileName(lesson.ThumbnailUrl) = Example: image1.jpg
             //For example: https://localhost:5000/lesson-thumbnails/image1.jpg
-            var imageUrl = $"{Request.Scheme}://{Request.Host}/lesson-thumbnails/{Path.GetFileName(lesson.ThumbnailUrl)}";
-            lessonDto.ThumbnailUrl = imageUrl;
+            lessonDto.ThumbnailUrl = ConstructFileUrl("lesson-thumbnails", lesson.ThumbnailUrl);
+            lessonDto.VideoUrl = ConstructFileUrl("lesson-videos", lesson.VideoUrl);
 
             return Ok(lessonDto);
         }
@@ -68,15 +75,20 @@ namespace EdufyAPI.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
             // Save the thumbnail image and get the URL
-            var imageUrl = await ImageHelper.SaveImageAsync(createLessonDto.Thumbnail, "lesson-thumbnails");
+            var imageUrl = await FileUploadHelper.UploadFileAsync(createLessonDto.Thumbnail, "lesson-thumbnails");
+            var videoUrl = await FileUploadHelper.UploadFileAsync(createLessonDto.Video, "lesson-videos");
 
             var lesson = _mapper.Map<Lesson>(createLessonDto);
             lesson.ThumbnailUrl = imageUrl; //Since ThumbnailUrl is generated after saving the image, you still need to assign it manually.
+            lesson.VideoUrl = videoUrl;
 
             await _unitOfWork.LessonRepository.AddAsync(lesson);
             await _unitOfWork.SaveChangesAsync();
 
             var lessonReadDto = _mapper.Map<LessonReadDTO>(lesson);
+            //lessonReadDto.ThumbnailUrl = ConstructFileUrl("lesson-thumbnails", lesson.ThumbnailUrl);
+            //lessonReadDto.VideoUrl = ConstructFileUrl("lesson-videos", lesson.VideoUrl);
+
             return CreatedAtAction(nameof(GetLessonByID), new { id = lesson.Id }, lessonReadDto);
         }
 
@@ -89,17 +101,28 @@ namespace EdufyAPI.Controllers
 
             _mapper.Map(updateLessonDto, lesson);
 
+            // Handle thumbnail update
             if (updateLessonDto.Thumbnail != null)
             {
-                ImageHelper.DeleteImage(lesson.ThumbnailUrl, "lesson-thumbnails");  // Delete the old image if exists
-                var imageUrl = await ImageHelper.SaveImageAsync(updateLessonDto.Thumbnail, "lesson-thumbnails");
+                FileUploadHelper.DeleteFile(lesson.ThumbnailUrl);  // Delete the old image if exists
+                var imageUrl = await FileUploadHelper.UploadFileAsync(updateLessonDto.Thumbnail, "lesson-thumbnails");
                 lesson.ThumbnailUrl = imageUrl;
+            }
+            // Handle video update
+            if (updateLessonDto.Video != null)
+            {
+                FileUploadHelper.DeleteFile(lesson.VideoUrl);  // Delete the old video if exists
+                var videoUrl = await FileUploadHelper.UploadFileAsync(updateLessonDto.Video, "lesson-video");
+                lesson.VideoUrl = videoUrl;
             }
 
             await _unitOfWork.LessonRepository.UpdateAsync(lesson);
             await _unitOfWork.SaveChangesAsync();
 
-            return Ok(_mapper.Map<LessonReadDTO>(lesson));
+            var lessonReadDto = _mapper.Map<LessonReadDTO>(lesson);
+            //lessonReadDto.ThumbnailUrl = ConstructFileUrl("lesson-thumbnails", lesson.ThumbnailUrl);
+            //lessonReadDto.VideoUrl = ConstructFileUrl("lesson-videos", lesson.VideoUrl);
+            return Ok(lessonReadDto);
         }
 
         // DELETE: api/Lesson/{id}
@@ -110,7 +133,9 @@ namespace EdufyAPI.Controllers
             if (lesson == null) return NotFound("Lesson not found.");
 
             // Delete the image from the server
-            ImageHelper.DeleteImage(lesson.ThumbnailUrl, "lesson-thumbnails");
+            FileUploadHelper.DeleteFile(lesson.ThumbnailUrl);
+            // Delete the video from the server
+            FileUploadHelper.DeleteFile(lesson.VideoUrl);
 
             // Remove the lesson from the database
             await _unitOfWork.LessonRepository.DeleteAsync(lesson);
