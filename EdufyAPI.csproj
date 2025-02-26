@@ -23,8 +23,7 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
-    <Folder Include="wwwroot\lesson-thumbnails\" />
-    <Folder Include="wwwroot\course-thumbnails\" />
+    <Folder Include="wwwroot\" />
   </ItemGroup>
 
 </Project>

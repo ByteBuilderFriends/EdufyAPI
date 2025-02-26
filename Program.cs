@@ -1,4 +1,5 @@
 using EdufyAPI.DTOs;
+using EdufyAPI.Helpers;
 using EdufyAPI.Models;
 using EdufyAPI.Models.Roles;
 using EdufyAPI.Repository;
@@ -132,6 +133,8 @@ builder.Services.AddCors(options =>
     * Don't forget to edit the appsettings.json file to include the AllowedOrigins key
  */
 #endregion
+
+builder.Services.AddScoped<FileUploadHelper>();
 
 var app = builder.Build();
 
