@@ -14,7 +14,7 @@ namespace EdufyAPI.Models
 
         /// The content of the lesson.
         public string Content { get; set; } = string.Empty;
-        public string ThumbnailUrl { get; set; } = string.Empty;
+        public string? ThumbnailUrl { get; set; } = string.Empty;
         public string VideoUrl { get; set; } = string.Empty;
 
         //new

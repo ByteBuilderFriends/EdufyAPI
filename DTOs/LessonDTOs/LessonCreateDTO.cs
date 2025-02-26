@@ -9,7 +9,7 @@ namespace EdufyAPI.DTOs.LessonDTOs
         public string Content { get; set; } = string.Empty;
         [Required]
         public string CourseId { get; set; }
-        public IFormFile Thumbnail { get; set; }
+        public IFormFile? Thumbnail { get; set; }
         public IFormFile Video { get; set; }
 
     }
