@@ -46,7 +46,7 @@ public class QuizController : ControllerBase
         if (!ModelState.IsValid) return BadRequest(ModelState);
 
         var lesson = await _unitOfWork.LessonRepository.GetByIdAsync(quizCreateDTO.LessonId);
-        if (lesson == null || lesson.IsDeleted) return BadRequest(new { Message = "Invalid LessonId." });
+        if (lesson == null) return BadRequest(new { Message = "Invalid LessonId." });
 
         var quiz = _mapper.Map<Quiz>(quizCreateDTO);
         await _unitOfWork.QuizRepository.AddAsync(quiz);
