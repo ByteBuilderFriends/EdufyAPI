@@ -7,6 +7,7 @@
         public string Content { get; set; } = string.Empty;
         public string ThumbnailUrl { get; set; }
         public string VideoUrl { get; set; }
+        public string ExternalVideoUrl { get; set; }
         public string CourseId { get; set; }
 
     }

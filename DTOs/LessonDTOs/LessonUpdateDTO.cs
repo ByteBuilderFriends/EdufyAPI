@@ -10,5 +10,9 @@ namespace EdufyAPI.DTOs.LessonDTOs
         public IFormFile? Thumbnail { get; set; }
         public IFormFile? Video { get; set; }
 
+        [Url(ErrorMessage = "Please enter a valid URL.")]
+        public string? ExternalVideoUrl { get; set; }
+
+
     }
 }

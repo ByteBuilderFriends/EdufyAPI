@@ -38,14 +38,24 @@ namespace EdufyAPI.Controllers
 
             var lessonDtos = _mapper.Map<IEnumerable<LessonReadDTO>>(lessons);
 
-            // Add image URLs to each lesson DTO
+            // Add image and video URLs to each lesson DTO
             foreach (var lessonDto in lessonDtos)
             {
                 //constructs the full URL for the lesson file, allowing the frontend to display it easily
                 //Request.Scheme = hhtp/https - Request.Host = localhost:5000 or example.com - Path.GetFileName(lesson.ThumbnailUrl) = Example: image1.jpg
                 //For example: https://localhost:5000/lesson-thumbnails/image1.jpg
-                lessonDto.ThumbnailUrl = ConstructFileUrl("lesson-thumbnails", lessonDto.ThumbnailUrl);
-                lessonDto.VideoUrl = ConstructFileUrl("lesson-videos", lessonDto.VideoUrl);
+
+                // Construct ThumbnailUrl if it exists
+                if (!string.IsNullOrEmpty(lessonDto.ThumbnailUrl))
+                {
+                    lessonDto.ThumbnailUrl = ConstructFileUrl("lesson-thumbnails", lessonDto.ThumbnailUrl);
+                }
+
+                // Construct VideoUrl if it exists
+                if (!string.IsNullOrEmpty(lessonDto.VideoUrl))
+                {
+                    lessonDto.VideoUrl = ConstructFileUrl("lesson-videos", lessonDto.VideoUrl);
+                }
             }
             return Ok(lessonDtos);
         }
@@ -62,8 +72,18 @@ namespace EdufyAPI.Controllers
             //constructs the full URL for the lesson image, allowing the frontend to display it easily
             //Request.Scheme = hhtp/https - Request.Host = localhost:5000 or example.com - Path.GetFileName(lesson.ThumbnailUrl) = Example: image1.jpg
             //For example: https://localhost:5000/lesson-thumbnails/image1.jpg
-            lessonDto.ThumbnailUrl = ConstructFileUrl("lesson-thumbnails", lesson.ThumbnailUrl);
-            lessonDto.VideoUrl = ConstructFileUrl("lesson-videos", lesson.VideoUrl);
+
+            // Construct ThumbnailUrl if it exists
+            if (!string.IsNullOrEmpty(lesson.ThumbnailUrl))
+            {
+                lessonDto.ThumbnailUrl = ConstructFileUrl("lesson-thumbnails", lesson.ThumbnailUrl);
+            }
+
+            // Construct VideoUrl if it exists
+            if (!string.IsNullOrEmpty(lesson.VideoUrl))
+            {
+                lessonDto.VideoUrl = ConstructFileUrl("lesson-videos", lesson.VideoUrl);
+            }
 
             return Ok(lessonDto);
         }
@@ -74,9 +94,39 @@ namespace EdufyAPI.Controllers
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            // Save the thumbnail image and get the URL
-            var imageUrl = await FileUploadHelper.UploadFileAsync(createLessonDto.Thumbnail, "lesson-thumbnails");
-            var videoUrl = await FileUploadHelper.UploadFileAsync(createLessonDto.Video, "lesson-videos");
+
+            // Validate the provided ExternalVideoUrl 
+            if (!string.IsNullOrEmpty(createLessonDto.ExternalVideoUrl))
+            {
+                // Check Format 
+                if (!UrlValidatorHelper.IsValidUrlFormat(createLessonDto.ExternalVideoUrl))
+                {
+                    return BadRequest("Invalid URL format.");
+                }
+
+                // Check if URL is reachable 
+                var isReachable = await UrlValidatorHelper.IsUrlReachableAsync(createLessonDto.ExternalVideoUrl);
+                if (!isReachable)
+                {
+                    return BadRequest("The provided URL is not reachable.");
+                }
+            }
+
+
+            string imageUrl = null;
+            string videoUrl = null;
+
+            // Save the thumbnail image if provided
+            if (createLessonDto.Thumbnail != null)
+            {
+                imageUrl = await FileUploadHelper.UploadFileAsync(createLessonDto.Thumbnail, "lesson-thumbnails");
+            }
+
+            // Save the video file if provided
+            if (createLessonDto.Video != null)
+            {
+                videoUrl = await FileUploadHelper.UploadFileAsync(createLessonDto.Video, "lesson-videos");
+            }
 
             var lesson = _mapper.Map<Lesson>(createLessonDto);
             lesson.ThumbnailUrl = imageUrl; //Since ThumbnailUrl is generated after saving the image, you still need to assign it manually.
@@ -86,9 +136,6 @@ namespace EdufyAPI.Controllers
             await _unitOfWork.SaveChangesAsync();
 
             var lessonReadDto = _mapper.Map<LessonReadDTO>(lesson);
-            //lessonReadDto.ThumbnailUrl = ConstructFileUrl("lesson-thumbnails", lesson.ThumbnailUrl);
-            //lessonReadDto.VideoUrl = ConstructFileUrl("lesson-videos", lesson.VideoUrl);
-
             return CreatedAtAction(nameof(GetLessonByID), new { id = lesson.Id }, lessonReadDto);
         }
 
@@ -98,6 +145,24 @@ namespace EdufyAPI.Controllers
         {
             var lesson = await _unitOfWork.LessonRepository.GetByIdAsync(id);
             if (lesson == null) return NotFound("Lesson not found.");
+
+            // Validate the provided ExternalVideoUrl 
+            if (!string.IsNullOrEmpty(updateLessonDto.ExternalVideoUrl))
+            {
+                // Check Format 
+                if (!UrlValidatorHelper.IsValidUrlFormat(updateLessonDto.ExternalVideoUrl))
+                {
+                    return BadRequest("Invalid URL format.");
+                }
+
+                // Check if URL is reachable 
+                var isReachable = await UrlValidatorHelper.IsUrlReachableAsync(updateLessonDto.ExternalVideoUrl);
+                if (!isReachable)
+                {
+                    return BadRequest("The provided URL is not reachable.");
+                }
+            }
+
 
             _mapper.Map(updateLessonDto, lesson);
 

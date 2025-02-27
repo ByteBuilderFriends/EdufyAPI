@@ -10,7 +10,11 @@ namespace EdufyAPI.DTOs.LessonDTOs
         [Required]
         public string CourseId { get; set; }
         public IFormFile? Thumbnail { get; set; }
-        public IFormFile Video { get; set; }
+        public IFormFile? Video { get; set; }
+
+        [Url(ErrorMessage = "Please enter a valid URL.")]
+        public string? ExternalVideoUrl { get; set; }   // Link from internet
+
 
     }
 }
