@@ -100,6 +100,7 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles)); // Register AutoMapper
+builder.Services.AddLogging(); // This ensures logging is available
 #endregion
 
 
