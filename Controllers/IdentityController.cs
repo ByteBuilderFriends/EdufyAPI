@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EdufyAPI.DTOs.IdentityDTOs;
 using EdufyAPI.Enums;
+using EdufyAPI.Helpers;
 using EdufyAPI.Models.Roles;
 using EdufyAPI.Repository.Interfaces;
 using EdufyAPI.ViewModels;
@@ -61,6 +62,12 @@ namespace EdufyAPI.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
+            var imageUrl = string.Empty;
+
+            // Add the user Picture if it exists
+            if (model.ProfilePicture != null)
+                imageUrl = await FileUploadHelper.UploadFileAsync(model.ProfilePicture, "user-profile");
+
             // MailAddress.User is used to take the username part of the email.
             var user = new AppUser
             {
@@ -68,8 +75,10 @@ namespace EdufyAPI.Controllers
                 Email = model.Email,
                 FirstName = model.FirstName,
                 LastName = model.LastName,
-                PhoneNumber = model.PhoneNumber
+                PhoneNumber = model.PhoneNumber,
+                ProfilePictureUrl = imageUrl
             };
+
             var result = await _userManager.CreateAsync(user, model.Password);
 
             if (!result.Succeeded)
@@ -179,7 +188,6 @@ namespace EdufyAPI.Controllers
         }
 
         [HttpGet("Users/{id}")]
-        [Authorize("Admin")]
         public async Task<IActionResult> GetUserById(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
