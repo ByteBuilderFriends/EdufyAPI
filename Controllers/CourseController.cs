@@ -61,8 +61,7 @@ namespace EdufyAPI.Controllers
             //constructs the full URL for the course image, allowing the frontend to display it easily
             //Request.Scheme = hhtp/https - Request.Host = localhost:5000 or example.com - Path.GetFileName(course.ThumbnailUrl) = Example: image1.jpg
             //For example: https://localhost:5000/course-thumbnails/image1.jpg
-            var imageUrl = ConstructFileUrlHelper.ConstructFileUrl(Request, ThumbnailsFolderName, courseDto.ThumbnailUrl);
-            courseDto.ThumbnailUrl = imageUrl;
+            courseDto.ThumbnailUrl = ConstructFileUrlHelper.ConstructFileUrl(Request, ThumbnailsFolderName, courseDto.ThumbnailUrl);
 
             return Ok(courseDto);
         }
