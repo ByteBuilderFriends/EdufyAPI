@@ -32,6 +32,7 @@ namespace EdufyAPI.ViewModels
         [Display(Name = "Role")]
         public Role Role { get; set; }
 
+        public IFormFile? ProfilePicture { get; set; }
 
         // will be implemented in the future
         //[Display(Name = "Profile Picture")]

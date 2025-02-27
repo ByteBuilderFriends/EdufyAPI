@@ -21,5 +21,7 @@ namespace EdufyAPI.Models.Roles
         [Required]
         [Display(Name = "Email or Username")]
         public override string Email { get; set; }
+
+        public string? ProfilePictureUrl { get; set; } = string.Empty;
     }
 }
