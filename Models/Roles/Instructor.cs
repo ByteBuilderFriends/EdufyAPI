@@ -4,7 +4,7 @@
     {
 
         #region Relationships
-        public virtual List<Course> CoursesCreated { get; set; } = new List<Course>();
+        public virtual List<Course> Courses { get; set; } = new List<Course>();
         #endregion
     }
 }

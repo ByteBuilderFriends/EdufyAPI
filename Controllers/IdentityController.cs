@@ -29,6 +29,7 @@ namespace EdufyAPI.Controllers
         private readonly IConfiguration _config;
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly ILogger<IdentityController> _logger;
 
         /// <summary>
         /// Constructor to initialize IdentityController with dependency injection.
@@ -38,13 +39,15 @@ namespace EdufyAPI.Controllers
             SignInManager<AppUser> signInManager,
             IConfiguration config,
             IMapper mapper,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            ILogger<IdentityController> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _config = config;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
+            _logger = logger;
         }
 
         /// <summary>
@@ -75,7 +78,10 @@ namespace EdufyAPI.Controllers
             // Assign the selected role (Student or Instructor)
             var roleAssignment = await _userManager.AddToRoleAsync(user, model.Role.ToString());
             if (!roleAssignment.Succeeded)
+            {
+                await _userManager.DeleteAsync(user);
                 return BadRequest(roleAssignment.Errors);
+            }
 
             // Student and Instructor have different tables for better query performance
             // Add user to the corresponding table
@@ -92,6 +98,8 @@ namespace EdufyAPI.Controllers
                     break;
             }
 
+            // Log the successful login
+            _logger.LogInformation($"User {user.Id} registered successfully.");
             return Ok(new { Message = "User registered successfully!" });
         }
 
@@ -109,24 +117,36 @@ namespace EdufyAPI.Controllers
             // Check if input is an email
             bool isEmail = new EmailAddressAttribute().IsValid(model.Email);
 
+            // Normalize the email correctly
+            var normalizedEmail = isEmail ? _userManager.NormalizeEmail(model.Email) : null;
+
             // Find the user by email or username
             var user = isEmail
-                ? await _userManager.Users.FirstOrDefaultAsync(u => u.Email == model.Email)
+                ? await _userManager.Users.FirstOrDefaultAsync(u => u.NormalizedEmail == normalizedEmail)
                 : await _userManager.FindByNameAsync(model.Email);
 
+            // Note: ✅ Emails must be normalized manually because we query using FirstOrDefaultAsync and compare against NormalizedEmail.
+            // NOTE: ✅ Usernames don't need manual normalization because FindByNameAsync already handles it.
+
             if (user == null)
-                return Unauthorized(new { Message = "Invalid credentials" });
+                return Problem("Invalid credentials", statusCode: 401);
 
             // Ensure correct username is used for sign-in
             var result = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, false, false);
 
             if (!result.Succeeded)
-                return Unauthorized(new { Message = "Invalid credentials" });
+            {
+                _logger.LogWarning($"Failed login attempt for {model.Email} at {DateTime.UtcNow}.");
+                return Problem("Invalid credentials", statusCode: 401);
+            }
 
             // Generate and return JWT token
             var token = GenerateJwtToken(user);
+
+
             return Ok(new { Token = token });
         }
+
 
 
 
@@ -137,9 +157,17 @@ namespace EdufyAPI.Controllers
         [HttpPost("logout")]
         public async Task<IActionResult> Logout()
         {
+            if (!User.Identity.IsAuthenticated)
+                return Unauthorized(new { Message = "User is not logged in." });
+
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            _logger.LogInformation($"User {userId} logged out at {DateTime.UtcNow}.");
+
             await _signInManager.SignOutAsync();
-            return Ok(new { Message = "Logged out successfully!" });
+
+            return NoContent(); // RESTful response
         }
+
 
         // Get All Users
         [HttpGet("Users")]

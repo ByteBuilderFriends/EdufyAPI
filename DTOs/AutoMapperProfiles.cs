@@ -36,6 +36,12 @@ namespace EdufyAPI.DTOs
             #region Instructor AutoMapper
             CreateMap<Instructor, InstructorReadDTO>().ReverseMap(); // Updated to use full namespace
             CreateMap<Instructor, RegisterViewModel>().ReverseMap();
+
+            CreateMap<Instructor, InstructorReadDTO>()
+                        .ForMember(dest => dest.Courses, opt => opt.MapFrom(src =>
+                            src.Courses.Select(c => $"{c.Title}: {c.Description}").ToList()))
+                        .ForMember(dest => dest.CourseCount, opt => opt.MapFrom(src => src.Courses.Count));
+
             #endregion
 
             #region Course AutoMapper
