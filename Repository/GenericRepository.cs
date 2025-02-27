@@ -1,6 +1,7 @@
 ﻿using EdufyAPI.Models;
 using EdufyAPI.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace EdufyAPI.Repository
 {
@@ -57,6 +58,11 @@ namespace EdufyAPI.Repository
             await _context.SaveChangesAsync();
         }
 
+        // Generic method to get by a condition
 
+        public async Task<IReadOnlyList<T>> GetByCondition(Expression<Func<T, bool>> expression)
+        {
+            return await _dbSet.Where(expression).ToListAsync();
+        }
     }
 }

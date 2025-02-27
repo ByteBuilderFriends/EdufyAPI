@@ -15,12 +15,6 @@ namespace EdufyAPI.Controllers
         private readonly IMapper _mapper = mapper;
 
 
-        // TODO: Implement the following methods.
-        // 2. Delete a student by their unique identifier, edit it inside the IdenrifierController.
-        // It should also allow the student to update his data.
-        // - It Should Contain the following properties:
-        // -Change Password, Change Email, Change Phone Number. If needed.
-
         // 3. The student should be able to enroll in a course.Inside CoursesController.
 
         // Get all students.
@@ -55,7 +49,21 @@ namespace EdufyAPI.Controllers
 
         }
 
-        // Other methods will be implemented inside: IdentityController.cs, CoursesController.cs, and StudentController.cs
+        [HttpGet("GetAllCourses")]
+        public async Task<IActionResult> GetAllStudentCourses(string StudentId)
+        {
+            if (StudentId == null)
+                return BadRequest();
+            // Check if the student exists
+            var student = await _unitOfWork.StudentRepository.GetByIdAsync(StudentId);
+            if (student == null)
+                return NotFound("Student not found.");
+            // Get all courses the student is enrolled in
+            var studentCourses = await _unitOfWork.StudentCourseRepository.GetByCondition(sc => sc.StudentId == StudentId);
+
+            List<GetStudentCoursesDTO> studentCoursesDTO = _mapper.Map<List<GetStudentCoursesDTO>>(studentCourses);
+            return Ok(studentCoursesDTO);
+        }
 
     }
 }
