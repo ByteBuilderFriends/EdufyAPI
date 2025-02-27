@@ -67,6 +67,29 @@ namespace EdufyAPI.Controllers
             return Ok(courseDto);
         }
 
+        // ✅ GET: api/Course/GetInstructorCourses/{instructorId}
+        [HttpGet("{instructorId}")]
+        public async Task<ActionResult<IEnumerable<CourseReadDTO>>> GetInstructorCourses(string instructorId)
+        {
+            var courses = await _unitOfWork.CourseRepository.GetByCondition(c => c.InstructorId == instructorId);
+
+            if (!courses.Any())
+            {
+                return Ok(Enumerable.Empty<CourseReadDTO>());
+            }
+
+            var courseDtos = _mapper.Map<IEnumerable<CourseReadDTO>>(courses);
+
+            // Add image URLs to each course DTO
+            foreach (var courseDto in courseDtos)
+            {
+                courseDto.ThumbnailUrl = ConstructFileUrlHelper.ConstructFileUrl(Request, ThumbnailsFolderName, courseDto.ThumbnailUrl);
+            }
+
+            return Ok(courseDtos);
+        }
+
+
         // ✅ POST: api/Course
         [HttpPost]
         public async Task<ActionResult<CourseReadDTO>> CreateCourse([FromForm] CourseCreateDTO courseCreateDto)
