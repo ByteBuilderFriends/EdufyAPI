@@ -17,6 +17,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 
+// TODO: Remove the Enum and  use Roles as a string better
+
 #region Configure Swagger with JWT authentication
 // 🔹 Configure Swagger with JWT authentication
 builder.Services.AddEndpointsApiExplorer();

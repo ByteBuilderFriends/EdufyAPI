@@ -29,6 +29,7 @@ namespace EdufyAPI.Models
         public DbSet<Answer> Answers { get; set; }
         public DbSet<QuizResult> QuizResults { get; set; }
         public DbSet<StudentAnswer> StudentAnswer { get; set; }
+        public DbSet<StudentCourse> StudentCourse { get; set; }
         public DbSet<Certificate> Certificate { get; set; }
 
         #endregion

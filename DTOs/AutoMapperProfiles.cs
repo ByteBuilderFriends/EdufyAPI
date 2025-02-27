@@ -31,6 +31,21 @@ namespace EdufyAPI.DTOs
             //Registeration of Student to StudentReadDTO
             CreateMap<Student, RegisterViewModel>().ReverseMap();
             CreateMap<Student, GetStudentsDTO>().ReverseMap();
+
+            CreateMap<Student, GetStudentsDTO>()
+                .ForMember(dest => dest.EnrolledCourses, opt => opt.MapFrom(src =>
+                    src.StudentCourses.Select(sc => $"{sc.Course.Title}, {sc.Course.Description}").ToList())) // ✅ Only map course titles
+
+                .ForMember(dest => dest.CompletedCourses, opt => opt.MapFrom(src =>
+                    src.StudentCourses
+                        .Where(sc => sc.Course.CourseProgress.All(y => y.IsCompleted))
+                        .Select(sc => sc.Course.Title)
+                        .ToList())) // ✅ Only completed courses
+
+                .ForMember(dest => dest.CourseCount, opt => opt.MapFrom(src => src.StudentCourses.Count))
+
+                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => $"{src.FirstName} {src.LastName}")); // ✅ Map FullName
+
             #endregion
 
             #region Instructor AutoMapper

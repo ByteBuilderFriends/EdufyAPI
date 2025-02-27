@@ -1,6 +1,4 @@
-﻿using EdufyAPI.Models;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace EdufyAPI.DTOs.StudentDTOs
 {
@@ -18,16 +16,17 @@ namespace EdufyAPI.DTOs.StudentDTOs
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
 
-        [NotMapped]
-        private List<StudentCourse> EnrolledCourses = new();
+        // ✅ Make it a property
+        public List<string> EnrolledCourses { get; set; } = new();
 
-        public List<string> CompletedCourses
-        {
-            get
-            {
-                return EnrolledCourses.Where(x => x.Course.CourseProgress.All(y => y.IsCompleted)).Select(x => x.Course.Title).ToList();
-            }
-        }
+        // ✅ Fix CompletedCourses logic
+        public List<string> CompletedCourses { get; set; } = new();
+
+        // ✅ Add CourseCount since it's mapped in AutoMapper
+        public int CourseCount { get; set; }
+
+
+        // NOTE: I neeed to thing about how the student will enrollCourse, remember is related to StudentCourse
 
     }
 }
