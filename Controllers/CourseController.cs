@@ -21,7 +21,6 @@ namespace EdufyAPI.Controllers
             _mapper = mapper;
         }
         private readonly string ThumbnailsFolderName = "course-thumbnails";
-        private readonly string VideosFolderName = "course-videos";
         // ✅ GET: api/Course
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CourseReadDTO>>> GetCourses()
