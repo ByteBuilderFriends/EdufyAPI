@@ -6,7 +6,7 @@
         private static readonly string BaseUploadDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
 
         // Allowed file extensions for upload
-        private static readonly string[] AllowedFileExtensions = { ".jpg", ".jpeg", ".png", ".gif", ".pdf", ".docx", ".mp4", ".mov", ".avi", ".mkv" };
+        private static readonly string[] AllowedFileExtensions = [".jpg", ".jpeg", ".png", ".gif", ".pdf", ".docx", ".mp4", ".mov", ".avi", ".mkv"];
         // Maximum file size allowed (500 MB for videos)
         private const long MaxFileSize = 500 * 1024 * 1024;
 
@@ -94,7 +94,7 @@
                 On Windows: It is a backslash (\)
                 On Linux and macOS: It is a forward slash(/)*/
                 var relativePath = fileUrl.Replace("/", Path.DirectorySeparatorChar.ToString());
-                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", relativePath); //C:\Projects\EdufyAPI\wwwroot\uploads\images\example.jpg
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", relativePath); // "C:\Projects\EdufyAPI\wwwroot\uploads\images\example.jpg"
 
                 // Check if the file exists before attempting to delete
                 if (File.Exists(filePath))

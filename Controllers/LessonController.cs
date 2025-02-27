@@ -20,12 +20,8 @@ namespace EdufyAPI.Controllers
             _mapper = mapper;
         }
 
-        // Centralized URL Construction Method
-        private string ConstructFileUrl(string folder, string fileName)
-        {
-            return $"{Request.Scheme}://{Request.Host}/{folder}/{Path.GetFileName(fileName)}";
-        }
-
+        private readonly string ThumbnailsFolderName = "course-thumbnails";
+        private readonly string VideosFolderName = "course-videos";
         // GET: api/Lesson
         [HttpGet]
         public async Task<ActionResult<IEnumerable<LessonReadDTO>>> GetLessons()
@@ -41,20 +37,16 @@ namespace EdufyAPI.Controllers
             // Add image and video URLs to each lesson DTO
             foreach (var lessonDto in lessonDtos)
             {
-                //constructs the full URL for the lesson file, allowing the frontend to display it easily
-                //Request.Scheme = hhtp/https - Request.Host = localhost:5000 or example.com - Path.GetFileName(lesson.ThumbnailUrl) = Example: image1.jpg
-                //For example: https://localhost:5000/lesson-thumbnails/image1.jpg
-
                 // Construct ThumbnailUrl if it exists
                 if (!string.IsNullOrEmpty(lessonDto.ThumbnailUrl))
                 {
-                    lessonDto.ThumbnailUrl = ConstructFileUrl("lesson-thumbnails", lessonDto.ThumbnailUrl);
+                    lessonDto.ThumbnailUrl = ConstructFileUrlHelper.ConstructFileUrl(Request, ThumbnailsFolderName, lessonDto.ThumbnailUrl);
                 }
 
                 // Construct VideoUrl if it exists
                 if (!string.IsNullOrEmpty(lessonDto.VideoUrl))
                 {
-                    lessonDto.VideoUrl = ConstructFileUrl("lesson-videos", lessonDto.VideoUrl);
+                    lessonDto.VideoUrl = ConstructFileUrlHelper.ConstructFileUrl(Request, VideosFolderName, lessonDto.VideoUrl);
                 }
             }
             return Ok(lessonDtos);
@@ -76,13 +68,13 @@ namespace EdufyAPI.Controllers
             // Construct ThumbnailUrl if it exists
             if (!string.IsNullOrEmpty(lesson.ThumbnailUrl))
             {
-                lessonDto.ThumbnailUrl = ConstructFileUrl("lesson-thumbnails", lesson.ThumbnailUrl);
+                lessonDto.ThumbnailUrl = ConstructFileUrlHelper.ConstructFileUrl(Request, ThumbnailsFolderName, lesson.ThumbnailUrl);
             }
 
             // Construct VideoUrl if it exists
             if (!string.IsNullOrEmpty(lesson.VideoUrl))
             {
-                lessonDto.VideoUrl = ConstructFileUrl("lesson-videos", lesson.VideoUrl);
+                lessonDto.VideoUrl = ConstructFileUrlHelper.ConstructFileUrl(Request, VideosFolderName, lesson.VideoUrl);
             }
 
             return Ok(lessonDto);
