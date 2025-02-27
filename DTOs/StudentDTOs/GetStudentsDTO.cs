@@ -25,6 +25,7 @@ namespace EdufyAPI.DTOs.StudentDTOs
         // ✅ Add CourseCount since it's mapped in AutoMapper
         public int CourseCount { get; set; }
 
+        public string ProfilePictureUrl { get; set; } = string.Empty;
 
         // NOTE: I neeed to thing about how the student will enrollCourse, remember is related to StudentCourse
 
