@@ -2,10 +2,12 @@
 using EduConnectAPI.Models;
 using EdufyAPI.DTOs.CertificateDTOs;
 using EdufyAPI.DTOs.CourseDTOs;
+using EdufyAPI.DTOs.EnrollmentDTOs;
 using EdufyAPI.DTOs.InstructorDTOs;
 using EdufyAPI.DTOs.LessonDTOs;
 using EdufyAPI.DTOs.ProgressDTOs;
 using EdufyAPI.DTOs.QuizModelsDTOs.QuizDTOs;
+using EdufyAPI.DTOs.StudentCourseDTOs;
 using EdufyAPI.DTOs.StudentDTOs;
 using EdufyAPI.Models;
 using EdufyAPI.Models.Roles;
@@ -86,6 +88,13 @@ namespace EdufyAPI.DTOs
             CreateMap<QuizCreateDTO, Quiz>();
             CreateMap<QuizUpdateDTO, Quiz>()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+            #endregion
+
+            #region Enrollment AutoMapper
+            CreateMap<Enrollment, EnrollmentReadDTO>()
+                .ForMember(dest => dest.StudentName, opt => opt.MapFrom(src => src.Student.FullName))
+                .ForMember(dest => dest.CourseTitle, opt => opt.MapFrom(src => src.Course.Title));
+            CreateMap<EnrollmentCreateDTO, Enrollment>();
             #endregion
         }
     }

@@ -18,7 +18,7 @@ namespace EdufyAPI.Repository.Interfaces
         GenericRepository<Question> QuestionRepository { get; }
         GenericRepository<Answer> AnswerRepository { get; }
         GenericRepository<StudentAnswer> StudentAnswerRepository { get; }
-        GenericRepository<StudentCourse> StudentCourseRepository { get; }
+        GenericRepository<Enrollment> EnrollmentRepository { get; }
 
 
         Task<int> SaveChangesAsync();

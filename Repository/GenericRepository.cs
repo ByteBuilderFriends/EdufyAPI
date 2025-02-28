@@ -22,6 +22,8 @@ namespace EdufyAPI.Repository
         {
             return await _dbSet.ToListAsync();
         }
+
+        // Generic method to get by a condition
         public async Task<IReadOnlyList<T>> GetByCondition(Expression<Func<T, bool>> expression)
         {
             return await _dbSet.Where(expression).ToListAsync();
@@ -61,8 +63,17 @@ namespace EdufyAPI.Repository
             await _context.SaveChangesAsync();
         }
 
-        // Generic method to get by a condition
+        //Enrollment only
 
+        public async Task<Enrollment?> GetAsync(string studentId, string courseId)
+        {
+            return await _context.Enrollment
+                .FirstOrDefaultAsync(sc => sc.StudentId == studentId && sc.CourseId == courseId);
+        }
+        //public async Task<bool> SaveChangesAsync()
+        //{
+        //    return await _context.SaveChangesAsync() > 0;
+        //}
     }
 }
 

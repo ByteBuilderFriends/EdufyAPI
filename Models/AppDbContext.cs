@@ -44,7 +44,7 @@ namespace EdufyAPI.Models
 
 
             #region Relationships
-            modelBuilder.Entity<StudentCourse>(entity =>
+            modelBuilder.Entity<Enrollment>(entity =>
                 {
                     entity.HasKey(sc => new { sc.StudentId, sc.CourseId });
 

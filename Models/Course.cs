@@ -33,7 +33,7 @@ namespace EdufyAPI.Models
 
 
         // Many-to-Many
-        public virtual List<StudentCourse> StudentCourses { get; set; } = new List<StudentCourse>();
+        public virtual List<Enrollment> StudentCourses { get; set; } = new List<Enrollment>();
         #endregion
     }
 }

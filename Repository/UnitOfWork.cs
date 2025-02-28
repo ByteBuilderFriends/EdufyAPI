@@ -24,7 +24,7 @@ namespace EdufyAPI.Repository
         private GenericRepository<Admin> _adminRepository;
         private GenericRepository<Student> _studentRepository;
         private GenericRepository<Instructor> _instructorRepository;
-        private GenericRepository<StudentCourse> _studentCourseRepository;
+        private GenericRepository<Enrollment> _enrollmentRepository;
 
 
         #region Repositories
@@ -56,7 +56,7 @@ namespace EdufyAPI.Repository
         public GenericRepository<Admin> AdminRepository => _adminRepository ??= new GenericRepository<Admin>(_context);
         public GenericRepository<Student> StudentRepository => _studentRepository ??= new GenericRepository<Student>(_context);
         public GenericRepository<Instructor> InstructorRepository => _instructorRepository ??= new GenericRepository<Instructor>(_context);
-        public GenericRepository<StudentCourse> StudentCourseRepository => _studentCourseRepository ??= new GenericRepository<StudentCourse>(_context);
+        public GenericRepository<Enrollment> EnrollmentRepository => _enrollmentRepository ??= new GenericRepository<Enrollment>(_context);
 
         #endregion
 

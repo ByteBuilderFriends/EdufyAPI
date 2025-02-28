@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EdufyAPI.Models
 {
-    public class StudentCourse
+    public class Enrollment
     {
         [ForeignKey("Student")]
         public string StudentId { get; set; }

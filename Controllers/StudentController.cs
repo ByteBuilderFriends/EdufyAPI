@@ -59,7 +59,7 @@ namespace EdufyAPI.Controllers
             if (student == null)
                 return NotFound("Student not found.");
             // Get all courses the student is enrolled in
-            var studentCourses = await _unitOfWork.StudentCourseRepository.GetByCondition(sc => sc.StudentId == StudentId);
+            var studentCourses = await _unitOfWork.EnrollmentRepository.GetByCondition(sc => sc.StudentId == StudentId);
 
             List<GetStudentCoursesDTO> studentCoursesDTO = _mapper.Map<List<GetStudentCoursesDTO>>(studentCourses);
             return Ok(studentCoursesDTO);
