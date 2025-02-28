@@ -43,7 +43,18 @@ namespace EdufyAPI.Models
             #endregion
 
 
+
             #region Relationships
+
+            // Restrict delete behavior to avoid accidental deletion of related entities
+            // Helps in avoiding orphaned records in the database
+            // Helps in preventing cascading delete, to prevent cycles or multiple cascade paths
+            foreach (var foreignKey in modelBuilder.Model.GetEntityTypes()
+            .SelectMany(e => e.GetForeignKeys()))
+            {
+                foreignKey.DeleteBehavior = DeleteBehavior.Restrict;
+            }
+
             modelBuilder.Entity<Enrollment>(entity =>
                 {
                     entity.HasKey(sc => new { sc.StudentId, sc.CourseId });
@@ -60,6 +71,8 @@ namespace EdufyAPI.Models
                 });
 
             #endregion
+
+
         }
     }
 }
