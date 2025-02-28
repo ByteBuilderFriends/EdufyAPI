@@ -2,7 +2,7 @@
 {
     public class ProgressCreateDTO
     {
+        public string CourseId { get; set; }
         public int TotalLessonsCompleted { get; set; }
-        public int CourseId { get; set; }
     }
 }

@@ -88,7 +88,6 @@ namespace EdufyAPI.Controllers
             return Ok(courseDtos);
         }
 
-
         // ✅ POST: api/Course
         [HttpPost]
         public async Task<ActionResult<CourseReadDTO>> CreateCourse([FromForm] CourseCreateDTO courseCreateDto)

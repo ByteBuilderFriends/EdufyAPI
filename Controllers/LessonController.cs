@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EdufyAPI.DTOs;
 using EdufyAPI.DTOs.LessonDTOs;
 using EdufyAPI.Helpers;
 using EdufyAPI.Models;
@@ -20,11 +21,11 @@ namespace EdufyAPI.Controllers
             _mapper = mapper;
         }
 
-        private readonly string ThumbnailsFolderName = "course-thumbnails";
-        private readonly string VideosFolderName = "course-videos";
+        private readonly string ThumbnailsFolderName = "lesson-thumbnails";
+        private readonly string VideosFolderName = "lesson-videos";
         // GET: api/Lesson
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<LessonReadDTO>>> GetLessons()
+        public async Task<ActionResult<IEnumerable<LessonReadDTO>>> GetAllLessons()
         {
             var lessons = await _unitOfWork.LessonRepository.GetAllAsync();
             if (!lessons.Any())
@@ -78,6 +79,38 @@ namespace EdufyAPI.Controllers
             }
 
             return Ok(lessonDto);
+        }
+
+        // ✅ GET: api/Course/GetInstructorCourses/{instructorId}
+        [HttpGet("{courseId}")]
+        public async Task<ActionResult<IEnumerable<LessonReadDTO>>> GetCourseLessons(string courseId)
+        {
+            var lessons = await _unitOfWork.LessonRepository.GetByCondition(l => l.CourseId == courseId);
+
+            if (!lessons.Any())
+            {
+                return Ok(Enumerable.Empty<CourseReadDTO>());
+            }
+
+            var lessonDtos = _mapper.Map<IEnumerable<LessonReadDTO>>(lessons);
+
+            // Add image and videos URLs to each lesson DTO
+            foreach (var lessonDto in lessonDtos)
+            {
+                // Construct ThumbnailUrl if it exists
+                if (!string.IsNullOrEmpty(lessonDto.ThumbnailUrl))
+                {
+                    lessonDto.ThumbnailUrl = ConstructFileUrlHelper.ConstructFileUrl(Request, ThumbnailsFolderName, lessonDto.ThumbnailUrl);
+                }
+
+                // Construct VideoUrl if it exists
+                if (!string.IsNullOrEmpty(lessonDto.VideoUrl))
+                {
+                    lessonDto.VideoUrl = ConstructFileUrlHelper.ConstructFileUrl(Request, VideosFolderName, lessonDto.VideoUrl);
+                }
+            }
+
+            return Ok(lessonDtos);
         }
 
         // POST: api/Lesson

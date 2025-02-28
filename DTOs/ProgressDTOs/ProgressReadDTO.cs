@@ -2,9 +2,9 @@
 {
     public class ProgressReadDTO
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         public int TotalLessonsCompleted { get; set; }
-        public double AverageScore { get; set; }
+        //public double AverageScore { get; set; }
         public double LessonCompletionRate { get; set; }
         public DateTime LastUpdated { get; set; }
         public bool IsCompleted { get; set; }
