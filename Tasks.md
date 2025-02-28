@@ -7,6 +7,10 @@
         Make GetCourseLessons action ✅
         Show Course Lessons and progresses in GetCourses action ✅   [Take a look]
 
+    ## Enrollment ToDo
+        Make Enroll Course action✅   [Take a look]
+
+
 # Features
     ## AutoMapper ToDo
         Use AfterMap in AutoMapperProfiles instead this
@@ -16,3 +20,5 @@
 
 # Bugs
     ## Progress Create and Read Errors
+    ## Register Errors because Profile Picture
+    ## Why Still using Enum in Register [0 for admin - 1 for student - ...]
