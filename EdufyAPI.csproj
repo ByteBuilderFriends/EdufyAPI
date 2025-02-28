@@ -25,6 +25,7 @@
     <Folder Include="wwwroot\uploads\lesson-thumbnails\" />
     <Folder Include="wwwroot\uploads\lesson-videos\" />
     <Folder Include="wwwroot\uploads\course-thumbnails\" />
+    <Folder Include="wwwroot\uploads\user-profile\" />
   </ItemGroup>
 
 </Project>

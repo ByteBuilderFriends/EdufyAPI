@@ -21,7 +21,7 @@ namespace EdufyAPI.Controllers
     /// <summary>
     /// Controller for handling user authentication (Register, Login, Logout, and JWT generation).
     /// </summary>
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class IdentityController : ControllerBase
     {
@@ -57,16 +57,13 @@ namespace EdufyAPI.Controllers
         /// <param name="model">User registration details.</param>
         /// <returns>Returns success or failure response.</returns>
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterViewModel model)
+        public async Task<IActionResult> Register([FromForm] RegisterViewModel model)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var imageUrl = string.Empty;
-
-            // Add the user Picture if it exists
-            if (model.ProfilePicture != null)
-                imageUrl = await FileUploadHelper.UploadFileAsync(model.ProfilePicture, "user-profile");
+            // Add the user Picture
+            var imageUrl = await FileUploadHelper.UploadFileAsync(model.ProfilePicture, "user-profile");
 
             // MailAddress.User is used to take the username part of the email.
             var user = new AppUser
@@ -180,7 +177,7 @@ namespace EdufyAPI.Controllers
 
         // Get All Users
         [HttpGet("Users")]
-        [Authorize("Admin")]
+        //[Authorize("Admin")]
         public async Task<IActionResult> GetAllUsers()
         {
             var users = await _userManager.Users.ToListAsync();
