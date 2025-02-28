@@ -6,7 +6,7 @@
 
         #region Relationships
         // List of courses the student is enrolled in
-        public virtual List<Enrollment> StudentCourses { get; set; } = new List<Enrollment>(); // Many-to-Many
+        public virtual List<Enrollment> Enrollments { get; set; } = new List<Enrollment>(); // Many-to-Many
         #endregion
 
     }

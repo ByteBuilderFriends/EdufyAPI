@@ -36,15 +36,15 @@ namespace EdufyAPI.DTOs
 
             CreateMap<Student, GetStudentsDTO>()
                 .ForMember(dest => dest.EnrolledCourses, opt => opt.MapFrom(src =>
-                    src.StudentCourses.Select(sc => $"{sc.Course.Title}, {sc.Course.Description}").ToList())) // ✅ Only map course titles
+                    src.Enrollments.Select(sc => $"{sc.Course.Title}, {sc.Course.Description}").ToList())) // ✅ Only map course titles
 
                 .ForMember(dest => dest.CompletedCourses, opt => opt.MapFrom(src =>
-                    src.StudentCourses
+                    src.Enrollments
                         .Where(sc => sc.Course.CourseProgress.All(y => y.IsCompleted))
                         .Select(sc => sc.Course.Title)
                         .ToList())) // ✅ Only completed courses
 
-                .ForMember(dest => dest.CourseCount, opt => opt.MapFrom(src => src.StudentCourses.Count))
+                .ForMember(dest => dest.CourseCount, opt => opt.MapFrom(src => src.Enrollments.Count))
 
                 .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => $"{src.FirstName} {src.LastName}")); // ✅ Map FullName
 

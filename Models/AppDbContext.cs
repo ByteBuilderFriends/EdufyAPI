@@ -49,12 +49,12 @@ namespace EdufyAPI.Models
                     entity.HasKey(sc => new { sc.StudentId, sc.CourseId });
 
                     entity.HasOne(sc => sc.Student)
-                          .WithMany(s => s.StudentCourses)
+                          .WithMany(s => s.Enrollments)
                           .HasForeignKey(sc => sc.StudentId)
                           .OnDelete(DeleteBehavior.Restrict);
 
                     entity.HasOne(sc => sc.Course)
-                          .WithMany(c => c.StudentCourses)
+                          .WithMany(c => c.Enrollments)
                           .HasForeignKey(sc => sc.CourseId)
                           .OnDelete(DeleteBehavior.Restrict);
                 });
