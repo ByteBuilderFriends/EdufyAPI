@@ -6,7 +6,7 @@ namespace EdufyAPI.DTOs.QuizModelsDTOs.QuizDTOs
     {
         [Required]
         [MaxLength(100)]
-        public string InternalTitle { get; set; } = string.Empty;
+        public string Title { get; set; } = string.Empty;
 
         public string? Description { get; set; }
 

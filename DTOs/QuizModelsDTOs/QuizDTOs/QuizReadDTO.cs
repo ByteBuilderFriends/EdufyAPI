@@ -12,7 +12,6 @@
         public int TotalPoints { get; set; }
 
         public string LessonId { get; set; }
-        public string LessonTitle { get; set; }
     }
 
 }

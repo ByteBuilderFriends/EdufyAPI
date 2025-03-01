@@ -47,6 +47,7 @@ namespace EdufyAPI.Models
         public string StudentId { get; set; }
         public virtual Student Student { get; set; }
 
+
         /// The list of quiz results related to this course progress.
         public virtual List<QuizResult> QuizResults { get; set; } = new List<QuizResult>();
         public virtual Certificate Certificate { get; set; }

@@ -21,15 +21,16 @@ namespace EdufyAPI.Models
     {
         [Required]
         [MaxLength(100)]
-        public string InternalTitle { get; set; } = string.Empty;
-
-        [NotMapped]
-        public string Title
-        {
-            get => string.IsNullOrEmpty(InternalTitle) ? $"{Lesson?.Title ?? "Untitled"} Quiz" : InternalTitle;
-            set => InternalTitle = string.IsNullOrWhiteSpace(value) ? string.Empty : value.Trim();
-        }
+        public string Title { get; set; } = string.Empty;
+        //[NotMapped]
         //public string Title => string.IsNullOrEmpty(InternalTitle) ? $"{Lesson?.Title ?? "Untitled"} Quiz" : InternalTitle;
+
+        //[NotMapped]
+        //public string Title
+        //{
+        //    get => string.IsNullOrEmpty(InternalTitle) ? $"{Lesson?.Title ?? "Untitled"} Quiz" : InternalTitle;
+        //    set => InternalTitle = string.IsNullOrWhiteSpace(value) ? string.Empty : value.Trim();
+        //}
 
         public string? Description { get; set; }
 
@@ -51,6 +52,7 @@ namespace EdufyAPI.Models
         public virtual Lesson Lesson { get; set; }
 
         public virtual List<Question> Questions { get; set; } = new();
+        public virtual List<QuizResult> QuizResult { get; set; } = new();
         #endregion
     }
 
@@ -75,6 +77,7 @@ namespace EdufyAPI.Models
         public virtual Quiz Quiz { get; set; }
 
         public virtual List<Answer> Answers { get; set; } = new();
+        public virtual List<StudentAnswer> StudentAnswers { get; set; } = new();
         #endregion
     }
 
@@ -93,6 +96,8 @@ namespace EdufyAPI.Models
         [ForeignKey("Question")]
         public string QuestionId { get; set; }
         public virtual Question Question { get; set; }
+
+        public virtual StudentAnswer StudentAnswer { get; set; }
         #endregion
     }
 
@@ -115,6 +120,10 @@ namespace EdufyAPI.Models
         public string ProgressId { get; set; }
         public virtual Progress Progress { get; set; }
 
+        [ForeignKey("Quiz")]
+        public string QuizId { get; set; }
+        public virtual Quiz Quiz { get; set; }
+
         public virtual List<StudentAnswer> StudentAnswers { get; set; } = new();
         #endregion
     }
@@ -122,7 +131,7 @@ namespace EdufyAPI.Models
     // 5. StudentAnswer class - stores individual student responses
     public class StudentAnswer : BaseEntity
     {
-        public string? SubmittedAnswer { get; set; }
+        public string? SubmittedAnswer { get; set; } = string.Empty;
 
         public DateTime SubmittedAt { get; set; } = DateTime.UtcNow;
 
@@ -133,6 +142,14 @@ namespace EdufyAPI.Models
         [ForeignKey("QuizResult")]
         public string QuizResultId { get; set; }
         public virtual QuizResult QuizResult { get; set; }
+
+        [ForeignKey("Question")]
+        public string QuestionId { get; set; }
+        public virtual Question Question { get; set; }
+
+        [ForeignKey("Answer")]
+        public string AnswerId { get; set; }
+        public virtual Answer Answer { get; set; }
         #endregion
     }
 }

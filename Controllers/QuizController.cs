@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
+using EdufyAPI.DTOs;
 using EdufyAPI.DTOs.QuizModelsDTOs.QuizDTOs;
 using EdufyAPI.Models;
 using EdufyAPI.Repository.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
-[Route("api/[controller]")]
+[Route("api/[controller][action]")]
 [ApiController]
 public class QuizController : ControllerBase
 {
@@ -19,10 +20,56 @@ public class QuizController : ControllerBase
 
     // GET: api/Quiz
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<QuizReadDTO>>> GetQuizzes()
+    public async Task<ActionResult<IEnumerable<QuizReadDTO>>> GetAllQuizzes()
     {
         var quizzes = await _unitOfWork.QuizRepository.GetAllAsync();
-        quizzes = quizzes.Where(q => !q.IsDeleted).ToList();
+        if (!quizzes.Any())
+            return Ok(Enumerable.Empty<CourseReadDTO>());
+
+        var quizDTOs = _mapper.Map<IEnumerable<QuizReadDTO>>(quizzes);
+        return Ok(quizDTOs);
+    }
+
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<QuizReadDTO>>> GetUnDeletedQuizzes()
+    {
+        var quizzes = await _unitOfWork.QuizRepository.GetByCondition(q => !q.IsDeleted);
+        if (!quizzes.Any())
+            return Ok(Enumerable.Empty<CourseReadDTO>());
+
+        var quizDTOs = _mapper.Map<IEnumerable<QuizReadDTO>>(quizzes);
+        return Ok(quizDTOs);
+    }
+
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<QuizReadDTO>>> GetDeletedQuizzes()
+    {
+        var quizzes = await _unitOfWork.QuizRepository.GetByCondition(q => q.IsDeleted);
+        if (!quizzes.Any())
+            return Ok(Enumerable.Empty<CourseReadDTO>());
+
+        var quizDTOs = _mapper.Map<IEnumerable<QuizReadDTO>>(quizzes);
+        return Ok(quizDTOs);
+    }
+
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<QuizReadDTO>>> GetActiveQuizzes()
+    {
+        var quizzes = await _unitOfWork.QuizRepository.GetByCondition(q => q.IsActive);
+        if (!quizzes.Any())
+            return Ok(Enumerable.Empty<CourseReadDTO>());
+
+        var quizDTOs = _mapper.Map<IEnumerable<QuizReadDTO>>(quizzes);
+        return Ok(quizDTOs);
+    }
+
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<QuizReadDTO>>> GetUnActiveQuizzes()
+    {
+        var quizzes = await _unitOfWork.QuizRepository.GetByCondition(q => !q.IsActive);
+        if (!quizzes.Any())
+            return Ok(Enumerable.Empty<CourseReadDTO>());
+
         var quizDTOs = _mapper.Map<IEnumerable<QuizReadDTO>>(quizzes);
         return Ok(quizDTOs);
     }
@@ -33,7 +80,7 @@ public class QuizController : ControllerBase
     {
         var quiz = await _unitOfWork.QuizRepository.GetByIdAsync(id);
         if (quiz == null || quiz.IsDeleted)
-            return NotFound(new { Message = "Quiz not found." });
+            return NotFound("Quiz not found.");
 
         var quizDTO = _mapper.Map<QuizReadDTO>(quiz);
         return Ok(quizDTO);
@@ -46,11 +93,10 @@ public class QuizController : ControllerBase
         if (!ModelState.IsValid) return BadRequest(ModelState);
 
         var lesson = await _unitOfWork.LessonRepository.GetByIdAsync(quizCreateDTO.LessonId);
-        if (lesson == null) return BadRequest(new { Message = "Invalid LessonId." });
+        if (lesson == null) return BadRequest("Invalid LessonId.");
 
         var quiz = _mapper.Map<Quiz>(quizCreateDTO);
         await _unitOfWork.QuizRepository.AddAsync(quiz);
-        await _unitOfWork.SaveChangesAsync();
 
         var quizReadDTO = _mapper.Map<QuizReadDTO>(quiz);
         return CreatedAtAction(nameof(GetQuizById), new { id = quizReadDTO.Id }, quizReadDTO);
@@ -63,13 +109,12 @@ public class QuizController : ControllerBase
         if (!ModelState.IsValid) return BadRequest(ModelState);
 
         var quiz = await _unitOfWork.QuizRepository.GetByIdAsync(id);
-        if (quiz == null || quiz.IsDeleted) return NotFound(new { Message = "Quiz not found." });
+        if (quiz == null || quiz.IsDeleted) return NotFound("Quiz not found.");
 
         _mapper.Map(quizUpdateDTO, quiz);
         quiz.UpdatedAt = DateTime.UtcNow;
 
         await _unitOfWork.QuizRepository.UpdateAsync(quiz);
-        await _unitOfWork.SaveChangesAsync();
 
         return NoContent();
     }
@@ -80,14 +125,13 @@ public class QuizController : ControllerBase
     {
         var quiz = await _unitOfWork.QuizRepository.GetByIdAsync(id);
         if (quiz == null)
-            return NotFound(new { Message = "Quiz not found." });
+            return NotFound("Quiz not found.");
 
         quiz.IsDeleted = true;
         quiz.UpdatedAt = DateTime.UtcNow;
 
+        // Save it in DB as deleted not delete it to access it after complete
         await _unitOfWork.QuizRepository.UpdateAsync(quiz);
-        await _unitOfWork.SaveChangesAsync();
-
         return NoContent();
     }
 }

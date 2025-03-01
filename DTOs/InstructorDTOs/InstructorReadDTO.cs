@@ -34,7 +34,7 @@ namespace EdufyAPI.DTOs.InstructorDTOs
             }
         }
 
-        public string ProfilePictureUrl { get; set; } = string.Empty;
+        public string? ProfilePictureUrl { get; set; } = string.Empty;
 
     }
 }

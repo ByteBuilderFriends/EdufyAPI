@@ -5,7 +5,7 @@
 namespace EdufyAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class t1 : Migration
+    public partial class UpdateQuizModelsRelationships : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -71,11 +71,48 @@ namespace EdufyAPI.Migrations
                 table: "StudentAnswer");
 
             migrationBuilder.AddColumn<string>(
+                name: "AnswerId",
+                table: "StudentAnswer",
+                type: "nvarchar(450)",
+                nullable: false,
+                defaultValue: "");
+
+            migrationBuilder.AddColumn<string>(
+                name: "QuestionId",
+                table: "StudentAnswer",
+                type: "nvarchar(450)",
+                nullable: false,
+                defaultValue: "");
+
+            migrationBuilder.AddColumn<string>(
+                name: "QuizId",
+                table: "QuizResults",
+                type: "nvarchar(450)",
+                nullable: false,
+                defaultValue: "");
+
+            migrationBuilder.AddColumn<string>(
                 name: "StudentId",
                 table: "Progresses",
                 type: "nvarchar(450)",
                 nullable: false,
                 defaultValue: "");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StudentAnswer_AnswerId",
+                table: "StudentAnswer",
+                column: "AnswerId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StudentAnswer_QuestionId",
+                table: "StudentAnswer",
+                column: "QuestionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_QuizResults_QuizId",
+                table: "QuizResults",
+                column: "QuizId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Progresses_StudentId",
@@ -195,10 +232,34 @@ namespace EdufyAPI.Migrations
                 onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
+                name: "FK_QuizResults_Quizzes_QuizId",
+                table: "QuizResults",
+                column: "QuizId",
+                principalTable: "Quizzes",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
                 name: "FK_Quizzes_Lessons_LessonId",
                 table: "Quizzes",
                 column: "LessonId",
                 principalTable: "Lessons",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_StudentAnswer_Answers_AnswerId",
+                table: "StudentAnswer",
+                column: "AnswerId",
+                principalTable: "Answers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_StudentAnswer_Questions_QuestionId",
+                table: "StudentAnswer",
+                column: "QuestionId",
+                principalTable: "Questions",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
 
@@ -271,16 +332,52 @@ namespace EdufyAPI.Migrations
                 table: "QuizResults");
 
             migrationBuilder.DropForeignKey(
+                name: "FK_QuizResults_Quizzes_QuizId",
+                table: "QuizResults");
+
+            migrationBuilder.DropForeignKey(
                 name: "FK_Quizzes_Lessons_LessonId",
                 table: "Quizzes");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_StudentAnswer_Answers_AnswerId",
+                table: "StudentAnswer");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_StudentAnswer_Questions_QuestionId",
+                table: "StudentAnswer");
 
             migrationBuilder.DropForeignKey(
                 name: "FK_StudentAnswer_QuizResults_QuizResultId",
                 table: "StudentAnswer");
 
             migrationBuilder.DropIndex(
+                name: "IX_StudentAnswer_AnswerId",
+                table: "StudentAnswer");
+
+            migrationBuilder.DropIndex(
+                name: "IX_StudentAnswer_QuestionId",
+                table: "StudentAnswer");
+
+            migrationBuilder.DropIndex(
+                name: "IX_QuizResults_QuizId",
+                table: "QuizResults");
+
+            migrationBuilder.DropIndex(
                 name: "IX_Progresses_StudentId",
                 table: "Progresses");
+
+            migrationBuilder.DropColumn(
+                name: "AnswerId",
+                table: "StudentAnswer");
+
+            migrationBuilder.DropColumn(
+                name: "QuestionId",
+                table: "StudentAnswer");
+
+            migrationBuilder.DropColumn(
+                name: "QuizId",
+                table: "QuizResults");
 
             migrationBuilder.DropColumn(
                 name: "StudentId",

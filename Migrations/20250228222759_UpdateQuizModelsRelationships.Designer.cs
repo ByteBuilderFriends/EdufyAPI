@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EdufyAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250228150458_t1")]
-    partial class t1
+    [Migration("20250228222759_UpdateQuizModelsRelationships")]
+    partial class UpdateQuizModelsRelationships
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -312,6 +312,10 @@ namespace EdufyAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("QuizId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<int>("Score")
                         .HasColumnType("int");
 
@@ -327,6 +331,8 @@ namespace EdufyAPI.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ProgressId");
+
+                    b.HasIndex("QuizId");
 
                     b.ToTable("QuizResults");
                 });
@@ -423,6 +429,10 @@ namespace EdufyAPI.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("AnswerId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -432,6 +442,10 @@ namespace EdufyAPI.Migrations
 
                     b.Property<bool>("IsCorrect")
                         .HasColumnType("bit");
+
+                    b.Property<string>("QuestionId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("QuizResultId")
                         .IsRequired()
@@ -450,6 +464,11 @@ namespace EdufyAPI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AnswerId")
+                        .IsUnique();
+
+                    b.HasIndex("QuestionId");
 
                     b.HasIndex("QuizResultId");
 
@@ -702,7 +721,7 @@ namespace EdufyAPI.Migrations
                         .IsRequired();
 
                     b.HasOne("EdufyAPI.Models.Roles.Student", "Student")
-                        .WithMany()
+                        .WithMany("Progresses")
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -742,16 +761,40 @@ namespace EdufyAPI.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("EdufyAPI.Models.Quiz", "Quiz")
+                        .WithMany("QuizResult")
+                        .HasForeignKey("QuizId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("Progress");
+
+                    b.Navigation("Quiz");
                 });
 
             modelBuilder.Entity("EdufyAPI.Models.StudentAnswer", b =>
                 {
+                    b.HasOne("EdufyAPI.Models.Answer", "Answer")
+                        .WithOne("StudentAnswer")
+                        .HasForeignKey("EdufyAPI.Models.StudentAnswer", "AnswerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("EdufyAPI.Models.Question", "Question")
+                        .WithMany("StudentAnswers")
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("EdufyAPI.Models.QuizResult", "QuizResult")
                         .WithMany("StudentAnswers")
                         .HasForeignKey("QuizResultId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Answer");
+
+                    b.Navigation("Question");
 
                     b.Navigation("QuizResult");
                 });
@@ -807,6 +850,12 @@ namespace EdufyAPI.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("EdufyAPI.Models.Answer", b =>
+                {
+                    b.Navigation("StudentAnswer")
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("EdufyAPI.Models.Course", b =>
                 {
                     b.Navigation("CourseProgress");
@@ -832,11 +881,15 @@ namespace EdufyAPI.Migrations
             modelBuilder.Entity("EdufyAPI.Models.Question", b =>
                 {
                     b.Navigation("Answers");
+
+                    b.Navigation("StudentAnswers");
                 });
 
             modelBuilder.Entity("EdufyAPI.Models.Quiz", b =>
                 {
                     b.Navigation("Questions");
+
+                    b.Navigation("QuizResult");
                 });
 
             modelBuilder.Entity("EdufyAPI.Models.QuizResult", b =>
@@ -852,6 +905,8 @@ namespace EdufyAPI.Migrations
             modelBuilder.Entity("EdufyAPI.Models.Roles.Student", b =>
                 {
                     b.Navigation("Enrollments");
+
+                    b.Navigation("Progresses");
                 });
 #pragma warning restore 612, 618
         }
