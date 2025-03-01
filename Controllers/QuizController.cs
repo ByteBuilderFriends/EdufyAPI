@@ -86,6 +86,34 @@ public class QuizController : ControllerBase
         return Ok(quizDTO);
     }
 
+    [HttpGet("{courseId}")]
+    public async Task<ActionResult<IEnumerable<QuizReadDTO>>> GetCourseQuizzes(string courseId)
+    {
+        var course = _unitOfWork.CourseRepository.GetByIdAsync(courseId);
+        if (course == null) return BadRequest("Invalid course id");
+
+        var quizzes = await _unitOfWork.QuizRepository.GetByCondition(q => q.Lesson.CourseId == courseId);
+        if (!quizzes.Any())
+            return Ok(Enumerable.Empty<CourseReadDTO>());
+
+        var quizDTOs = _mapper.Map<IEnumerable<QuizReadDTO>>(quizzes);
+        return Ok(quizDTOs);
+    }
+
+    //[HttpGet("{lessonId}")]//
+    //public async Task<ActionResult<QuizReadDTO>> GetQuizByLessonId(string lessonId)
+    //{
+    //    var lesson = await _unitOfWork.LessonRepository.GetByIdAsync(lessonId);
+    //    if (lesson == null) return BadRequest("Invalid lesson id");
+
+    //    var quiz = await _unitOfWork.QuizRepository.GetByCondition(q => q.Lesson.Id == lessonId);
+    //    if (quiz == null)
+    //        return Ok("There is no quiz in this lesson");
+
+    //    var quizDTO = _mapper.Map<QuizReadDTO>(quiz);
+    //    return Ok(quizDTO);
+    //}
+
     // POST: api/Quiz
     [HttpPost]
     public async Task<ActionResult<QuizReadDTO>> CreateQuiz([FromBody] QuizCreateDTO quizCreateDTO)
@@ -94,6 +122,7 @@ public class QuizController : ControllerBase
 
         var lesson = await _unitOfWork.LessonRepository.GetByIdAsync(quizCreateDTO.LessonId);
         if (lesson == null) return BadRequest("Invalid LessonId.");
+        if (lesson.Quiz != null && lesson.Quiz.Id != null) return BadRequest("This lesson already has a quiz");
 
         var quiz = _mapper.Map<Quiz>(quizCreateDTO);
         await _unitOfWork.QuizRepository.AddAsync(quiz);
