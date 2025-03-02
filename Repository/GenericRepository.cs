@@ -62,6 +62,17 @@ namespace EdufyAPI.Repository
             await _context.SaveChangesAsync();
             return true;
         }
+
+        //Delete by id
+        public async Task<bool> DeleteAsync(string Fid, string Sid)
+        {
+            var entity = await _dbSet.FindAsync(Fid, Sid);
+            if (entity == null) return false;
+
+            _dbSet.Remove(entity);
+            await _context.SaveChangesAsync();
+            return true;
+        }
         //Delete by object
         public async Task DeleteAsync(T entity)
         {

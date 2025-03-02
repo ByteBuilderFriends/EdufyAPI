@@ -51,6 +51,22 @@ namespace EdufyAPI.Controllers
             var Enrollment = _mapper.Map<Enrollment>(enrollmentDto);
             await _unitOfWork.EnrollmentRepository.AddAsync(Enrollment);
 
+            // Now add Course Progress for the student
+            #region Add Course Progress
+            var course = await _unitOfWork.CourseRepository.GetByIdAsync(enrollmentDto.CourseId);
+            var student = await _unitOfWork.StudentRepository.GetByIdAsync(enrollmentDto.StudentId);
+
+            var progress = new Progress
+            {
+                StudentId = student.Id,
+                CourseId = course.Id,
+                TotalLessonsCompleted = 0
+            };
+
+            await _unitOfWork.ProgressRepository.AddAsync(progress);
+            #endregion
+
+
             return Ok("Enrollment successful.");
         }
 
@@ -62,6 +78,15 @@ namespace EdufyAPI.Controllers
                 return NotFound("Enrollment not found.");
 
             await _unitOfWork.EnrollmentRepository.DeleteAsync(enrollment);
+
+            // Now delete the Course Progress for the student
+
+            var progress = await _unitOfWork.ProgressRepository.GetAsync(studentId, courseId);
+            if (progress == null)
+                return Ok();
+
+            await _unitOfWork.ProgressRepository.DeleteAsync(studentId, courseId);
+
 
             return Ok("Unenrollment successful.");
         }
