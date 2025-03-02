@@ -42,7 +42,7 @@ public class ProgressController : ControllerBase
     public async Task<ActionResult<IEnumerable<ProgressReadDTO>>> GetProgressByStudentId(string studentId)
     {
         var progresses = await _unitOfWork.ProgressRepository.GetAllAsync();
-        var filteredProgresses = progresses.Where(p => p.CourseId == studentId).ToList();
+        var filteredProgresses = progresses.Where(p => p.StudentId == studentId).ToList();
         var progressDTOs = _mapper.Map<IReadOnlyList<ProgressReadDTO>>(filteredProgresses);
         return Ok(progressDTOs);
     }

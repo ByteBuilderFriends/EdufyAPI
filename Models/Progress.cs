@@ -1,5 +1,4 @@
 ﻿using EduConnectAPI.Models;
-using EdufyAPI.Models.Roles;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EdufyAPI.Models
@@ -43,9 +42,9 @@ namespace EdufyAPI.Models
         public virtual Course Course { get; set; }
 
 
-        [ForeignKey("Student")]
         public string StudentId { get; set; }
-        public virtual Student Student { get; set; }
+
+        public virtual Enrollment Enrollment { get; set; }
 
 
         /// The list of quiz results related to this course progress.

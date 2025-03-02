@@ -12,5 +12,7 @@ namespace EdufyAPI.Models
         [ForeignKey("Course")]
         public string CourseId { get; set; }
         public virtual Course Course { get; set; }
+
+        public virtual Progress Progress { get; set; }
     }
 }

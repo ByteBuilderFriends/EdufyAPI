@@ -56,19 +56,26 @@ namespace EdufyAPI.Models
             }
 
             modelBuilder.Entity<Enrollment>(entity =>
-                {
-                    entity.HasKey(sc => new { sc.StudentId, sc.CourseId });
+            {
+                entity.HasKey(sc => new { sc.StudentId, sc.CourseId });
 
-                    entity.HasOne(sc => sc.Student)
-                          .WithMany(s => s.Enrollments)
-                          .HasForeignKey(sc => sc.StudentId)
-                          .OnDelete(DeleteBehavior.Restrict);
+                entity.HasOne(sc => sc.Student)
+                      .WithMany(s => s.Enrollments)
+                      .HasForeignKey(sc => sc.StudentId)
+                      .OnDelete(DeleteBehavior.Restrict);
 
-                    entity.HasOne(sc => sc.Course)
-                          .WithMany(c => c.Enrollments)
-                          .HasForeignKey(sc => sc.CourseId)
-                          .OnDelete(DeleteBehavior.Restrict);
-                });
+                entity.HasOne(sc => sc.Course)
+                      .WithMany(c => c.Enrollments)
+                      .HasForeignKey(sc => sc.CourseId)
+                      .OnDelete(DeleteBehavior.Restrict);
+            });
+
+
+            // Define the FK relationship between Progress and Enrollment
+            modelBuilder.Entity<Progress>()
+                .HasOne(p => p.Enrollment)
+                .WithOne(e => e.Progress)
+                .HasForeignKey<Progress>(p => new { p.CourseId, p.StudentId });
 
             #endregion
 
