@@ -90,7 +90,7 @@ public class QuizController : ControllerBase
     public async Task<ActionResult<IEnumerable<QuizReadDTO>>> GetCourseQuizzes(string courseId)
     {
         var course = await _unitOfWork.CourseRepository.GetByIdAsync(courseId);
-        if (course == null) return BadRequest("Invalid course id");
+        if (course == null) return NotFound("Course not found.");
 
         var quizzes = await _unitOfWork.QuizRepository.GetByCondition(q => q.Lesson.CourseId == courseId);
         if (!quizzes.Any())
@@ -115,17 +115,17 @@ public class QuizController : ControllerBase
         return Ok(quizDTO);
     }
 
-    //[HttpGet("{quizId}/details")]
-    //public async Task<ActionResult<QuizDetailsDTO>> GetQuizWithQuestions(string quizId)
-    //{
-    //    var quiz = await _unitOfWork.QuizRepository.GetByIdAsync(quizId);
+    [HttpGet("{quizId}/details")]
+    public async Task<ActionResult<QuizDetailsDTO>> GetQuizWithDetails(string quizId)
+    {
+        var quiz = await _unitOfWork.QuizRepository.GetByIdAsync(quizId);
 
-    //    if (quiz == null)
-    //        return NotFound("Quiz not found.");
+        if (quiz == null)
+            return NotFound("Quiz not found.");
 
-    //    var quizDetailsDTO = _mapper.Map<QuizDetailsDTO>(quiz);
-    //    return Ok(quizDetailsDTO);
-    //}
+        var quizDetailsDTO = _mapper.Map<QuizDetailsDTO>(quiz);
+        return Ok(quizDetailsDTO);
+    }
 
     // POST: api/Quiz
     [HttpPost]

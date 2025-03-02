@@ -12,6 +12,8 @@ namespace EdufyAPI.DTOs.QuizModelsDTOs.QuizDTOs
         public bool IsActive { get; set; }
         public int TotalQuestions { get; set; }
         public int TotalPoints { get; set; }
+        public string LessonId { get; set; }
+
         public List<QuestionReadDTO> Questions { get; set; }
     }
 }

@@ -10,7 +10,6 @@
         public bool IsActive { get; set; }
         public int TotalQuestions { get; set; }
         public int TotalPoints { get; set; }
-
         public string LessonId { get; set; }
     }
 
