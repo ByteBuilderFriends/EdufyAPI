@@ -65,6 +65,9 @@ namespace EdufyAPI.Controllers
             // Add the user Picture
             var imageUrl = await FileUploadHelper.UploadFileAsync(model.ProfilePicture, "user-profile");
 
+            // Construct the full URL immediately during registration
+            imageUrl = ConstructFileUrlHelper.ConstructFileUrl(Request, "user-profile", imageUrl);
+
             // MailAddress.User is used to take the username part of the email.
             var user = new AppUser
             {
@@ -181,11 +184,7 @@ namespace EdufyAPI.Controllers
         public async Task<IActionResult> GetAllUsers()
         {
             var users = await _userManager.Users.ToListAsync();
-            foreach (var user in users)
-            {
-                if (user.ProfilePictureUrl != null)
-                    user.ProfilePictureUrl = ConstructFileUrlHelper.ConstructFileUrl(Request, "user-profile", user.ProfilePictureUrl);
-            }
+
             return Ok(users);
         }
 
@@ -195,8 +194,7 @@ namespace EdufyAPI.Controllers
             var user = await _userManager.FindByIdAsync(id);
             if (user == null)
                 return NotFound();
-            if (user.ProfilePictureUrl != null)
-                user.ProfilePictureUrl = ConstructFileUrlHelper.ConstructFileUrl(Request, "user-profile", user.ProfilePictureUrl);
+
             return Ok(user);
         }
 

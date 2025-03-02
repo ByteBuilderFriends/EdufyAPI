@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using EdufyAPI.DTOs.InstructorDTOs;
-using EdufyAPI.Helpers;
 using EdufyAPI.Repository.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,11 +24,6 @@ namespace EdufyAPI.Controllers
                 return Ok();
 
             var instructorDtos = _mapper.Map<IEnumerable<InstructorReadDTO>>(instructors);
-            foreach (var instructorDto in instructorDtos)
-            {
-                if (instructorDto.ProfilePictureUrl != null)
-                    instructorDto.ProfilePictureUrl = ConstructFileUrlHelper.ConstructFileUrl(Request, InstructorProfilePictureFolder, instructorDto.ProfilePictureUrl);
-            }
 
             return Ok(instructorDtos);
         }
@@ -43,8 +37,6 @@ namespace EdufyAPI.Controllers
             if (instructor == null)
                 return NotFound();
             var instructorDto = _mapper.Map<InstructorReadDTO>(instructor);
-            if (instructorDto.ProfilePictureUrl != null)
-                instructorDto.ProfilePictureUrl = ConstructFileUrlHelper.ConstructFileUrl(Request, InstructorProfilePictureFolder, instructorDto.ProfilePictureUrl);
             return Ok(instructorDto);
         }
 
