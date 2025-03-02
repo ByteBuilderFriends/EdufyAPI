@@ -181,6 +181,11 @@ namespace EdufyAPI.Controllers
         public async Task<IActionResult> GetAllUsers()
         {
             var users = await _userManager.Users.ToListAsync();
+            foreach (var user in users)
+            {
+                if (user.ProfilePictureUrl != null)
+                    user.ProfilePictureUrl = ConstructFileUrlHelper.ConstructFileUrl(Request, "user-profile", user.ProfilePictureUrl);
+            }
             return Ok(users);
         }
 
@@ -190,6 +195,8 @@ namespace EdufyAPI.Controllers
             var user = await _userManager.FindByIdAsync(id);
             if (user == null)
                 return NotFound();
+            if (user.ProfilePictureUrl != null)
+                user.ProfilePictureUrl = ConstructFileUrlHelper.ConstructFileUrl(Request, "user-profile", user.ProfilePictureUrl);
             return Ok(user);
         }
 

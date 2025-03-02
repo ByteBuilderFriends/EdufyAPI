@@ -14,6 +14,7 @@ namespace EdufyAPI.Controllers
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
         private readonly IMapper _mapper = mapper;
 
+        private readonly string StudentProfilePictureFolder = "student-profile-picture";
 
         // 3. The student should be able to enroll in a course.Inside CoursesController.
 

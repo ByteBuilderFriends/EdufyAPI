@@ -24,6 +24,8 @@ namespace EdufyAPI.Controllers
         public async Task<IActionResult> GetAllQuestions()
         {
             var questions = await _unitOfWork.QuestionRepository.GetAllAsync();
+            if (questions == null)
+                return Ok(Enumerable.Empty<QuestionReadDTO>());
             var questionDTOs = _mapper.Map<IEnumerable<QuestionReadDTO>>(questions);
             return Ok(questionDTOs);
         }
