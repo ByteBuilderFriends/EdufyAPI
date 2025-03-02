@@ -1,6 +1,8 @@
-﻿namespace EdufyAPI.DTOs.QuizModelsDTOs.QuizDTOs
+﻿using EdufyAPI.DTOs.QuizModelsDTOs.QuestionDTOs;
+
+namespace EdufyAPI.DTOs.QuizModelsDTOs.QuizDTOs
 {
-    public class QuizReadDTO
+    public class QuizDetailsDTO
     {
         public string Id { get; set; }
         public string Title { get; set; }
@@ -11,6 +13,7 @@
         public int TotalQuestions { get; set; }
         public int TotalPoints { get; set; }
         public string LessonId { get; set; }
-    }
 
+        public List<QuestionReadDTO> Questions { get; set; }
+    }
 }

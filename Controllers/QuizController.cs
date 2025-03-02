@@ -89,30 +89,43 @@ public class QuizController : ControllerBase
     [HttpGet("{courseId}")]
     public async Task<ActionResult<IEnumerable<QuizReadDTO>>> GetCourseQuizzes(string courseId)
     {
-        var course = _unitOfWork.CourseRepository.GetByIdAsync(courseId);
-        if (course == null) return BadRequest("Invalid course id");
+        var course = await _unitOfWork.CourseRepository.GetByIdAsync(courseId);
+        if (course == null) return NotFound("Course not found.");
 
         var quizzes = await _unitOfWork.QuizRepository.GetByCondition(q => q.Lesson.CourseId == courseId);
         if (!quizzes.Any())
-            return Ok(Enumerable.Empty<CourseReadDTO>());
+            return Ok(Enumerable.Empty<QuizReadDTO>());
 
         var quizDTOs = _mapper.Map<IEnumerable<QuizReadDTO>>(quizzes);
         return Ok(quizDTOs);
     }
 
-    //[HttpGet("{lessonId}")]//
-    //public async Task<ActionResult<QuizReadDTO>> GetQuizByLessonId(string lessonId)
-    //{
-    //    var lesson = await _unitOfWork.LessonRepository.GetByIdAsync(lessonId);
-    //    if (lesson == null) return BadRequest("Invalid lesson id");
+    [HttpGet("{lessonId}")]
+    public async Task<ActionResult<QuizReadDTO>> GetQuizByLessonId(string lessonId)
+    {
+        var lesson = await _unitOfWork.LessonRepository.GetByIdAsync(lessonId);
+        if (lesson == null) return BadRequest("Invalid lesson id");
 
-    //    var quiz = await _unitOfWork.QuizRepository.GetByCondition(q => q.Lesson.Id == lessonId);
-    //    if (quiz == null)
-    //        return Ok("There is no quiz in this lesson");
+        var quiz = await _unitOfWork.QuizRepository.GetSingleByCondition(q => q.LessonId == lessonId);
+        if (quiz == null)
+            return NotFound("No quiz found for this lesson");
 
-    //    var quizDTO = _mapper.Map<QuizReadDTO>(quiz);
-    //    return Ok(quizDTO);
-    //}
+        var quizDTO = _mapper.Map<QuizReadDTO>(quiz);
+
+        return Ok(quizDTO);
+    }
+
+    [HttpGet("{quizId}/details")]
+    public async Task<ActionResult<QuizDetailsDTO>> GetQuizWithDetails(string quizId)
+    {
+        var quiz = await _unitOfWork.QuizRepository.GetByIdAsync(quizId);
+
+        if (quiz == null)
+            return NotFound("Quiz not found.");
+
+        var quizDetailsDTO = _mapper.Map<QuizDetailsDTO>(quiz);
+        return Ok(quizDetailsDTO);
+    }
 
     // POST: api/Quiz
     [HttpPost]
