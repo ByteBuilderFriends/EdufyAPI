@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using EdufyAPI.DTOs.QuizModelsDTOs.QuestionDTOs;
-using EdufyAPI.Models;
+using EdufyAPI.Models.QuizModels;
 using EdufyAPI.Repository.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 

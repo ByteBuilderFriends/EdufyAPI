@@ -1,4 +1,5 @@
 ﻿using EduConnectAPI.Models;
+using EdufyAPI.Models.QuizModels;
 using EdufyAPI.Models.Roles;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -17,7 +18,7 @@ namespace EdufyAPI.Models
         public DbSet<Quiz> Quizzes { get; set; }
         public DbSet<Question> Questions { get; set; }
         public DbSet<Answer> Answers { get; set; }
-        public DbSet<QuizResult> QuizResults { get; set; }
+        public DbSet<QuizAttemp> QuizResults { get; set; }
         public DbSet<StudentAnswer> StudentAnswer { get; set; }
         public DbSet<Enrollment> Enrollment { get; set; }
         public DbSet<Certificate> Certificate { get; set; }

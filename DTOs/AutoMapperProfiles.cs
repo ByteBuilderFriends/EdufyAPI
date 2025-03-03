@@ -11,6 +11,7 @@ using EdufyAPI.DTOs.QuizModelsDTOs.QuizDTOs;
 using EdufyAPI.DTOs.StudentCourseDTOs;
 using EdufyAPI.DTOs.StudentDTOs;
 using EdufyAPI.Models;
+using EdufyAPI.Models.QuizModels;
 using EdufyAPI.Models.Roles;
 using EdufyAPI.ViewModels;
 

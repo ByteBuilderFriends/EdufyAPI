@@ -273,7 +273,7 @@ namespace EdufyAPI.Migrations
                     b.ToTable("Quizzes");
                 });
 
-            modelBuilder.Entity("EdufyAPI.Models.QuizResult", b =>
+            modelBuilder.Entity("EdufyAPI.Models.QuizAttemp", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -699,7 +699,7 @@ namespace EdufyAPI.Migrations
                     b.Navigation("Lesson");
                 });
 
-            modelBuilder.Entity("EdufyAPI.Models.QuizResult", b =>
+            modelBuilder.Entity("EdufyAPI.Models.QuizAttemp", b =>
                 {
                     b.HasOne("EdufyAPI.Models.Progress", "Progress")
                         .WithMany("QuizResults")
@@ -712,13 +712,13 @@ namespace EdufyAPI.Migrations
 
             modelBuilder.Entity("EdufyAPI.Models.StudentAnswer", b =>
                 {
-                    b.HasOne("EdufyAPI.Models.QuizResult", "QuizResult")
+                    b.HasOne("EdufyAPI.Models.QuizAttemp", "QuizAttemp")
                         .WithMany("StudentAnswers")
                         .HasForeignKey("QuizResultId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("QuizResult");
+                    b.Navigation("QuizAttemp");
                 });
 
             modelBuilder.Entity("EdufyAPI.Models.StudentCourse", b =>
@@ -823,7 +823,7 @@ namespace EdufyAPI.Migrations
                     b.Navigation("Questions");
                 });
 
-            modelBuilder.Entity("EdufyAPI.Models.QuizResult", b =>
+            modelBuilder.Entity("EdufyAPI.Models.QuizAttemp", b =>
                 {
                     b.Navigation("StudentAnswers");
                 });

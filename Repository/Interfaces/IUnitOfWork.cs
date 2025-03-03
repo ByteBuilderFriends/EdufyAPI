@@ -1,5 +1,6 @@
 ﻿using EduConnectAPI.Models;
 using EdufyAPI.Models;
+using EdufyAPI.Models.QuizModels;
 using EdufyAPI.Models.Roles;
 
 namespace EdufyAPI.Repository.Interfaces
@@ -14,7 +15,7 @@ namespace EdufyAPI.Repository.Interfaces
         GenericRepository<Progress> ProgressRepository { get; }
         GenericRepository<Certificate> CertificateRepository { get; }
         GenericRepository<Quiz> QuizRepository { get; }
-        GenericRepository<QuizResult> QuizResultRepository { get; }
+        GenericRepository<QuizAttemp> QuizResultRepository { get; }
         GenericRepository<Question> QuestionRepository { get; }
         GenericRepository<Answer> AnswerRepository { get; }
         GenericRepository<StudentAnswer> StudentAnswerRepository { get; }

@@ -1,5 +1,6 @@
 ﻿using EduConnectAPI.Models;
 using EdufyAPI.Models;
+using EdufyAPI.Models.QuizModels;
 using EdufyAPI.Models.Roles;
 using EdufyAPI.Repository.Interfaces;
 
@@ -18,7 +19,7 @@ namespace EdufyAPI.Repository
         private GenericRepository<Quiz> _quizRepository;
         private GenericRepository<Question> _questionRepository;
         private GenericRepository<Answer> _answerRepository;
-        private GenericRepository<QuizResult> _quizResultRepository;
+        private GenericRepository<QuizAttemp> _quizResultRepository;
         private GenericRepository<StudentAnswer> _studentAnswerRepository;
         private GenericRepository<Certificate> _certificateRepository;
         private GenericRepository<Admin> _adminRepository;
@@ -50,7 +51,7 @@ namespace EdufyAPI.Repository
         public GenericRepository<Quiz> QuizRepository => _quizRepository ??= new GenericRepository<Quiz>(_context);
         public GenericRepository<Question> QuestionRepository => _questionRepository ??= new GenericRepository<Question>(_context);
         public GenericRepository<Answer> AnswerRepository => _answerRepository ??= new GenericRepository<Answer>(_context);
-        public GenericRepository<QuizResult> QuizResultRepository => _quizResultRepository ??= new GenericRepository<QuizResult>(_context);
+        public GenericRepository<QuizAttemp> QuizResultRepository => _quizResultRepository ??= new GenericRepository<QuizAttemp>(_context);
         public GenericRepository<StudentAnswer> StudentAnswerRepository => _studentAnswerRepository ??= new GenericRepository<StudentAnswer>(_context);
         public GenericRepository<Certificate> CertificateRepository => _certificateRepository ??= new GenericRepository<Certificate>(_context);
         public GenericRepository<Admin> AdminRepository => _adminRepository ??= new GenericRepository<Admin>(_context);
