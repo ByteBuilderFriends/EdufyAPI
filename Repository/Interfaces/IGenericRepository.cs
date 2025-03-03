@@ -12,6 +12,5 @@ namespace EdufyAPI.Repository.Interfaces
 
         // Enrollment only
         Task<Enrollment?> GetAsync(string studentId, string courseId);
-        //Task<bool> SaveChangesAsync();
     }
 }

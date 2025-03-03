@@ -3,7 +3,7 @@ using EdufyAPI.DTOs.InstructorDTOs;
 using EdufyAPI.Repository.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
-namespace EdufyAPI.Controllers
+namespace EdufyAPI.Controllers.RoleControllers
 {
     [Route("api/[controller]/[Action]")]
     [ApiController]

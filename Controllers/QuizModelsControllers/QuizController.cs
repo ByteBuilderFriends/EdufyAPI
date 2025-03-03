@@ -5,7 +5,7 @@ using EdufyAPI.Models.QuizModels;
 using EdufyAPI.Repository.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
-[Route("api/[controller][action]")]
+[Route("api/[controller]/[action]")]
 [ApiController]
 public class QuizController : ControllerBase
 {
@@ -160,6 +160,23 @@ public class QuizController : ControllerBase
 
         return NoContent();
     }
+
+    [HttpPut("{quizId}/activate")]
+    public async Task<ActionResult> MakeQuizActive(string quizId)
+    {
+        var quiz = await _unitOfWork.QuizRepository.GetByIdAsync(quizId);
+        if (quiz == null)
+            return NotFound("Quiz not found.");
+
+        if (quiz.IsActive)
+            return BadRequest("Quiz is already active.");
+
+        quiz.IsActive = true;
+        await _unitOfWork.QuizRepository.UpdateAsync(quiz);
+
+        return Ok("Quiz is now active.");
+    }
+
 
     // DELETE: api/Quiz/{id}
     [HttpDelete("{id}")]

@@ -16,7 +16,7 @@ using System.Net.Mail;
 using System.Security.Claims;
 using System.Text;
 
-namespace EdufyAPI.Controllers
+namespace EdufyAPI.Controllers.RoleControllers
 {
     /// <summary>
     /// Controller for handling user authentication (Register, Login, Logout, and JWT generation).

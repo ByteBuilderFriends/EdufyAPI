@@ -4,7 +4,7 @@ using EdufyAPI.Models.QuizModels;
 using EdufyAPI.Repository.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
-namespace EdufyAPI.Controllers
+namespace EdufyAPI.Controllers.QuizModelsControllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
