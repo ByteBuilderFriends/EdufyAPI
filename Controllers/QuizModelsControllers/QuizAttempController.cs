@@ -164,6 +164,37 @@ namespace EdufyAPI.Controllers.QuizModelsControllers
             return Ok(new { Passed = passCount, Failed = failCount });
         }
 
+
+        // Start a quiz attempt
+        // POST: api/QuizAttemp/Start/{progressId}/{quizId}
+        [HttpPost("Start/{progressId}/{quizId}")]
+        public async Task<IActionResult> StartQuizAttempt(string progressId, string quizId)
+        {
+            var progress = await _unitOfWork.ProgressRepository.GetByIdAsync(progressId);
+            if (progress == null)
+                return NotFound("Progress not found.");
+            var quiz = await _unitOfWork.QuizRepository.GetByIdAsync(quizId);
+            if (quiz == null)
+                return NotFound("Quiz not found.");
+
+            // Check if an attempt already exists for this progress and quiz
+            //var existingAttempt = await _unitOfWork.QuizAttempRepository
+            //    .GetByCondition(q => q.ProgressId == progressId && q.QuizId == quizId);
+
+            //if (existingAttempt.Any())
+            //    return BadRequest("An attempt for this quiz already exists.");
+
+            var attempt = new QuizAttemp
+            {
+                ProgressId = progressId,
+                QuizId = quizId,
+                StartedAt = DateTime.UtcNow
+            };
+            await _unitOfWork.QuizAttempRepository.AddAsync(attempt);
+            await _unitOfWork.SaveChangesAsync();
+            return CreatedAtAction(nameof(GetQuizAttempById), new { id = attempt.Id }, _mapper.Map<QuizAttempReadDTO>(attempt));
+        }
+
         // POST: api/QuizAttemp/Complete/{attemptId}
         [HttpPost("Complete/{attemptId}")]
         public async Task<IActionResult> CompleteQuizAttempt(string attemptId)
@@ -177,10 +208,6 @@ namespace EdufyAPI.Controllers.QuizModelsControllers
 
             return Ok(new { attempt.CompletedAt, attempt.Duration });
         }
-
-
-
-
 
     }
 }
