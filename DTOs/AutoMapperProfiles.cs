@@ -91,6 +91,7 @@ namespace EdufyAPI.DTOs
             CreateMap<QuizCreateDTO, Quiz>();
             CreateMap<QuizUpdateDTO, Quiz>();
             CreateMap<QuizAttemp, QuizAttempReadDTO>().ReverseMap();
+            CreateMap<QuizAttempCreateDTO, QuizAttemp>();
 
             #endregion
 
