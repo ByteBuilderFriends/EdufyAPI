@@ -81,11 +81,24 @@ namespace EdufyAPI.Repository
         }
 
         //Enrollment only
-
         public async Task<Enrollment?> GetAsync(string studentId, string courseId)
         {
             return await _context.Enrollment
                 .FirstOrDefaultAsync(sc => sc.StudentId == studentId && sc.CourseId == courseId);
+        }
+
+        // ✅ Bulk Add
+        public async Task AddRangeAsync(IEnumerable<T> entities)
+        {
+            await _dbSet.AddRangeAsync(entities);
+            await _context.SaveChangesAsync();
+
+        }
+        // ✅ Bulk Delete
+        public void RemoveRange(IEnumerable<T> entities)
+        {
+            _dbSet.RemoveRange(entities);
+            _context.SaveChangesAsync();
         }
     }
 }

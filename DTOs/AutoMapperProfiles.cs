@@ -92,11 +92,11 @@ namespace EdufyAPI.DTOs
 
             #endregion
 
-            #region
-            CreateMap<Question, QuestionReadDTO>()
-                .ForMember(dest => dest.QuizName, opt => opt.MapFrom(src => src.Quiz.Title));
+            #region Question AutoMapper
+            CreateMap<Question, QuestionReadDTO>();
             CreateMap<QuestionCreateDTO, Question>();
             CreateMap<QuestionUpdateDTO, Question>();
+            CreateMap<QuestionBulkUpdateDTO, Question>();
             #endregion
 
             #region Enrollment AutoMapper
