@@ -7,6 +7,7 @@ using EdufyAPI.DTOs.InstructorDTOs;
 using EdufyAPI.DTOs.LessonDTOs;
 using EdufyAPI.DTOs.ProgressDTOs;
 using EdufyAPI.DTOs.QuizModelsDTOs.QuestionDTOs;
+using EdufyAPI.DTOs.QuizModelsDTOs.QuizAttempDTOs;
 using EdufyAPI.DTOs.QuizModelsDTOs.QuizDTOs;
 using EdufyAPI.DTOs.StudentCourseDTOs;
 using EdufyAPI.DTOs.StudentDTOs;
@@ -89,6 +90,7 @@ namespace EdufyAPI.DTOs
             CreateMap<Quiz, QuizDetailsDTO>();
             CreateMap<QuizCreateDTO, Quiz>();
             CreateMap<QuizUpdateDTO, Quiz>();
+            CreateMap<QuizAttemp, QuizAttempReadDTO>().ReverseMap();
 
             #endregion
 

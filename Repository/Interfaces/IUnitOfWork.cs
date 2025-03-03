@@ -15,7 +15,7 @@ namespace EdufyAPI.Repository.Interfaces
         GenericRepository<Progress> ProgressRepository { get; }
         GenericRepository<Certificate> CertificateRepository { get; }
         GenericRepository<Quiz> QuizRepository { get; }
-        GenericRepository<QuizAttemp> QuizResultRepository { get; }
+        GenericRepository<QuizAttemp> QuizAttempRepository { get; }
         GenericRepository<Question> QuestionRepository { get; }
         GenericRepository<Answer> AnswerRepository { get; }
         GenericRepository<StudentAnswer> StudentAnswerRepository { get; }
