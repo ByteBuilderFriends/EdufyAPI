@@ -120,6 +120,66 @@ namespace EdufyAPI.Controllers.QuizModelsControllers
         }
 
 
+        // GET: api/QuizAttemp/BestScore/{studentId}/{quizId}
+        [HttpGet("BestScore/{studentId}/{quizId}")]
+        public async Task<IActionResult> GetStudentBestScore(string studentId, string quizId)
+        {
+            var quizAttempts = await _unitOfWork.QuizAttempRepository
+            .GetByCondition(q => q.Progress.StudentId == studentId && q.QuizId == quizId);
+
+            if (quizAttempts == null || !quizAttempts.Any())
+                return NotFound("No attempts found for this student in the specified quiz.");
+
+            var bestAttempt = quizAttempts
+                .OrderByDescending(q => q.Score)
+                .FirstOrDefault();
+
+            return Ok(new { bestAttempt.Score, bestAttempt.ScorePercentage, bestAttempt.IsPassed });
+        }
+
+        // GET: api/QuizAttemp/Duration/{attemptId}
+        [HttpGet("Duration/{attemptId}")]
+        public async Task<IActionResult> GetQuizAttemptDuration(string attemptId)
+        {
+            var attempt = await _unitOfWork.QuizAttempRepository.GetByIdAsync(attemptId);
+            if (attempt == null)
+                return NotFound("Quiz attempt not found.");
+
+            return Ok(new { attempt.Duration });
+        }
+
+
+        // GET: api/QuizAttemp/PassFailStats/{quizId}
+        [HttpGet("PassFailStats/{quizId}")]
+        public async Task<IActionResult> GetPassFailStats(string quizId)
+        {
+            var attempts = await _unitOfWork.QuizAttempRepository.GetByCondition(q => q.QuizId == quizId);
+
+            if (!attempts.Any())
+                return NotFound("No attempts found for this quiz.");
+
+            var passCount = attempts.Count(q => q.IsPassed);
+            var failCount = attempts.Count(q => !q.IsPassed);
+
+            return Ok(new { Passed = passCount, Failed = failCount });
+        }
+
+        // POST: api/QuizAttemp/Complete/{attemptId}
+        [HttpPost("Complete/{attemptId}")]
+        public async Task<IActionResult> CompleteQuizAttempt(string attemptId)
+        {
+            var attempt = await _unitOfWork.QuizAttempRepository.GetByIdAsync(attemptId);
+            if (attempt == null)
+                return NotFound("Quiz attempt not found.");
+
+            attempt.CompletedAt = DateTime.UtcNow;
+            await _unitOfWork.SaveChangesAsync();
+
+            return Ok(new { attempt.CompletedAt, attempt.Duration });
+        }
+
+
+
 
 
     }
