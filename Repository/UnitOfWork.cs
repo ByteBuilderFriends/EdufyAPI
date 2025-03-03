@@ -51,7 +51,7 @@ namespace EdufyAPI.Repository
         public GenericRepository<Quiz> QuizRepository => _quizRepository ??= new GenericRepository<Quiz>(_context);
         public GenericRepository<Question> QuestionRepository => _questionRepository ??= new GenericRepository<Question>(_context);
         public GenericRepository<Answer> AnswerRepository => _answerRepository ??= new GenericRepository<Answer>(_context);
-        public GenericRepository<QuizAttemp> QuizResultRepository => _quizResultRepository ??= new GenericRepository<QuizAttemp>(_context);
+        public GenericRepository<QuizAttemp> QuizAttempRepository => _quizResultRepository ??= new GenericRepository<QuizAttemp>(_context);
         public GenericRepository<StudentAnswer> StudentAnswerRepository => _studentAnswerRepository ??= new GenericRepository<StudentAnswer>(_context);
         public GenericRepository<Certificate> CertificateRepository => _certificateRepository ??= new GenericRepository<Certificate>(_context);
         public GenericRepository<Admin> AdminRepository => _adminRepository ??= new GenericRepository<Admin>(_context);
