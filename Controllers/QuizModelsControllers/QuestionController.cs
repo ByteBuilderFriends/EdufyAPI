@@ -3,10 +3,11 @@ using EdufyAPI.DTOs.QuizModelsDTOs.QuestionDTOs;
 using EdufyAPI.Models.QuizModels;
 using EdufyAPI.Repository.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace EdufyAPI.Controllers.QuizModelsControllers
 {
-    [Route("api/[controller]/[action]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class QuestionController : ControllerBase
     {
@@ -59,6 +60,47 @@ namespace EdufyAPI.Controllers.QuizModelsControllers
             var quizQuestionsDTO = _mapper.Map<QuestionReadDTO>(quiz);
             return Ok(quizQuestionsDTO);
         }
+
+        // Search questions by text
+        [HttpGet("search")]
+        public async Task<IActionResult> SearchQuestions(string text, bool isCaseSensitive = false)
+        {
+            if (string.IsNullOrWhiteSpace(text))
+                return BadRequest("Search text cannot be empty.");
+
+            IReadOnlyList<Question> questions;
+            if (isCaseSensitive)
+            {
+                // EF.Functions.Collate(expression, collation) is an Entity Framework Core function that changes the collation of a database column only for the current query.
+                // Collation controls how text is compared and sorted in SQL Server.
+                // SQL_Latin1_General_CP1_CS_AS → A case-sensitive collation (CS = Case-Sensitive).
+                questions = await _unitOfWork.QuestionRepository.GetByCondition(q =>
+                    EF.Functions.Collate(q.Text, "SQL_Latin1_General_CP1_CS_AS").Contains(text));
+            }
+            else
+            {
+                //By default, SQL Server collation is case-insensitive (CI), meaning "math" and "Math" are treated as the same.
+                questions = await _unitOfWork.QuestionRepository.GetByCondition(q => q.Text.Contains(text));
+            }
+
+            var questionDTOs = _mapper.Map<IEnumerable<QuestionReadDTO>>(questions);
+            return Ok(questionDTOs);
+        }
+
+        // Filter questions by type & points range
+        //[HttpGet("filter")]
+        //public async Task<IActionResult> FilterQuestions(
+        //    [FromQuery] QuestionType? type,
+        //    [FromQuery] int? minPoints,
+        //    [FromQuery] int? maxPoints)
+        //{
+        //    var questions = await _unitOfWork.QuestionRepository.FilterQuestionsAsync(type, minPoints, maxPoints);
+        //    var questionDTOs = _mapper.Map<IEnumerable<QuestionReadDTO>>(questions);
+
+        //    return Ok(questionDTOs);
+        //}
+
+
 
         // POST: api/Question
         [HttpPost]
