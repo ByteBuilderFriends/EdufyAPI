@@ -117,5 +117,35 @@ namespace EdufyAPI.Controllers.QuizModelsControllers
             return NoContent();
         }
 
+        // Correct all student answers for a specific question
+        [HttpPut("question/{questionId}/correct")]
+        public async Task<IActionResult> CorrectAllStudentAnswersForQuestion(string questionId)
+        {
+            // Retrieve the question
+            var question = await _unitOfWork.QuestionRepository.GetByIdAsync(questionId);
+            if (question == null)
+                return NotFound($"Question with ID {questionId} not found.");
+
+            // Retrieve all student answers for this question
+            var studentAnswers = await _unitOfWork.StudentAnswerRepository.GetByCondition(sa => sa.QuestionId == questionId);
+            if (!studentAnswers.Any())
+                return NotFound($"No student answers found for question ID {questionId}.");
+
+            // Validate and update each student's answer
+            foreach (var studentAnswer in studentAnswers)
+            {
+                studentAnswer.IsCorrect = string.Equals(
+                    studentAnswer.SubmittedAnswer, question.Answer, StringComparison.OrdinalIgnoreCase
+                );
+
+                await _unitOfWork.StudentAnswerRepository.UpdateAsync(studentAnswer);
+            }
+
+            // Save all updates
+            await _unitOfWork.SaveChangesAsync();
+
+            return NoContent(); // Success response
+        }
+
     }
 }
