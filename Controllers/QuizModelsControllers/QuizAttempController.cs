@@ -209,5 +209,7 @@ namespace EdufyAPI.Controllers.QuizModelsControllers
             return Ok(new { attempt.CompletedAt, attempt.Duration });
         }
 
+
+
     }
 }

@@ -18,6 +18,8 @@ namespace EdufyAPI.Models.QuizModels
 
         public int OrderIndex { get; set; }
 
+        public string Answer { get; set; } = string.Empty;
+
         #region Relationships
         [ForeignKey("Quiz")]
         public string QuizId { get; set; }

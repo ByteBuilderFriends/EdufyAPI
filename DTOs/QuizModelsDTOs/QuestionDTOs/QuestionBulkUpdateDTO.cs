@@ -18,5 +18,7 @@ namespace EdufyAPI.DTOs.QuizModelsDTOs.QuestionDTOs
         public QuestionType Type { get; set; }
 
         public int OrderIndex { get; set; }
+
+        public string Answer { get; set; } = string.Empty;
     }
 }
