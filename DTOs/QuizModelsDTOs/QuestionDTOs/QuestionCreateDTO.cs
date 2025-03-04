@@ -18,5 +18,7 @@ namespace EdufyAPI.DTOs.QuizModelsDTOs.QuestionDTOs
 
         [Required]
         public string QuizId { get; set; } = string.Empty;
+
+        public string Answer { get; set; } = string.Empty;
     }
 }

@@ -9,9 +9,8 @@ namespace EdufyAPI.Models.QuizModels
 
         public DateTime SubmittedAt { get; set; } = DateTime.UtcNow;
 
-        public bool IsCorrect { get; set; }
-        //[NotMapped]
-        //public bool IsCorrect => Answer?.IsCorrect ?? false; // Automatically determine correctness
+        public bool IsCorrect { get; set; } = false;
+
         #region Relationships
         [ForeignKey("QuizAttemp")]
         public string QuizResultId { get; set; }

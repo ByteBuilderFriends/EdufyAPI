@@ -12,6 +12,8 @@ namespace EdufyAPI.DTOs.QuizModelsDTOs.QuestionDTOs
         public string? Explanation { get; set; }
         public string QuizId { get; set; }
         public string QuizName { get; set; } = string.Empty; // Nested property
+
+        public string Answer { get; set; } = string.Empty; // Nested property
         public List<AnswerReadDTO> Answers { get; set; }
     }
 }

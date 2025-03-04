@@ -99,7 +99,12 @@ builder.Services.AddAuthentication(options =>
 
 #region Register services
 // 🔹 Register UnitOfWork and Generic Repository for dependency injection
+
+// This ensures that:
+//A new instance of UnitOfWork(and consequently DbContext) is created per request.
+//Once the request is complete, the instance is disposed of properly. This is important to prevent memory leaks.
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles)); // Register AutoMapper
 builder.Services.AddLogging(); // This ensures logging is available
