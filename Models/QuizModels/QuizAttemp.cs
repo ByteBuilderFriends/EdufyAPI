@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using EdufyAPI.Models.Roles;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EdufyAPI.Models.QuizModels
@@ -8,7 +9,7 @@ namespace EdufyAPI.Models.QuizModels
     public class QuizAttemp : QuizModelsBaseEntity
     {
         [Required]
-        public int Score { get; set; }
+        public double Score { get; set; }
 
         public double ScorePercentage => (double)(Quiz?.TotalPoints == 0 ? 0 : (double)Score / Quiz?.TotalPoints * 100);
         public bool IsPassed => ScorePercentage >= Quiz?.PassingScore;
@@ -26,6 +27,10 @@ namespace EdufyAPI.Models.QuizModels
         [ForeignKey("Quiz")]
         public string QuizId { get; set; }
         public virtual Quiz Quiz { get; set; }
+
+        [ForeignKey("Student")]
+        public string StudentId { get; set; }
+        public virtual Student Student { get; set; }
 
         public virtual List<StudentAnswer> StudentAnswers { get; set; } = new();
         #endregion

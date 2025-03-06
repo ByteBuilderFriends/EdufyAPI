@@ -11,6 +11,7 @@ namespace EdufyAPI.Models.QuizModels
 
         public bool IsCorrect { get; set; } = false;
 
+        public virtual List<string> SelectedAnswerIds { get; set; } = new();
         #region Relationships
         [ForeignKey("QuizAttemp")]
         public string QuizResultId { get; set; }
