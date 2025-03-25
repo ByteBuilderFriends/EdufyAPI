@@ -1,7 +1,7 @@
 ﻿using EdufyAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace EdufyAPI.Controllers.PrayerContollers
+namespace EdufyAPI.Controllers.PrayerControllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -14,15 +14,17 @@ namespace EdufyAPI.Controllers.PrayerContollers
             _qiblaService = qiblaService;
         }
 
+        // ✅ Get Qibla Direction
         [HttpGet("direction")]
         public async Task<IActionResult> GetQiblaDirection()
         {
-            var qiblaDirection = await _qiblaService.GetQiblaDirection();
+            var qiblaDirection = await _qiblaService.GetQiblaCompass();
 
             if (qiblaDirection == null)
                 return NotFound(new { message = "Could not determine Qibla direction." });
 
             return Ok(qiblaDirection);
         }
+
     }
 }

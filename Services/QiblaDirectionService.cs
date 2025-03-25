@@ -17,7 +17,8 @@ namespace EdufyAPI.Services
             _prayerTimesService = prayerTimesService;
         }
 
-        public async Task<QiblaResponse?> GetQiblaDirection()
+        // ✅ Get Qibla Compass Image
+        public async Task<QiblaCompassResponse?> GetQiblaCompass()
         {
             var location = await _prayerTimesService.GetUserLocation();
             if (location == null || location.Lat == 0 || location.Lon == 0)
@@ -26,36 +27,23 @@ namespace EdufyAPI.Services
                 return null;
             }
 
-            string cacheKey = $"QiblaDirection-{location.Lat}-{location.Lon}";
+            string cacheKey = $"QiblaCompass-{location.Lat}-{location.Lon}";
 
-            if (_cache.TryGetValue(cacheKey, out QiblaResponse cachedQiblaDirection))
+            if (_cache.TryGetValue(cacheKey, out QiblaCompassResponse cachedCompass))
             {
-                return cachedQiblaDirection;
+                return cachedCompass;
             }
 
             try
             {
-                string requestUrl = $"{QiblaApiUrl}/{location.Lat}/{location.Lon}";
-                Console.WriteLine($"📍 Fetching Qibla Direction: {requestUrl}");
+                string requestUrl = $"{QiblaApiUrl}/{location.Lat}/{location.Lon}/image";
+                Console.WriteLine($"📍 Fetching Qibla Compass Image: {requestUrl}");
 
-                var response = await _httpClient.GetFromJsonAsync<QiblaApiResponse>(requestUrl);
+                var compassImageUrl = new QiblaCompassResponse { ImageUrl = requestUrl };
 
-                if (response == null)
-                {
-                    Console.WriteLine("❌ API returned null response.");
-                    return null;
-                }
-                if (response.Data == null)
-                {
-                    Console.WriteLine("❌ API response does not contain Data.");
-                    return null;
-                }
+                _cache.Set(cacheKey, compassImageUrl, TimeSpan.FromHours(CacheDurationHours));
 
-                var qiblaDirection = new QiblaResponse { Direction = response.Data.Direction };
-
-                _cache.Set(cacheKey, qiblaDirection, TimeSpan.FromHours(CacheDurationHours));
-
-                return qiblaDirection;
+                return compassImageUrl;
             }
             catch (HttpRequestException ex)
             {
@@ -65,13 +53,8 @@ namespace EdufyAPI.Services
         }
     }
 
-    public class QiblaApiResponse
+    public class QiblaCompassResponse
     {
-        public QiblaResponse Data { get; set; } = new();
-    }
-
-    public class QiblaResponse
-    {
-        public double Direction { get; set; }
+        public string ImageUrl { get; set; } = string.Empty;
     }
 }
