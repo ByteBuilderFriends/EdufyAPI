@@ -4,6 +4,7 @@ using EdufyAPI.Models;
 using EdufyAPI.Models.Roles;
 using EdufyAPI.Repository;
 using EdufyAPI.Repository.Interfaces; // Add the namespace for repositories
+using EdufyAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -97,7 +98,7 @@ builder.Services.AddAuthentication(options =>
 #endregion
 
 
-#region Register services
+#region Register services for dependency injection
 // 🔹 Register UnitOfWork and Generic Repository for dependency injection
 
 // This ensures that:
@@ -108,6 +109,8 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles)); // Register AutoMapper
 builder.Services.AddLogging(); // This ensures logging is available
+builder.Services.AddHttpClient<PrayerTimesService>();
+builder.Services.AddMemoryCache();
 #endregion
 
 
