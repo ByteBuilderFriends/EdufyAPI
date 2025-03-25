@@ -110,6 +110,7 @@ builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepositor
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles)); // Register AutoMapper
 builder.Services.AddLogging(); // This ensures logging is available
 builder.Services.AddHttpClient<PrayerTimesService>();
+builder.Services.AddHttpClient<QiblaDirectionService>();
 builder.Services.AddMemoryCache();
 #endregion
 

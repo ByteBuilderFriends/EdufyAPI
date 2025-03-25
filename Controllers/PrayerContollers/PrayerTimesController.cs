@@ -1,7 +1,7 @@
 ﻿using EdufyAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace EdufyAPI.Controllers
+namespace EdufyAPI.Controllers.ServiceContollers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -59,8 +59,8 @@ namespace EdufyAPI.Controllers
                 {
                     Latitude = location.Lat,
                     Longitude = location.Lon,
-                    Country = location.Country,
-                    City = location.City
+                    location.Country,
+                    location.City
                 });
             }
             catch (Exception ex)
