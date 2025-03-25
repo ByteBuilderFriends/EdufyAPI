@@ -77,7 +77,7 @@ namespace EdufyAPI.Services
 
         public class PrayerTimings
         {
-            public Dictionary<string, string> Timings { get; set; }
+            public Dictionary<string, string> Timings { get; set; } // Prayer : Time
         }
     }
 }
