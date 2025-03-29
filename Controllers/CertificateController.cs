@@ -13,18 +13,25 @@ namespace EdufyAPI.Controllers
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
         private readonly IMapper _mapper = mapper;
 
-        // Create a new certificate for a student who has completed a course.
-
-        // !NOTE: I need to check if it's better to use Progress Object or ProgressId
+        /// <summary>
+        /// Generates a new certificate for a student who has completed a course.
+        /// </summary>
+        /// <param name="progressId">The ID of the progress record associated with the completed course.</param>
+        /// <returns>Returns an HTTP 200 status on success, 400 if progressId is missing, and 404 if progress is not found.</returns>
         [HttpPost]
         public async Task<IActionResult> AutoGenerateCertificate(string progressId)
         {
-            if (progressId == "")
+            if (string.IsNullOrWhiteSpace(progressId))
             {
                 return BadRequest("Progress Id is required");
             }
 
             var progress = await _unitOfWork.ProgressRepository.GetByIdAsync(progressId);
+            if (progress == null)
+            {
+                return NotFound("Progress record not found");
+            }
+
             if (progress.IsCompleted)
             {
                 var certificate = new Certificate
@@ -36,15 +43,18 @@ namespace EdufyAPI.Controllers
                 await _unitOfWork.CertificateRepository.AddAsync(certificate);
             }
 
-            return Ok();
+            return Ok("Certificate generated successfully");
         }
 
-        // Get all certificates issued to students.
+        /// <summary>
+        /// Retrieves all certificates issued to students.
+        /// </summary>
+        /// <returns>Returns a list of certificates or a 204 status if no certificates exist.</returns>
         [HttpGet]
         public async Task<IActionResult> GetCertificates()
         {
             var certificates = await _unitOfWork.CertificateRepository.GetAllAsync();
-            if (certificates == null)
+            if (certificates == null || !certificates.Any())
             {
                 return NoContent();
             }
@@ -53,10 +63,18 @@ namespace EdufyAPI.Controllers
             return Ok(certificatesDTO);
         }
 
-        // Get a certificate by its unique identifier.
+        /// <summary>
+        /// Retrieves a certificate by its unique identifier.
+        /// </summary>
+        /// <param name="id">The ID of the certificate.</param>
+        /// <returns>Returns the certificate if found, otherwise a 404 status.</returns>
         [HttpGet]
         public async Task<IActionResult> GetCertificateById(string id)
         {
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                return BadRequest("Certificate Id is required");
+            }
 
             var certificate = await _unitOfWork.CertificateRepository.GetByIdAsync(id);
             if (certificate == null)
@@ -68,46 +86,29 @@ namespace EdufyAPI.Controllers
             return Ok(certificateDTO);
         }
 
-        // Get all certificates issued to a student.
-        //[HttpGet]
-        //public async Task<IActionResult> GetStudentCertificates(int studentId)
-        //{
-        //    if (studentId == 0)
-        //    {
-        //        return BadRequest("Student Id is required");
-        //    }
-        //    var certificates = await _unitOfWork.CertificateRepository.GetCertificatesByStudentId(studentId);
-        //    if (certificates == null)
-        //    {
-        //        return NoContent();
-        //    }
-        //    return Ok(certificates);
-        //}
-
-        // Update a certificate's remarks.
+        /// <summary>
+        /// Updates the remarks of a certificate.
+        /// </summary>
+        /// <param name="id">The ID of the certificate.</param>
+        /// <param name="remarks">The new remarks to update.</param>
+        /// <returns>Returns an HTTP 200 status on success, 400 if ID is missing, or 404 if certificate is not found.</returns>
         [HttpPut]
         public async Task<IActionResult> UpdateCertificateRemarks(string id, string remarks)
         {
-            if (id == "")
+            if (string.IsNullOrWhiteSpace(id))
             {
                 return BadRequest("Certificate Id is required");
             }
+
             var certificate = await _unitOfWork.CertificateRepository.GetByIdAsync(id);
             if (certificate == null)
             {
                 return NotFound();
             }
+
             certificate.Remarks = remarks;
             await _unitOfWork.CertificateRepository.UpdateAsync(certificate);
-            return Ok();
+            return Ok("Certificate remarks updated successfully");
         }
     }
 }
-
-
-/*
-NOTE:
-We need to Add in the student Controller the following methods:
-- GetStudentCertificates
- */
-
