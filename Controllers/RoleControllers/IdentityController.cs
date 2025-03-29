@@ -52,10 +52,26 @@ namespace EdufyAPI.Controllers.RoleControllers
         }
 
         /// <summary>
-        /// Registers a new user with email and password.
+        /// Registers a new user with email and password
         /// </summary>
-        /// <param name="model">User registration details.</param>
-        /// <returns>Returns success or failure response.</returns>
+        /// <remarks>
+        /// Sample request:
+        /// 
+        ///     POST /api/Identity/register
+        ///     FormData:
+        ///     - FirstName: "John"
+        ///     - LastName: "Doe"
+        ///     - Email: "john.doe@example.com"
+        ///     - Password: "P@ssw0rd!"
+        ///     - PhoneNumber: "123-456-7890"
+        ///     - Role: 0 (Student) or 1 (Instructor)
+        ///     - ProfilePicture: [file upload]
+        ///     
+        /// </remarks>
+        /// <param name="model">User registration details including profile picture</param>
+        /// <returns>Success message or error details</returns>
+        /// <response code="200">User registered successfully</response>
+        /// <response code="400">Invalid input data or registration error</response>
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromForm] RegisterViewModel model)
         {
@@ -113,10 +129,23 @@ namespace EdufyAPI.Controllers.RoleControllers
         }
 
         /// <summary>
-        /// Logs in a user and generates a JWT token.
+        /// Authenticates a user and generates JWT token
         /// </summary>
-        /// <param name="model">User login credentials.</param>
-        /// <returns>JWT Token on successful authentication.</returns>
+        /// <remarks>
+        /// Sample request:
+        /// 
+        ///     POST /api/Identity/login
+        ///     {
+        ///         "email": "john.doe@example.com",
+        ///         "password": "P@ssw0rd!"
+        ///     }
+        ///     
+        /// </remarks>
+        /// <param name="model">User credentials (email/username and password)</param>
+        /// <returns>JWT token for authenticated requests</returns>
+        /// <response code="200">Returns authentication token</response>
+        /// <response code="400">Invalid request format</response>
+        /// <response code="401">Invalid credentials</response>
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginViewModel model)
         {
@@ -160,9 +189,11 @@ namespace EdufyAPI.Controllers.RoleControllers
 
 
         /// <summary>
-        /// Logs out the authenticated user.
+        /// Logs out the currently authenticated user
         /// </summary>
-        /// <returns>Success message.</returns>
+        /// <returns>Empty response</returns>
+        /// <response code="204">Successfully logged out</response>
+        /// <response code="401">User not authenticated</response>
         [HttpPost("logout")]
         public async Task<IActionResult> Logout()
         {
@@ -179,6 +210,13 @@ namespace EdufyAPI.Controllers.RoleControllers
 
 
         // Get All Users
+        /// <summary>
+        /// Retrieves all registered users (Admin only)
+        /// </summary>
+        /// <returns>List of all users</returns>
+        /// <response code="200">Returns user list</response>
+        /// <response code="401">Unauthorized access</response>
+        /// <response code="403">Insufficient privileges</response>
         [HttpGet("Users")]
         //[Authorize("Admin")]
         public async Task<IActionResult> GetAllUsers()
@@ -188,6 +226,13 @@ namespace EdufyAPI.Controllers.RoleControllers
             return Ok(users);
         }
 
+        /// <summary>
+        /// Retrieves a specific user by ID
+        /// </summary>
+        /// <param name="id">User ID to retrieve</param>
+        /// <returns>User details</returns>
+        /// <response code="200">Returns requested user</response>
+        /// <response code="404">User not found</response>
         [HttpGet("Users/{id}")]
         public async Task<IActionResult> GetUserById(string id)
         {
@@ -198,6 +243,25 @@ namespace EdufyAPI.Controllers.RoleControllers
             return Ok(user);
         }
 
+        /// <summary>
+        /// Updates user's email address
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        /// 
+        ///     PUT /api/Identity/update-email
+        ///     {
+        ///         "userId": "123e4567-e89b-12d3-a456-426614174000",
+        ///         "newEmail": "new.email@example.com"
+        ///     }
+        ///     
+        /// </remarks>
+        /// <param name="model">Email update details</param>
+        /// <returns>Success message with new username</returns>
+        /// <response code="200">Email updated successfully</response>
+        /// <response code="400">Invalid input data</response>
+        /// <response code="403">Unauthorized update attempt</response>
+        /// <response code="404">User not found</response>
         [HttpPut("update-email")]
         [Authorize]
         public async Task<IActionResult> UpdateEmail([FromBody] UpdateEmailDTO model)
@@ -241,7 +305,28 @@ namespace EdufyAPI.Controllers.RoleControllers
             return Ok(new { Message = "Email updated successfully!", UserName = newUserName });
         }
 
-
+        /// <summary>
+        /// Updates user's password
+        /// </summary>
+        /// <remarks>
+        /// Regular users must provide old password, admins can reset directly
+        /// 
+        /// Sample user request:
+        /// 
+        ///     PUT /api/Identity/update-password
+        ///     {
+        ///         "userId": "123e4567-e89b-12d3-a456-426614174000",
+        ///         "oldPassword": "oldPassword123",
+        ///         "newPassword": "newPassword456"
+        ///     }
+        ///     
+        /// </remarks>
+        /// <param name="model">Password update details</param>
+        /// <returns>Success message</returns>
+        /// <response code="200">Password updated successfully</response>
+        /// <response code="400">Invalid input data</response>
+        /// <response code="403">Unauthorized update attempt</response>
+        /// <response code="404">User not found</response>
         [HttpPut("update-password")]
         [Authorize]
         public async Task<IActionResult> UpdatePassword([FromBody] UpdatePasswordDTO model)
@@ -279,6 +364,26 @@ namespace EdufyAPI.Controllers.RoleControllers
             return Ok(new { Message = "Password updated successfully!" });
         }
 
+        /// <summary>
+        /// Updates user's first and last name
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        /// 
+        ///     PUT /api/Identity/update-name
+        ///     {
+        ///         "userId": "123e4567-e89b-12d3-a456-426614174000",
+        ///         "firstName": "John",
+        ///         "lastName": "Smith"
+        ///     }
+        ///     
+        /// </remarks>
+        /// <param name="model">Name update details</param>
+        /// <returns>Success message</returns>
+        /// <response code="200">Name updated successfully</response>
+        /// <response code="400">Invalid input data</response>
+        /// <response code="403">Unauthorized update attempt</response>
+        /// <response code="404">User not found</response>
         [HttpPut("update-name")]
         [Authorize]
         public async Task<IActionResult> UpdateName([FromBody] UpdateNameDTO model)
@@ -307,6 +412,14 @@ namespace EdufyAPI.Controllers.RoleControllers
             return Ok(new { Message = "Name updated successfully!" });
         }
 
+        /// <summary>
+        /// Deletes a user account
+        /// </summary>
+        /// <param name="id">ID of user to delete</param>
+        /// <returns>Success message</returns>
+        /// <response code="200">User deleted successfully</response>
+        /// <response code="400">Deletion failed</response>
+        /// <response code="404">User not found</response>
         [HttpDelete("delete-user/{id}")]
         public async Task<IActionResult> DeleteUser(string id)
         {
@@ -337,11 +450,7 @@ namespace EdufyAPI.Controllers.RoleControllers
 
 
 
-        /// <summary>
-        /// Generates a JWT token for the authenticated user.
-        /// </summary>
-        /// <param name="user">Authenticated IdentityUser.</param>
-        /// <returns>JWT Token as a string.</returns>
+
         private string GenerateJwtToken(IdentityUser user)
         {
             var jwtSettings = _config.GetSection("JwtSettings");

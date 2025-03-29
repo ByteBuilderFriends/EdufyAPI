@@ -17,7 +17,10 @@ public class ProgressController : ControllerBase
         _mapper = mapper;
     }
 
-    // ✅ Get all progress records
+    /// <summary>
+    /// Retrieves all progress records.
+    /// </summary>
+    /// <returns>A list of progress records.</returns>
     [HttpGet]
     public async Task<ActionResult<IEnumerable<ProgressReadDTO>>> GetAllProgresses()
     {
@@ -26,7 +29,11 @@ public class ProgressController : ControllerBase
         return Ok(progressDTOs);
     }
 
-    // ✅ Get progress by Id
+    /// <summary>
+    /// Retrieves a progress record by its ID.
+    /// </summary>
+    /// <param name="id">The progress ID.</param>
+    /// <returns>The progress record.</returns>
     [HttpGet("{id}")]
     public async Task<ActionResult<ProgressReadDTO>> GetProgressById(string id)
     {
@@ -37,7 +44,11 @@ public class ProgressController : ControllerBase
         return Ok(progressDTO);
     }
 
-    // ✅ Get progress by Student Id
+    /// <summary>
+    /// Retrieves all progress records for a specific student.
+    /// </summary>
+    /// <param name="studentId">The student ID.</param>
+    /// <returns>A list of progress records for the student.</returns>
     [HttpGet("ByStudent/{studentId}")]
     public async Task<ActionResult<IEnumerable<ProgressReadDTO>>> GetProgressByStudentId(string studentId)
     {
@@ -47,7 +58,11 @@ public class ProgressController : ControllerBase
         return Ok(progressDTOs);
     }
 
-    // ✅ Get progress by Course Id
+    /// <summary>
+    /// Retrieves all progress records for a specific course.
+    /// </summary>
+    /// <param name="courseId">The course ID.</param>
+    /// <returns>A list of progress records for the course.</returns>
     [HttpGet("ByCourse/{courseId}")]
     public async Task<ActionResult<IEnumerable<ProgressReadDTO>>> GetProgressByCourseId(string courseId)
     {
@@ -57,8 +72,11 @@ public class ProgressController : ControllerBase
         return Ok(progressDTOs);
     }
 
-
-    // ✅ Create new progress
+    /// <summary>
+    /// Creates a new progress record.
+    /// </summary>
+    /// <param name="dto">The progress creation data.</param>
+    /// <returns>The created progress record.</returns>
     [HttpPost]
     public async Task<ActionResult<ProgressReadDTO>> CreateProgress([FromBody] ProgressCreateDTO dto)
     {
@@ -72,7 +90,11 @@ public class ProgressController : ControllerBase
         return CreatedAtAction(nameof(GetProgressById), new { id = progress.Id }, progressReadDTO);
     }
 
-    // ✅ Update progress
+    /// <summary>
+    /// Updates an existing progress record.
+    /// </summary>
+    /// <param name="id">The progress ID.</param>
+    /// <param name="dto">The updated progress data.</param>
     [HttpPut("{id}")]
     public async Task<ActionResult> UpdateProgress(string id, [FromBody] ProgressUpdateDTO dto)
     {
@@ -88,7 +110,10 @@ public class ProgressController : ControllerBase
         return NoContent();
     }
 
-    // ✅ Delete progress
+    /// <summary>
+    /// Deletes a progress record.
+    /// </summary>
+    /// <param name="id">The progress ID.</param>
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteProgress(string id)
     {
@@ -99,7 +124,10 @@ public class ProgressController : ControllerBase
         return NoContent();
     }
 
-    // ✅ Mark progress as completed
+    /// <summary>
+    /// Marks a progress record as completed.
+    /// </summary>
+    /// <param name="id">The progress ID.</param>
     [HttpPut("MarkAsCompleted/{id}")]
     public async Task<ActionResult> MarkProgressAsCompleted(string id)
     {
