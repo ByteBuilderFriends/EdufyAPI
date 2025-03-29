@@ -5,6 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EdufyAPI.Controllers.RoleControllers
 {
+    /// <summary>
+    /// Controller for managing instructor-related operations
+    /// </summary>
     [Route("api/[controller]/[Action]")]
     [ApiController]
     public class InstructorController(IUnitOfWork unitOfWork, IMapper mapper) : ControllerBase
@@ -12,10 +15,19 @@ namespace EdufyAPI.Controllers.RoleControllers
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
         private readonly IMapper _mapper = mapper;
 
-        private readonly string InstructorProfilePictureFolder = "instructor-profile-picture";
-
-        // GET: api/Instructor
+        /// <summary>
+        /// Retrieves all instructors
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        /// 
+        ///     GET /api/Instructor/GetAllInstructors
+        ///     
+        /// </remarks>
+        /// <returns>List of instructors</returns>
+        /// <response code="200">Returns list of instructors (might be empty)</response>
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllInstructors()
         {
             var instructors = await _unitOfWork.InstructorRepository.GetAllAsync();
@@ -28,21 +40,48 @@ namespace EdufyAPI.Controllers.RoleControllers
             return Ok(instructorDtos);
         }
 
-        // GET: api/Instructor/5
-
+        /// <summary>
+        /// Retrieves a specific instructor by ID
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        /// 
+        ///     GET /api/Instructor/GetInstructorById/abc123
+        ///     
+        /// </remarks>
+        /// <param name="id">Instructor ID</param>
+        /// <returns>Instructor details</returns>
+        /// <response code="200">Returns requested instructor</response>
+        /// <response code="404">Instructor not found</response>
         [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetInstructorById(string id)
         {
             var instructor = await _unitOfWork.InstructorRepository.GetByIdAsync(id);
             if (instructor == null)
                 return NotFound();
+
             var instructorDto = _mapper.Map<InstructorReadDTO>(instructor);
             return Ok(instructorDto);
         }
 
-        // POST: api/Course/5/Instructor
-
+        /// <summary>
+        /// Retrieves the instructor associated with a specific course
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        /// 
+        ///     POST /api/Instructor/GetInstructorByCourseId/456/course
+        ///     
+        /// </remarks>
+        /// <param name="id">Course ID</param>
+        /// <returns>Instructor details for course</returns>
+        /// <response code="200">Returns associated instructor</response>
+        /// <response code="404">Course or instructor not found</response>
         [HttpPost("{id}/Instructor")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetInstructorByCourseId(string id)
         {
             var course = await _unitOfWork.CourseRepository.GetByIdAsync(id);
@@ -56,13 +95,5 @@ namespace EdufyAPI.Controllers.RoleControllers
             var instructorDto = _mapper.Map<InstructorReadDTO>(instructor);
             return Ok(instructorDto);
         }
-
-        // Upload Course
-        //public async Task<IActionResult> UploadCourse(Course course)
-        //{
-        //    return Ok();
-        //}
-
-
     }
 }
