@@ -2,6 +2,7 @@
 using EdufyAPI.DTOs;
 using EdufyAPI.DTOs.EnrollmentDTOs;
 using EdufyAPI.DTOs.StudentCourseDTOs;
+using EdufyAPI.DTOs.StudentDTOs;
 using EdufyAPI.Models;
 using EdufyAPI.Repository.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -73,6 +74,17 @@ namespace EdufyAPI.Controllers
 
             var courseDtos = _mapper.Map<IEnumerable<CourseReadDTO>>(enrollments.Select(e => e.Course));
             return Ok(courseDtos);
+        }
+
+        // Get all students enrolled in a course
+        [HttpGet]
+        public async Task<IActionResult> GetStudentsEnrolledInCourse(string courseId)
+        {
+            var enrollments = await _unitOfWork.EnrollmentRepository.GetByCondition(e => e.CourseId == courseId);
+            if (!enrollments.Any())
+                return NotFound("No students enrolled in this course.");
+            var studentDtos = _mapper.Map<IEnumerable<StudentReadDTO>>(enrollments.Select(e => e.Student));
+            return Ok(studentDtos);
         }
 
 
