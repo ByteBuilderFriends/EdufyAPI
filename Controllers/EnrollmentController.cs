@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EdufyAPI.DTOs;
 using EdufyAPI.DTOs.EnrollmentDTOs;
 using EdufyAPI.DTOs.StudentCourseDTOs;
 using EdufyAPI.Models;
@@ -52,6 +53,28 @@ namespace EdufyAPI.Controllers
             var enrollmentDtos = _mapper.Map<EnrollmentReadDTO>(enrollment);
             return Ok(enrollmentDtos);
         }
+
+        // Get all courses enrolled by a student
+
+        /// <summary>
+        /// Retrieves a list of courses that a student is enrolled in based on their student ID.
+        /// </summary>
+        /// <param name="studentId">The unique identifier of the student.</param>
+        /// <returns>
+        /// Returns a list of enrolled courses in the form of <see cref="IEnumerable{CourseReadDTO}"/>.
+        /// If no enrollments are found, it returns a 404 Not Found response.
+        /// </returns>
+        [HttpGet]
+        public async Task<IActionResult> GetEnrolledCoursesByStudent(string studentId)
+        {
+            var enrollments = await _unitOfWork.EnrollmentRepository.GetByCondition(e => e.StudentId == studentId);
+            if (!enrollments.Any())
+                return NotFound("No enrollments found for this student.");
+
+            var courseDtos = _mapper.Map<IEnumerable<CourseReadDTO>>(enrollments.Select(e => e.Course));
+            return Ok(courseDtos);
+        }
+
 
         /// <summary>
         /// Enrolls a student in a course.
