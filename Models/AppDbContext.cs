@@ -79,6 +79,19 @@ namespace EdufyAPI.Models
                 .OnDelete(DeleteBehavior.Restrict); // Avoid cascading delete
 
 
+            //// Define the FK relationship between StudentAnswer and QuizAttempt
+            //modelBuilder.Entity<StudentAnswer>()
+            //    .HasOne(sa => sa.QuizResult)
+            //    .WithMany(qa => qa.StudentAnswers)
+            //    .HasForeignKey(sa => sa.QuizResultId)
+            //    .OnDelete(DeleteBehavior.Restrict); // Avoid cascading delete
+
+            //// Define the FK relationship between QuizAttempt and StudentAnswer
+            //modelBuilder.Entity<QuizAttemp>()
+            //    .HasMany(qa => qa.StudentAnswers)
+            //    .WithOne(sa => sa.QuizResult)
+            //    .HasForeignKey(sa => sa.QuizResultId)
+            //    .OnDelete(DeleteBehavior.Restrict); // Avoid cascading delete
 
             #endregion
 
@@ -86,6 +99,13 @@ namespace EdufyAPI.Models
             CourseSeeding.Seed(modelBuilder); // Seed Courses
             EnrollmentSeeding.Seed(modelBuilder); // Seed Enrollments
             ProgressSeeding.Seed(modelBuilder); // Seed Progresses
+            LessonSeeding.Seed(modelBuilder); // Seed Lessons
+            QuizSeeding.Seed(modelBuilder); // Seed Quizzes
+            QuestionSeeding.Seed(modelBuilder); // Seed Questions
+            AnswerSeeding.Seed(modelBuilder); // Seed Answers
+            QuizAttempSeeding.Seed(modelBuilder); // Seed Quiz Attempts
+            StudentAnswerSeeding.Seed(modelBuilder); // Seed Student Answers
+
         }
     }
 }

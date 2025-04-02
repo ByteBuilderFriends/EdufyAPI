@@ -98,7 +98,7 @@ namespace EdufyAPI.DTOs
             #endregion
 
             #region Question AutoMapper
-            CreateMap<Question, QuestionReadDTO>();
+            CreateMap<Question, QuestionReadDTO>().ReverseMap();
             CreateMap<QuestionCreateDTO, Question>();
             CreateMap<QuestionUpdateDTO, Question>();
             CreateMap<QuestionBulkUpdateDTO, Question>();

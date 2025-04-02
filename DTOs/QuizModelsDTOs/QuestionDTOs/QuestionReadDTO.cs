@@ -1,6 +1,4 @@
-﻿using EdufyAPI.DTOs.QuizModelsDTOs.AnswerDTOs;
-
-namespace EdufyAPI.DTOs.QuizModelsDTOs.QuestionDTOs
+﻿namespace EdufyAPI.DTOs.QuizModelsDTOs.QuestionDTOs
 {
     public class QuestionReadDTO
     {
@@ -11,9 +9,9 @@ namespace EdufyAPI.DTOs.QuizModelsDTOs.QuestionDTOs
         public string Text { get; set; }
         public string? Explanation { get; set; }
         public string QuizId { get; set; }
-        public string QuizName { get; set; } = string.Empty; // Nested property
+        //public string QuizName { get; set; } = string.Empty; // Nested property
 
-        public string Answer { get; set; } = string.Empty; // Nested property
-        public List<AnswerReadDTO> Answers { get; set; }
+        //public string Answer { get; set; } = string.Empty; // Nested property
+        //public List<AnswerReadDTO> Answers { get; set; }
     }
 }

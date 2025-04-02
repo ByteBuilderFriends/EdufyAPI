@@ -460,10 +460,10 @@ namespace EdufyAPI.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Discriminator", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "ProfilePictureUrl", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "58ec4bbf-4913-4dc1-96b7-381159ce0878", 0, "5d2d80f8-2a01-4fae-807e-c95e616863d4", "Instructor", "omar.tarek@example.com", false, "Omar", "Tarek", false, null, "OMAR.TAREK@EXAMPLE.COM", "OMAR.TAREK", "AQAAAAIAAYagAAAAEBAQ0oa4ArUNOD2WX+YEVMzYmbWXQ68gmNFB2Bnf5tbIgXaaO169FmQv5N3yMm05OQ==", "1122334455", false, "", "91fcc28c-5cd5-4349-8fd9-c9dac4189fa1", false, "omar.tarek" },
-                    { "626b8c7f-f4d4-4467-bb37-570f1aa6fd77", 0, "f102c648-90a0-47ae-9182-9afe5120638f", "Student", "ali.mahmoud@example.com", false, "Ali", "Mahmoud", false, null, "ALI.MAHMOUD@EXAMPLE.COM", "ALI.MAHMOUD", "AQAAAAIAAYagAAAAEBNmy/dG0t5S/77VMtsokdH2d7j7nhIVG3+O7KgKMvo/373PilQZg0NvGbMIoUb8hw==", "1234567890", false, "", "76ae1c98-894a-4a53-aa7b-85c6481d92b8", false, "ali.mahmoud" },
-                    { "a86582e6-8511-4b78-b548-e17a2eaf0d3e", 0, "f468abe3-ef6d-4493-b69c-07f66317ec13", "Instructor", "hana.mostafa@example.com", false, "Hana", "Mostafa", false, null, "HANA.MOSTAFA@EXAMPLE.COM", "HANA.MOSTAFA", "AQAAAAIAAYagAAAAEAiM8WxWli2V7srdU9nY5Gxtd92lUDmQ/9ve7SFxdamJMS36k/zTQe9R38aHzkHNGQ==", "5566778899", false, "", "df129406-5091-45bb-80da-c3c10f3b93d2", false, "hana.mostafa" },
-                    { "e452e625-327a-4bf2-9540-3db6577ab68f", 0, "28ee6904-d38e-47d3-a3ce-bfc24e689350", "Student", "salma.ahmed@example.com", false, "Salma", "Ahmed", false, null, "SALMA.AHMED@EXAMPLE.COM", "SALMA.AHMED", "AQAAAAIAAYagAAAAEESKx3ptzJ4nJDQnCBfVjT8lXoMTUm8EiJJIQ7YU4gwkJ2gwOsU9ST9x1gyTZgoyNA==", "0987654321", false, "", "59128164-4061-4e4b-9e2e-414824298d2b", false, "salma.ahmed" }
+                    { "58ec4bbf-4913-4dc1-96b7-381159ce0878", 0, "1b7795c4-332b-40be-a452-ff1bc9c6a91f", "Instructor", "omar.tarek@example.com", false, "Omar", "Tarek", false, null, "OMAR.TAREK@EXAMPLE.COM", "OMAR.TAREK", "AQAAAAIAAYagAAAAEHfG3kVSDGYlE19W+GpKUzz5SOhN9LinHSy3q/y6Ozl3Xl5vmGpKEtKO7IR3HjPV9w==", "1122334455", false, "", "a6afba5a-0909-4c12-958e-810f60ab37a3", false, "omar.tarek" },
+                    { "626b8c7f-f4d4-4467-bb37-570f1aa6fd77", 0, "d7c5d3d7-d959-4c74-89a0-a6de9df0888a", "Student", "ali.mahmoud@example.com", false, "Ali", "Mahmoud", false, null, "ALI.MAHMOUD@EXAMPLE.COM", "ALI.MAHMOUD", "AQAAAAIAAYagAAAAEPFBrUDr9mI9Ha4vir7abB26qAJDjek5hjRafR4ewwl+4Mf+gKTnieAlYnkA7vEQmQ==", "1234567890", false, "", "272f69db-d44c-4ea9-9ef0-56e332d9adb4", false, "ali.mahmoud" },
+                    { "a86582e6-8511-4b78-b548-e17a2eaf0d3e", 0, "7527958f-dc1b-42be-9c19-856c8b660dbd", "Instructor", "hana.mostafa@example.com", false, "Hana", "Mostafa", false, null, "HANA.MOSTAFA@EXAMPLE.COM", "HANA.MOSTAFA", "AQAAAAIAAYagAAAAEHxGfFe6Mr7oxyO1gMMyiDObSQgFYTwMYArJhmL5PQARw/l8aWs42hYyq6P+9i/7GA==", "5566778899", false, "", "d4240263-ea88-47bc-aed7-7e66e28063ab", false, "hana.mostafa" },
+                    { "e452e625-327a-4bf2-9540-3db6577ab68f", 0, "082576e7-5464-4608-8329-8c7fc8247f0c", "Student", "salma.ahmed@example.com", false, "Salma", "Ahmed", false, null, "SALMA.AHMED@EXAMPLE.COM", "SALMA.AHMED", "AQAAAAIAAYagAAAAEMAjCq9BOGCh12VESDso69qMu1ziu/K9MkVxMqUE93K/9XObh7TOZK2ZtZqJKcJCoQ==", "0987654321", false, "", "04bbf8d3-d318-45cd-ae87-e7f911d18e7b", false, "salma.ahmed" }
                 });
 
             migrationBuilder.InsertData(
@@ -487,14 +487,79 @@ namespace EdufyAPI.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Lessons",
+                columns: new[] { "Id", "Content", "CourseId", "ExternalVideoUrl", "ThumbnailUrl", "Title", "VideoUrl" },
+                values: new object[,]
+                {
+                    { "LESSON-1001", "This is the introduction to programming, covering the basics of coding.", "1c700ea4-ac54-487f-80e4-25c7b348b9e0", "https://example.com/intro-video", "", "Introduction to Programming", "" },
+                    { "LESSON-1002", "This lesson explains variables, constants, and different data types in programming.", "1c700ea4-ac54-487f-80e4-25c7b348b9e0", "https://example.com/variables-video", "", "Variables and Data Types", "" },
+                    { "LESSON-1003", "This lesson dives deep into sorting algorithms and their applications.", "2d7df053-81d5-4bb8-994d-76619c341c46", "https://example.com/algorithms-video", "", "Advanced Algorithms", "" },
+                    { "LESSON-1004", "Learn about trees, graphs, and their applications in computer science.", "2d7df053-81d5-4bb8-994d-76619c341c46", "https://example.com/data-structures-video", "", "Data Structures: Trees and Graphs", "" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Progresses",
                 columns: new[] { "Id", "CourseId", "LastUpdated", "StudentId", "TotalLessonsCompleted" },
                 values: new object[,]
                 {
-                    { "PROG-1001", "1c700ea4-ac54-487f-80e4-25c7b348b9e0", new DateTime(2025, 4, 2, 4, 55, 53, 985, DateTimeKind.Utc).AddTicks(7525), "626b8c7f-f4d4-4467-bb37-570f1aa6fd77", 5 },
-                    { "PROG-1002", "1c700ea4-ac54-487f-80e4-25c7b348b9e0", new DateTime(2025, 4, 2, 4, 55, 53, 985, DateTimeKind.Utc).AddTicks(7532), "e452e625-327a-4bf2-9540-3db6577ab68f", 7 },
-                    { "PROG-1003", "2d7df053-81d5-4bb8-994d-76619c341c46", new DateTime(2025, 4, 2, 4, 55, 53, 985, DateTimeKind.Utc).AddTicks(7536), "626b8c7f-f4d4-4467-bb37-570f1aa6fd77", 10 },
-                    { "PROG-1004", "2d7df053-81d5-4bb8-994d-76619c341c46", new DateTime(2025, 4, 2, 4, 55, 53, 985, DateTimeKind.Utc).AddTicks(7541), "e452e625-327a-4bf2-9540-3db6577ab68f", 12 }
+                    { "PROG-1001", "1c700ea4-ac54-487f-80e4-25c7b348b9e0", new DateTime(2025, 4, 2, 5, 57, 26, 888, DateTimeKind.Utc).AddTicks(4830), "626b8c7f-f4d4-4467-bb37-570f1aa6fd77", 5 },
+                    { "PROG-1002", "1c700ea4-ac54-487f-80e4-25c7b348b9e0", new DateTime(2025, 4, 2, 5, 57, 26, 888, DateTimeKind.Utc).AddTicks(4848), "e452e625-327a-4bf2-9540-3db6577ab68f", 7 },
+                    { "PROG-1003", "2d7df053-81d5-4bb8-994d-76619c341c46", new DateTime(2025, 4, 2, 5, 57, 26, 888, DateTimeKind.Utc).AddTicks(4853), "626b8c7f-f4d4-4467-bb37-570f1aa6fd77", 10 },
+                    { "PROG-1004", "2d7df053-81d5-4bb8-994d-76619c341c46", new DateTime(2025, 4, 2, 5, 57, 26, 888, DateTimeKind.Utc).AddTicks(4856), "e452e625-327a-4bf2-9540-3db6577ab68f", 12 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Quizzes",
+                columns: new[] { "Id", "CreatedAt", "CreatedBy", "Description", "IsActive", "IsDeleted", "LessonId", "PassingScore", "TimeLimit", "Title", "UpdatedAt", "UpdatedBy" },
+                values: new object[,]
+                {
+                    { "QUIZ-2001", new DateTime(2025, 4, 2, 5, 57, 26, 888, DateTimeKind.Utc).AddTicks(4980), "System", "This quiz tests your knowledge on basic programming concepts.", true, false, "LESSON-1001", 80, 300, "Introduction to Programming Quiz", null, null },
+                    { "QUIZ-2002", new DateTime(2025, 4, 2, 5, 57, 26, 888, DateTimeKind.Utc).AddTicks(4986), "System", "This quiz tests your understanding of variables and data types.", true, false, "LESSON-1002", 70, 300, "Variables and Data Types Quiz", null, null },
+                    { "QUIZ-2003", new DateTime(2025, 4, 2, 5, 57, 26, 888, DateTimeKind.Utc).AddTicks(4989), "System", "This quiz evaluates your understanding of complex algorithms.", true, false, "LESSON-1003", 85, 300, "Advanced Algorithms Quiz", null, null }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Questions",
+                columns: new[] { "Id", "Answer", "CreatedAt", "CreatedBy", "Explanation", "OrderIndex", "Points", "QuizId", "Text", "Type", "UpdatedAt", "UpdatedBy" },
+                values: new object[,]
+                {
+                    { "QUESTION-3001", "Paris", new DateTime(2025, 4, 2, 5, 57, 26, 888, DateTimeKind.Utc).AddTicks(5035), "System", "The capital of France is Paris.", 1, 10, "QUIZ-2002", "What is the capital of France?", 1, null, null },
+                    { "QUESTION-3002", "4", new DateTime(2025, 4, 2, 5, 57, 26, 888, DateTimeKind.Utc).AddTicks(5050), "System", "2 + 2 equals 4.", 2, 5, "QUIZ-2002", "What is 2 + 2?", 1, null, null },
+                    { "QUESTION-3003", "George Orwell", new DateTime(2025, 4, 2, 5, 57, 26, 888, DateTimeKind.Utc).AddTicks(5055), "System", "The author of '1984' is George Orwell.", 1, 10, "QUIZ-2003", "Who is the author of '1984'?", 1, null, null },
+                    { "QUESTION-3004", "Pacific Ocean", new DateTime(2025, 4, 2, 5, 57, 26, 888, DateTimeKind.Utc).AddTicks(5058), "System", "The largest ocean on Earth is the Pacific Ocean.", 2, 5, "QUIZ-2003", "What is the largest ocean on Earth?", 1, null, null }
+                });
+
+            migrationBuilder.InsertData(
+                table: "QuizResults",
+                columns: new[] { "Id", "CompletedAt", "CreatedAt", "CreatedBy", "ProgressId", "QuizId", "Score", "StartedAt", "StudentId", "UpdatedAt", "UpdatedBy" },
+                values: new object[,]
+                {
+                    { "QUIZATTEMPT-10001", new DateTime(2025, 4, 2, 5, 57, 26, 888, DateTimeKind.Utc).AddTicks(5207), new DateTime(2025, 4, 2, 5, 57, 26, 888, DateTimeKind.Utc).AddTicks(5200), "System", "PROG-1001", "QUIZ-2001", 85.0, new DateTime(2025, 4, 2, 5, 42, 26, 888, DateTimeKind.Utc).AddTicks(5203), "e452e625-327a-4bf2-9540-3db6577ab68f", null, null },
+                    { "QUIZATTEMPT-10002", new DateTime(2025, 4, 2, 5, 57, 26, 888, DateTimeKind.Utc).AddTicks(5212), new DateTime(2025, 4, 2, 5, 57, 26, 888, DateTimeKind.Utc).AddTicks(5211), "System", "PROG-1002", "QUIZ-2002", 60.0, new DateTime(2025, 4, 2, 5, 37, 26, 888, DateTimeKind.Utc).AddTicks(5212), "626b8c7f-f4d4-4467-bb37-570f1aa6fd77", null, null },
+                    { "QUIZATTEMPT-10003", new DateTime(2025, 4, 2, 5, 57, 26, 888, DateTimeKind.Utc).AddTicks(5221), new DateTime(2025, 4, 2, 5, 57, 26, 888, DateTimeKind.Utc).AddTicks(5220), "System", "PROG-1001", "QUIZ-2002", 90.0, new DateTime(2025, 4, 2, 5, 47, 26, 888, DateTimeKind.Utc).AddTicks(5220), "e452e625-327a-4bf2-9540-3db6577ab68f", null, null },
+                    { "QUIZATTEMPT-10004", new DateTime(2025, 4, 2, 5, 57, 26, 888, DateTimeKind.Utc).AddTicks(5268), new DateTime(2025, 4, 2, 5, 57, 26, 888, DateTimeKind.Utc).AddTicks(5267), "System", "PROG-1002", "QUIZ-2001", 75.0, new DateTime(2025, 4, 2, 5, 32, 26, 888, DateTimeKind.Utc).AddTicks(5267), "626b8c7f-f4d4-4467-bb37-570f1aa6fd77", null, null }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Answers",
+                columns: new[] { "Id", "CreatedAt", "CreatedBy", "Explanation", "IsCorrect", "OrderIndex", "QuestionId", "Text", "UpdatedAt", "UpdatedBy" },
+                values: new object[,]
+                {
+                    { "ANSWER-4001", new DateTime(2025, 4, 2, 5, 57, 26, 888, DateTimeKind.Utc).AddTicks(5099), "System", null, true, 1, "QUESTION-3001", "Option A: Correct answer for question 1", null, null },
+                    { "ANSWER-4002", new DateTime(2025, 4, 2, 5, 57, 26, 888, DateTimeKind.Utc).AddTicks(5104), "System", null, false, 2, "QUESTION-3001", "Option B: Incorrect answer for question 1", null, null },
+                    { "ANSWER-4003", new DateTime(2025, 4, 2, 5, 57, 26, 888, DateTimeKind.Utc).AddTicks(5108), "System", null, true, 1, "QUESTION-3002", "Option A: Correct answer for question 2", null, null },
+                    { "ANSWER-4004", new DateTime(2025, 4, 2, 5, 57, 26, 888, DateTimeKind.Utc).AddTicks(5110), "System", null, false, 2, "QUESTION-3002", "Option B: Incorrect answer for question 2", null, null },
+                    { "ANSWER-4005", new DateTime(2025, 4, 2, 5, 57, 26, 888, DateTimeKind.Utc).AddTicks(5113), "System", null, true, 1, "QUESTION-3003", "Option A: Correct answer for question 3", null, null },
+                    { "ANSWER-4006", new DateTime(2025, 4, 2, 5, 57, 26, 888, DateTimeKind.Utc).AddTicks(5117), "System", null, false, 2, "QUESTION-3003", "Option B: Incorrect answer for question 3", null, null }
+                });
+
+            migrationBuilder.InsertData(
+                table: "StudentAnswer",
+                columns: new[] { "Id", "AnswerId", "CreatedAt", "CreatedBy", "IsCorrect", "QuestionId", "QuizResultId", "SelectedAnswerIds", "SubmittedAnswer", "SubmittedAt", "UpdatedAt", "UpdatedBy" },
+                values: new object[,]
+                {
+                    { "STUDENTANSWER-7001", "ANSWER-4001", new DateTime(2025, 4, 2, 5, 57, 26, 888, DateTimeKind.Utc).AddTicks(5333), "System", true, "QUESTION-3001", "QUIZATTEMPT-10001", "[]", "Option A: Correct answer for question 1", new DateTime(2025, 4, 2, 5, 57, 26, 888, DateTimeKind.Utc).AddTicks(5335), null, null },
+                    { "STUDENTANSWER-7004", "ANSWER-4002", new DateTime(2025, 4, 2, 5, 57, 26, 888, DateTimeKind.Utc).AddTicks(5337), "System", false, "QUESTION-3001", "QUIZATTEMPT-10002", "[]", "Option B: Incorrect answer for question 1", new DateTime(2025, 4, 2, 5, 57, 26, 888, DateTimeKind.Utc).AddTicks(5338), null, null }
                 });
 
             migrationBuilder.CreateIndex(
