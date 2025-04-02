@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace EdufyAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class CreateTheWholeDB : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -36,6 +36,7 @@ namespace EdufyAPI.Migrations
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    ProfilePictureUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Discriminator = table.Column<string>(type: "nvarchar(13)", maxLength: 13, nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -73,7 +74,7 @@ namespace EdufyAPI.Migrations
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -94,7 +95,7 @@ namespace EdufyAPI.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -114,7 +115,7 @@ namespace EdufyAPI.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -132,13 +133,13 @@ namespace EdufyAPI.Migrations
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_AspNetUserRoles_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -158,7 +159,7 @@ namespace EdufyAPI.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -167,8 +168,8 @@ namespace EdufyAPI.Migrations
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ThumbnailUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ThumbnailUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     InstructorId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
@@ -179,7 +180,31 @@ namespace EdufyAPI.Migrations
                         column: x => x.InstructorId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Enrollment",
+                columns: table => new
+                {
+                    StudentId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CourseId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Enrollment", x => new { x.StudentId, x.CourseId });
+                    table.ForeignKey(
+                        name: "FK_Enrollment_AspNetUsers_StudentId",
+                        column: x => x.StudentId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Enrollment_Courses_CourseId",
+                        column: x => x.CourseId,
+                        principalTable: "Courses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -188,9 +213,10 @@ namespace EdufyAPI.Migrations
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ThumbnailUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    VideoUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ThumbnailUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    VideoUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ExternalVideoUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CourseId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
@@ -201,7 +227,7 @@ namespace EdufyAPI.Migrations
                         column: x => x.CourseId,
                         principalTable: "Courses",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -211,40 +237,29 @@ namespace EdufyAPI.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     TotalLessonsCompleted = table.Column<int>(type: "int", nullable: false),
                     LastUpdated = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CourseId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    CourseId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    StudentId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Progresses", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Progresses_Courses_CourseId",
-                        column: x => x.CourseId,
-                        principalTable: "Courses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "StudentCourse",
-                columns: table => new
-                {
-                    StudentId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    CourseId = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_StudentCourse", x => new { x.StudentId, x.CourseId });
-                    table.ForeignKey(
-                        name: "FK_StudentCourse_AspNetUsers_StudentId",
+                        name: "FK_Progresses_AspNetUsers_StudentId",
                         column: x => x.StudentId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_StudentCourse_Courses_CourseId",
+                        name: "FK_Progresses_Courses_CourseId",
                         column: x => x.CourseId,
                         principalTable: "Courses",
                         principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Progresses_Enrollment_StudentId_CourseId",
+                        columns: x => new { x.StudentId, x.CourseId },
+                        principalTable: "Enrollment",
+                        principalColumns: new[] { "StudentId", "CourseId" },
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -253,7 +268,7 @@ namespace EdufyAPI.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    InternalTitle = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PassingScore = table.Column<int>(type: "int", nullable: false),
                     TimeLimit = table.Column<int>(type: "int", nullable: false),
@@ -273,7 +288,7 @@ namespace EdufyAPI.Migrations
                         column: x => x.LessonId,
                         principalTable: "Lessons",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -294,32 +309,7 @@ namespace EdufyAPI.Migrations
                         column: x => x.ProgressId,
                         principalTable: "Progresses",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "QuizResults",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Score = table.Column<int>(type: "int", nullable: false),
-                    StartedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CompletedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ProgressId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_QuizResults", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_QuizResults_Progresses_ProgressId",
-                        column: x => x.ProgressId,
-                        principalTable: "Progresses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -332,6 +322,7 @@ namespace EdufyAPI.Migrations
                     Points = table.Column<int>(type: "int", nullable: false),
                     Type = table.Column<int>(type: "int", nullable: false),
                     OrderIndex = table.Column<int>(type: "int", nullable: false),
+                    Answer = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     QuizId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -346,18 +337,20 @@ namespace EdufyAPI.Migrations
                         column: x => x.QuizId,
                         principalTable: "Quizzes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "StudentAnswer",
+                name: "QuizResults",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    SubmittedAnswer = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SubmittedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsCorrect = table.Column<bool>(type: "bit", nullable: false),
-                    QuizResultId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Score = table.Column<double>(type: "float", nullable: false),
+                    StartedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CompletedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ProgressId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    QuizId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    StudentId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -365,13 +358,25 @@ namespace EdufyAPI.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_StudentAnswer", x => x.Id);
+                    table.PrimaryKey("PK_QuizResults", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_StudentAnswer_QuizResults_QuizResultId",
-                        column: x => x.QuizResultId,
-                        principalTable: "QuizResults",
+                        name: "FK_QuizResults_AspNetUsers_StudentId",
+                        column: x => x.StudentId,
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_QuizResults_Progresses_ProgressId",
+                        column: x => x.ProgressId,
+                        principalTable: "Progresses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_QuizResults_Quizzes_QuizId",
+                        column: x => x.QuizId,
+                        principalTable: "Quizzes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -397,7 +402,47 @@ namespace EdufyAPI.Migrations
                         column: x => x.QuestionId,
                         principalTable: "Questions",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "StudentAnswer",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    SubmittedAnswer = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SubmittedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsCorrect = table.Column<bool>(type: "bit", nullable: false),
+                    SelectedAnswerIds = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    QuizResultId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    QuestionId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    AnswerId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StudentAnswer", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_StudentAnswer_Answers_AnswerId",
+                        column: x => x.AnswerId,
+                        principalTable: "Answers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_StudentAnswer_Questions_QuestionId",
+                        column: x => x.QuestionId,
+                        principalTable: "Questions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_StudentAnswer_QuizResults_QuizResultId",
+                        column: x => x.QuizResultId,
+                        principalTable: "QuizResults",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.InsertData(
@@ -408,6 +453,48 @@ namespace EdufyAPI.Migrations
                     { "1", null, "Admin", "ADMIN" },
                     { "2", null, "Instructor", "INSTRUCTOR" },
                     { "3", null, "Student", "STUDENT" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Discriminator", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "ProfilePictureUrl", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[,]
+                {
+                    { "58ec4bbf-4913-4dc1-96b7-381159ce0878", 0, "5d2d80f8-2a01-4fae-807e-c95e616863d4", "Instructor", "omar.tarek@example.com", false, "Omar", "Tarek", false, null, "OMAR.TAREK@EXAMPLE.COM", "OMAR.TAREK", "AQAAAAIAAYagAAAAEBAQ0oa4ArUNOD2WX+YEVMzYmbWXQ68gmNFB2Bnf5tbIgXaaO169FmQv5N3yMm05OQ==", "1122334455", false, "", "91fcc28c-5cd5-4349-8fd9-c9dac4189fa1", false, "omar.tarek" },
+                    { "626b8c7f-f4d4-4467-bb37-570f1aa6fd77", 0, "f102c648-90a0-47ae-9182-9afe5120638f", "Student", "ali.mahmoud@example.com", false, "Ali", "Mahmoud", false, null, "ALI.MAHMOUD@EXAMPLE.COM", "ALI.MAHMOUD", "AQAAAAIAAYagAAAAEBNmy/dG0t5S/77VMtsokdH2d7j7nhIVG3+O7KgKMvo/373PilQZg0NvGbMIoUb8hw==", "1234567890", false, "", "76ae1c98-894a-4a53-aa7b-85c6481d92b8", false, "ali.mahmoud" },
+                    { "a86582e6-8511-4b78-b548-e17a2eaf0d3e", 0, "f468abe3-ef6d-4493-b69c-07f66317ec13", "Instructor", "hana.mostafa@example.com", false, "Hana", "Mostafa", false, null, "HANA.MOSTAFA@EXAMPLE.COM", "HANA.MOSTAFA", "AQAAAAIAAYagAAAAEAiM8WxWli2V7srdU9nY5Gxtd92lUDmQ/9ve7SFxdamJMS36k/zTQe9R38aHzkHNGQ==", "5566778899", false, "", "df129406-5091-45bb-80da-c3c10f3b93d2", false, "hana.mostafa" },
+                    { "e452e625-327a-4bf2-9540-3db6577ab68f", 0, "28ee6904-d38e-47d3-a3ce-bfc24e689350", "Student", "salma.ahmed@example.com", false, "Salma", "Ahmed", false, null, "SALMA.AHMED@EXAMPLE.COM", "SALMA.AHMED", "AQAAAAIAAYagAAAAEESKx3ptzJ4nJDQnCBfVjT8lXoMTUm8EiJJIQ7YU4gwkJ2gwOsU9ST9x1gyTZgoyNA==", "0987654321", false, "", "59128164-4061-4e4b-9e2e-414824298d2b", false, "salma.ahmed" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Courses",
+                columns: new[] { "Id", "Description", "InstructorId", "ThumbnailUrl", "Title" },
+                values: new object[,]
+                {
+                    { "1c700ea4-ac54-487f-80e4-25c7b348b9e0", "Learn the basics of C# programming, including syntax, OOP concepts, and best practices.", "58ec4bbf-4913-4dc1-96b7-381159ce0878", "csharp_course_thumbnail.jpg", "Introduction to C#" },
+                    { "2d7df053-81d5-4bb8-994d-76619c341c46", "Deep dive into .NET framework, dependency injection, middleware, and microservices.", "a86582e6-8511-4b78-b548-e17a2eaf0d3e", "dotnet_course_thumbnail.jpg", "Advanced .NET Development" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Enrollment",
+                columns: new[] { "CourseId", "StudentId" },
+                values: new object[,]
+                {
+                    { "1c700ea4-ac54-487f-80e4-25c7b348b9e0", "626b8c7f-f4d4-4467-bb37-570f1aa6fd77" },
+                    { "2d7df053-81d5-4bb8-994d-76619c341c46", "626b8c7f-f4d4-4467-bb37-570f1aa6fd77" },
+                    { "1c700ea4-ac54-487f-80e4-25c7b348b9e0", "e452e625-327a-4bf2-9540-3db6577ab68f" },
+                    { "2d7df053-81d5-4bb8-994d-76619c341c46", "e452e625-327a-4bf2-9540-3db6577ab68f" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Progresses",
+                columns: new[] { "Id", "CourseId", "LastUpdated", "StudentId", "TotalLessonsCompleted" },
+                values: new object[,]
+                {
+                    { "PROG-1001", "1c700ea4-ac54-487f-80e4-25c7b348b9e0", new DateTime(2025, 4, 2, 4, 55, 53, 985, DateTimeKind.Utc).AddTicks(7525), "626b8c7f-f4d4-4467-bb37-570f1aa6fd77", 5 },
+                    { "PROG-1002", "1c700ea4-ac54-487f-80e4-25c7b348b9e0", new DateTime(2025, 4, 2, 4, 55, 53, 985, DateTimeKind.Utc).AddTicks(7532), "e452e625-327a-4bf2-9540-3db6577ab68f", 7 },
+                    { "PROG-1003", "2d7df053-81d5-4bb8-994d-76619c341c46", new DateTime(2025, 4, 2, 4, 55, 53, 985, DateTimeKind.Utc).AddTicks(7536), "626b8c7f-f4d4-4467-bb37-570f1aa6fd77", 10 },
+                    { "PROG-1004", "2d7df053-81d5-4bb8-994d-76619c341c46", new DateTime(2025, 4, 2, 4, 55, 53, 985, DateTimeKind.Utc).AddTicks(7541), "e452e625-327a-4bf2-9540-3db6577ab68f", 12 }
                 });
 
             migrationBuilder.CreateIndex(
@@ -466,6 +553,11 @@ namespace EdufyAPI.Migrations
                 column: "InstructorId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Enrollment_CourseId",
+                table: "Enrollment",
+                column: "CourseId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Lessons_CourseId",
                 table: "Lessons",
                 column: "CourseId");
@@ -474,6 +566,12 @@ namespace EdufyAPI.Migrations
                 name: "IX_Progresses_CourseId",
                 table: "Progresses",
                 column: "CourseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Progresses_StudentId_CourseId",
+                table: "Progresses",
+                columns: new[] { "StudentId", "CourseId" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Questions_QuizId",
@@ -486,28 +584,41 @@ namespace EdufyAPI.Migrations
                 column: "ProgressId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_QuizResults_QuizId",
+                table: "QuizResults",
+                column: "QuizId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_QuizResults_StudentId",
+                table: "QuizResults",
+                column: "StudentId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Quizzes_LessonId",
                 table: "Quizzes",
                 column: "LessonId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_StudentAnswer_AnswerId",
+                table: "StudentAnswer",
+                column: "AnswerId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StudentAnswer_QuestionId",
+                table: "StudentAnswer",
+                column: "QuestionId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_StudentAnswer_QuizResultId",
                 table: "StudentAnswer",
                 column: "QuizResultId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_StudentCourse_CourseId",
-                table: "StudentCourse",
-                column: "CourseId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "Answers");
-
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -530,22 +641,25 @@ namespace EdufyAPI.Migrations
                 name: "StudentAnswer");
 
             migrationBuilder.DropTable(
-                name: "StudentCourse");
-
-            migrationBuilder.DropTable(
-                name: "Questions");
-
-            migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Answers");
 
             migrationBuilder.DropTable(
                 name: "QuizResults");
 
             migrationBuilder.DropTable(
-                name: "Quizzes");
+                name: "Questions");
 
             migrationBuilder.DropTable(
                 name: "Progresses");
+
+            migrationBuilder.DropTable(
+                name: "Quizzes");
+
+            migrationBuilder.DropTable(
+                name: "Enrollment");
 
             migrationBuilder.DropTable(
                 name: "Lessons");

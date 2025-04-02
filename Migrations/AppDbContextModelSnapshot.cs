@@ -49,7 +49,7 @@ namespace EdufyAPI.Migrations
                     b.HasIndex("ProgressId")
                         .IsUnique();
 
-                    b.ToTable("Certificate", (string)null);
+                    b.ToTable("Certificate");
                 });
 
             modelBuilder.Entity("EdufyAPI.Models.Course", b =>
@@ -75,7 +75,25 @@ namespace EdufyAPI.Migrations
 
                     b.HasIndex("InstructorId");
 
-                    b.ToTable("Courses", (string)null);
+                    b.ToTable("Courses");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "1c700ea4-ac54-487f-80e4-25c7b348b9e0",
+                            Description = "Learn the basics of C# programming, including syntax, OOP concepts, and best practices.",
+                            InstructorId = "58ec4bbf-4913-4dc1-96b7-381159ce0878",
+                            ThumbnailUrl = "csharp_course_thumbnail.jpg",
+                            Title = "Introduction to C#"
+                        },
+                        new
+                        {
+                            Id = "2d7df053-81d5-4bb8-994d-76619c341c46",
+                            Description = "Deep dive into .NET framework, dependency injection, middleware, and microservices.",
+                            InstructorId = "a86582e6-8511-4b78-b548-e17a2eaf0d3e",
+                            ThumbnailUrl = "dotnet_course_thumbnail.jpg",
+                            Title = "Advanced .NET Development"
+                        });
                 });
 
             modelBuilder.Entity("EdufyAPI.Models.Enrollment", b =>
@@ -90,7 +108,29 @@ namespace EdufyAPI.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.ToTable("Enrollment", (string)null);
+                    b.ToTable("Enrollment");
+
+                    b.HasData(
+                        new
+                        {
+                            StudentId = "626b8c7f-f4d4-4467-bb37-570f1aa6fd77",
+                            CourseId = "1c700ea4-ac54-487f-80e4-25c7b348b9e0"
+                        },
+                        new
+                        {
+                            StudentId = "626b8c7f-f4d4-4467-bb37-570f1aa6fd77",
+                            CourseId = "2d7df053-81d5-4bb8-994d-76619c341c46"
+                        },
+                        new
+                        {
+                            StudentId = "e452e625-327a-4bf2-9540-3db6577ab68f",
+                            CourseId = "1c700ea4-ac54-487f-80e4-25c7b348b9e0"
+                        },
+                        new
+                        {
+                            StudentId = "e452e625-327a-4bf2-9540-3db6577ab68f",
+                            CourseId = "2d7df053-81d5-4bb8-994d-76619c341c46"
+                        });
                 });
 
             modelBuilder.Entity("EdufyAPI.Models.Lesson", b =>
@@ -122,7 +162,7 @@ namespace EdufyAPI.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.ToTable("Lessons", (string)null);
+                    b.ToTable("Lessons");
                 });
 
             modelBuilder.Entity("EdufyAPI.Models.Progress", b =>
@@ -146,12 +186,46 @@ namespace EdufyAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("StudentId");
+                    b.HasIndex("CourseId");
 
-                    b.HasIndex("CourseId", "StudentId")
+                    b.HasIndex("StudentId", "CourseId")
                         .IsUnique();
 
-                    b.ToTable("Progresses", (string)null);
+                    b.ToTable("Progresses");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "PROG-1001",
+                            CourseId = "1c700ea4-ac54-487f-80e4-25c7b348b9e0",
+                            LastUpdated = new DateTime(2025, 4, 2, 4, 55, 53, 985, DateTimeKind.Utc).AddTicks(7525),
+                            StudentId = "626b8c7f-f4d4-4467-bb37-570f1aa6fd77",
+                            TotalLessonsCompleted = 5
+                        },
+                        new
+                        {
+                            Id = "PROG-1002",
+                            CourseId = "1c700ea4-ac54-487f-80e4-25c7b348b9e0",
+                            LastUpdated = new DateTime(2025, 4, 2, 4, 55, 53, 985, DateTimeKind.Utc).AddTicks(7532),
+                            StudentId = "e452e625-327a-4bf2-9540-3db6577ab68f",
+                            TotalLessonsCompleted = 7
+                        },
+                        new
+                        {
+                            Id = "PROG-1003",
+                            CourseId = "2d7df053-81d5-4bb8-994d-76619c341c46",
+                            LastUpdated = new DateTime(2025, 4, 2, 4, 55, 53, 985, DateTimeKind.Utc).AddTicks(7536),
+                            StudentId = "626b8c7f-f4d4-4467-bb37-570f1aa6fd77",
+                            TotalLessonsCompleted = 10
+                        },
+                        new
+                        {
+                            Id = "PROG-1004",
+                            CourseId = "2d7df053-81d5-4bb8-994d-76619c341c46",
+                            LastUpdated = new DateTime(2025, 4, 2, 4, 55, 53, 985, DateTimeKind.Utc).AddTicks(7541),
+                            StudentId = "e452e625-327a-4bf2-9540-3db6577ab68f",
+                            TotalLessonsCompleted = 12
+                        });
                 });
 
             modelBuilder.Entity("EdufyAPI.Models.QuizModels.Answer", b =>
@@ -193,7 +267,7 @@ namespace EdufyAPI.Migrations
 
                     b.HasIndex("QuestionId");
 
-                    b.ToTable("Answers", (string)null);
+                    b.ToTable("Answers");
                 });
 
             modelBuilder.Entity("EdufyAPI.Models.QuizModels.Question", b =>
@@ -242,7 +316,7 @@ namespace EdufyAPI.Migrations
 
                     b.HasIndex("QuizId");
 
-                    b.ToTable("Questions", (string)null);
+                    b.ToTable("Questions");
                 });
 
             modelBuilder.Entity("EdufyAPI.Models.QuizModels.Quiz", b =>
@@ -292,7 +366,7 @@ namespace EdufyAPI.Migrations
                     b.HasIndex("LessonId")
                         .IsUnique();
 
-                    b.ToTable("Quizzes", (string)null);
+                    b.ToTable("Quizzes");
                 });
 
             modelBuilder.Entity("EdufyAPI.Models.QuizModels.QuizAttemp", b =>
@@ -342,7 +416,7 @@ namespace EdufyAPI.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("QuizResults", (string)null);
+                    b.ToTable("QuizResults");
                 });
 
             modelBuilder.Entity("EdufyAPI.Models.QuizModels.StudentAnswer", b =>
@@ -397,7 +471,7 @@ namespace EdufyAPI.Migrations
 
                     b.HasIndex("QuizResultId");
 
-                    b.ToTable("StudentAnswer", (string)null);
+                    b.ToTable("StudentAnswer");
                 });
 
             modelBuilder.Entity("EdufyAPI.Models.Roles.AppUser", b =>
@@ -652,6 +726,48 @@ namespace EdufyAPI.Migrations
                     b.HasBaseType("EdufyAPI.Models.Roles.AppUser");
 
                     b.HasDiscriminator().HasValue("Instructor");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "58ec4bbf-4913-4dc1-96b7-381159ce0878",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "5d2d80f8-2a01-4fae-807e-c95e616863d4",
+                            Email = "omar.tarek@example.com",
+                            EmailConfirmed = false,
+                            FirstName = "Omar",
+                            LastName = "Tarek",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "OMAR.TAREK@EXAMPLE.COM",
+                            NormalizedUserName = "OMAR.TAREK",
+                            PasswordHash = "AQAAAAIAAYagAAAAEBAQ0oa4ArUNOD2WX+YEVMzYmbWXQ68gmNFB2Bnf5tbIgXaaO169FmQv5N3yMm05OQ==",
+                            PhoneNumber = "1122334455",
+                            PhoneNumberConfirmed = false,
+                            ProfilePictureUrl = "",
+                            SecurityStamp = "91fcc28c-5cd5-4349-8fd9-c9dac4189fa1",
+                            TwoFactorEnabled = false,
+                            UserName = "omar.tarek"
+                        },
+                        new
+                        {
+                            Id = "a86582e6-8511-4b78-b548-e17a2eaf0d3e",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "f468abe3-ef6d-4493-b69c-07f66317ec13",
+                            Email = "hana.mostafa@example.com",
+                            EmailConfirmed = false,
+                            FirstName = "Hana",
+                            LastName = "Mostafa",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "HANA.MOSTAFA@EXAMPLE.COM",
+                            NormalizedUserName = "HANA.MOSTAFA",
+                            PasswordHash = "AQAAAAIAAYagAAAAEAiM8WxWli2V7srdU9nY5Gxtd92lUDmQ/9ve7SFxdamJMS36k/zTQe9R38aHzkHNGQ==",
+                            PhoneNumber = "5566778899",
+                            PhoneNumberConfirmed = false,
+                            ProfilePictureUrl = "",
+                            SecurityStamp = "df129406-5091-45bb-80da-c3c10f3b93d2",
+                            TwoFactorEnabled = false,
+                            UserName = "hana.mostafa"
+                        });
                 });
 
             modelBuilder.Entity("EdufyAPI.Models.Roles.Student", b =>
@@ -659,6 +775,48 @@ namespace EdufyAPI.Migrations
                     b.HasBaseType("EdufyAPI.Models.Roles.AppUser");
 
                     b.HasDiscriminator().HasValue("Student");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "626b8c7f-f4d4-4467-bb37-570f1aa6fd77",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "f102c648-90a0-47ae-9182-9afe5120638f",
+                            Email = "ali.mahmoud@example.com",
+                            EmailConfirmed = false,
+                            FirstName = "Ali",
+                            LastName = "Mahmoud",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ALI.MAHMOUD@EXAMPLE.COM",
+                            NormalizedUserName = "ALI.MAHMOUD",
+                            PasswordHash = "AQAAAAIAAYagAAAAEBNmy/dG0t5S/77VMtsokdH2d7j7nhIVG3+O7KgKMvo/373PilQZg0NvGbMIoUb8hw==",
+                            PhoneNumber = "1234567890",
+                            PhoneNumberConfirmed = false,
+                            ProfilePictureUrl = "",
+                            SecurityStamp = "76ae1c98-894a-4a53-aa7b-85c6481d92b8",
+                            TwoFactorEnabled = false,
+                            UserName = "ali.mahmoud"
+                        },
+                        new
+                        {
+                            Id = "e452e625-327a-4bf2-9540-3db6577ab68f",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "28ee6904-d38e-47d3-a3ce-bfc24e689350",
+                            Email = "salma.ahmed@example.com",
+                            EmailConfirmed = false,
+                            FirstName = "Salma",
+                            LastName = "Ahmed",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "SALMA.AHMED@EXAMPLE.COM",
+                            NormalizedUserName = "SALMA.AHMED",
+                            PasswordHash = "AQAAAAIAAYagAAAAEESKx3ptzJ4nJDQnCBfVjT8lXoMTUm8EiJJIQ7YU4gwkJ2gwOsU9ST9x1gyTZgoyNA==",
+                            PhoneNumber = "0987654321",
+                            PhoneNumberConfirmed = false,
+                            ProfilePictureUrl = "",
+                            SecurityStamp = "59128164-4061-4e4b-9e2e-414824298d2b",
+                            TwoFactorEnabled = false,
+                            UserName = "salma.ahmed"
+                        });
                 });
 
             modelBuilder.Entity("EduConnectAPI.Models.Certificate", b =>
@@ -729,7 +887,7 @@ namespace EdufyAPI.Migrations
 
                     b.HasOne("EdufyAPI.Models.Enrollment", "Enrollment")
                         .WithOne("Progress")
-                        .HasForeignKey("EdufyAPI.Models.Progress", "CourseId", "StudentId")
+                        .HasForeignKey("EdufyAPI.Models.Progress", "StudentId", "CourseId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 

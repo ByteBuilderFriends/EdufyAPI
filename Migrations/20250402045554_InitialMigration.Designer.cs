@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EdufyAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250227003720_AddExternalVideoUrlToLesson")]
-    partial class AddExternalVideoUrlToLesson
+    [Migration("20250402045554_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -55,7 +55,183 @@ namespace EdufyAPI.Migrations
                     b.ToTable("Certificate");
                 });
 
-            modelBuilder.Entity("EdufyAPI.Models.Answer", b =>
+            modelBuilder.Entity("EdufyAPI.Models.Course", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("InstructorId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ThumbnailUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InstructorId");
+
+                    b.ToTable("Courses");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "1c700ea4-ac54-487f-80e4-25c7b348b9e0",
+                            Description = "Learn the basics of C# programming, including syntax, OOP concepts, and best practices.",
+                            InstructorId = "58ec4bbf-4913-4dc1-96b7-381159ce0878",
+                            ThumbnailUrl = "csharp_course_thumbnail.jpg",
+                            Title = "Introduction to C#"
+                        },
+                        new
+                        {
+                            Id = "2d7df053-81d5-4bb8-994d-76619c341c46",
+                            Description = "Deep dive into .NET framework, dependency injection, middleware, and microservices.",
+                            InstructorId = "a86582e6-8511-4b78-b548-e17a2eaf0d3e",
+                            ThumbnailUrl = "dotnet_course_thumbnail.jpg",
+                            Title = "Advanced .NET Development"
+                        });
+                });
+
+            modelBuilder.Entity("EdufyAPI.Models.Enrollment", b =>
+                {
+                    b.Property<string>("StudentId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CourseId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("StudentId", "CourseId");
+
+                    b.HasIndex("CourseId");
+
+                    b.ToTable("Enrollment");
+
+                    b.HasData(
+                        new
+                        {
+                            StudentId = "626b8c7f-f4d4-4467-bb37-570f1aa6fd77",
+                            CourseId = "1c700ea4-ac54-487f-80e4-25c7b348b9e0"
+                        },
+                        new
+                        {
+                            StudentId = "626b8c7f-f4d4-4467-bb37-570f1aa6fd77",
+                            CourseId = "2d7df053-81d5-4bb8-994d-76619c341c46"
+                        },
+                        new
+                        {
+                            StudentId = "e452e625-327a-4bf2-9540-3db6577ab68f",
+                            CourseId = "1c700ea4-ac54-487f-80e4-25c7b348b9e0"
+                        },
+                        new
+                        {
+                            StudentId = "e452e625-327a-4bf2-9540-3db6577ab68f",
+                            CourseId = "2d7df053-81d5-4bb8-994d-76619c341c46"
+                        });
+                });
+
+            modelBuilder.Entity("EdufyAPI.Models.Lesson", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CourseId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ExternalVideoUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ThumbnailUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("VideoUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.ToTable("Lessons");
+                });
+
+            modelBuilder.Entity("EdufyAPI.Models.Progress", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CourseId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("LastUpdated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("StudentId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("TotalLessonsCompleted")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.HasIndex("StudentId", "CourseId")
+                        .IsUnique();
+
+                    b.ToTable("Progresses");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "PROG-1001",
+                            CourseId = "1c700ea4-ac54-487f-80e4-25c7b348b9e0",
+                            LastUpdated = new DateTime(2025, 4, 2, 4, 55, 53, 985, DateTimeKind.Utc).AddTicks(7525),
+                            StudentId = "626b8c7f-f4d4-4467-bb37-570f1aa6fd77",
+                            TotalLessonsCompleted = 5
+                        },
+                        new
+                        {
+                            Id = "PROG-1002",
+                            CourseId = "1c700ea4-ac54-487f-80e4-25c7b348b9e0",
+                            LastUpdated = new DateTime(2025, 4, 2, 4, 55, 53, 985, DateTimeKind.Utc).AddTicks(7532),
+                            StudentId = "e452e625-327a-4bf2-9540-3db6577ab68f",
+                            TotalLessonsCompleted = 7
+                        },
+                        new
+                        {
+                            Id = "PROG-1003",
+                            CourseId = "2d7df053-81d5-4bb8-994d-76619c341c46",
+                            LastUpdated = new DateTime(2025, 4, 2, 4, 55, 53, 985, DateTimeKind.Utc).AddTicks(7536),
+                            StudentId = "626b8c7f-f4d4-4467-bb37-570f1aa6fd77",
+                            TotalLessonsCompleted = 10
+                        },
+                        new
+                        {
+                            Id = "PROG-1004",
+                            CourseId = "2d7df053-81d5-4bb8-994d-76619c341c46",
+                            LastUpdated = new DateTime(2025, 4, 2, 4, 55, 53, 985, DateTimeKind.Utc).AddTicks(7541),
+                            StudentId = "e452e625-327a-4bf2-9540-3db6577ab68f",
+                            TotalLessonsCompleted = 12
+                        });
+                });
+
+            modelBuilder.Entity("EdufyAPI.Models.QuizModels.Answer", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -97,94 +273,14 @@ namespace EdufyAPI.Migrations
                     b.ToTable("Answers");
                 });
 
-            modelBuilder.Entity("EdufyAPI.Models.Course", b =>
+            modelBuilder.Entity("EdufyAPI.Models.QuizModels.Question", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Description")
+                    b.Property<string>("Answer")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("InstructorId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ThumbnailUrl")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("InstructorId");
-
-                    b.ToTable("Courses");
-                });
-
-            modelBuilder.Entity("EdufyAPI.Models.Lesson", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CourseId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ExternalVideoUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ThumbnailUrl")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("VideoUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CourseId");
-
-                    b.ToTable("Lessons");
-                });
-
-            modelBuilder.Entity("EdufyAPI.Models.Progress", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("CourseId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("LastUpdated")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("TotalLessonsCompleted")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CourseId");
-
-                    b.ToTable("Progresses");
-                });
-
-            modelBuilder.Entity("EdufyAPI.Models.Question", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -226,7 +322,7 @@ namespace EdufyAPI.Migrations
                     b.ToTable("Questions");
                 });
 
-            modelBuilder.Entity("EdufyAPI.Models.Quiz", b =>
+            modelBuilder.Entity("EdufyAPI.Models.QuizModels.Quiz", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -240,11 +336,6 @@ namespace EdufyAPI.Migrations
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("InternalTitle")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -262,6 +353,11 @@ namespace EdufyAPI.Migrations
                     b.Property<int>("TimeLimit")
                         .HasColumnType("int");
 
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
@@ -276,7 +372,7 @@ namespace EdufyAPI.Migrations
                     b.ToTable("Quizzes");
                 });
 
-            modelBuilder.Entity("EdufyAPI.Models.QuizAttemp", b =>
+            modelBuilder.Entity("EdufyAPI.Models.QuizModels.QuizAttemp", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -295,11 +391,19 @@ namespace EdufyAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("Score")
-                        .HasColumnType("int");
+                    b.Property<string>("QuizId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<double>("Score")
+                        .HasColumnType("float");
 
                     b.Property<DateTime>("StartedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("StudentId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -311,7 +415,66 @@ namespace EdufyAPI.Migrations
 
                     b.HasIndex("ProgressId");
 
+                    b.HasIndex("QuizId");
+
+                    b.HasIndex("StudentId");
+
                     b.ToTable("QuizResults");
+                });
+
+            modelBuilder.Entity("EdufyAPI.Models.QuizModels.StudentAnswer", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("AnswerId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsCorrect")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("QuestionId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("QuizResultId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("SelectedAnswerIds")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SubmittedAnswer")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("SubmittedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AnswerId")
+                        .IsUnique();
+
+                    b.HasIndex("QuestionId");
+
+                    b.HasIndex("QuizResultId");
+
+                    b.ToTable("StudentAnswer");
                 });
 
             modelBuilder.Entity("EdufyAPI.Models.Roles.AppUser", b =>
@@ -371,6 +534,9 @@ namespace EdufyAPI.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("ProfilePictureUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -396,59 +562,6 @@ namespace EdufyAPI.Migrations
                     b.HasDiscriminator().HasValue("AppUser");
 
                     b.UseTphMappingStrategy();
-                });
-
-            modelBuilder.Entity("EdufyAPI.Models.StudentAnswer", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsCorrect")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("QuizResultId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("SubmittedAnswer")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("SubmittedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("QuizResultId");
-
-                    b.ToTable("StudentAnswer");
-                });
-
-            modelBuilder.Entity("EdufyAPI.Models.StudentCourse", b =>
-                {
-                    b.Property<string>("StudentId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("CourseId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("StudentId", "CourseId");
-
-                    b.HasIndex("CourseId");
-
-                    b.ToTable("StudentCourse");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -616,6 +729,48 @@ namespace EdufyAPI.Migrations
                     b.HasBaseType("EdufyAPI.Models.Roles.AppUser");
 
                     b.HasDiscriminator().HasValue("Instructor");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "58ec4bbf-4913-4dc1-96b7-381159ce0878",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "5d2d80f8-2a01-4fae-807e-c95e616863d4",
+                            Email = "omar.tarek@example.com",
+                            EmailConfirmed = false,
+                            FirstName = "Omar",
+                            LastName = "Tarek",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "OMAR.TAREK@EXAMPLE.COM",
+                            NormalizedUserName = "OMAR.TAREK",
+                            PasswordHash = "AQAAAAIAAYagAAAAEBAQ0oa4ArUNOD2WX+YEVMzYmbWXQ68gmNFB2Bnf5tbIgXaaO169FmQv5N3yMm05OQ==",
+                            PhoneNumber = "1122334455",
+                            PhoneNumberConfirmed = false,
+                            ProfilePictureUrl = "",
+                            SecurityStamp = "91fcc28c-5cd5-4349-8fd9-c9dac4189fa1",
+                            TwoFactorEnabled = false,
+                            UserName = "omar.tarek"
+                        },
+                        new
+                        {
+                            Id = "a86582e6-8511-4b78-b548-e17a2eaf0d3e",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "f468abe3-ef6d-4493-b69c-07f66317ec13",
+                            Email = "hana.mostafa@example.com",
+                            EmailConfirmed = false,
+                            FirstName = "Hana",
+                            LastName = "Mostafa",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "HANA.MOSTAFA@EXAMPLE.COM",
+                            NormalizedUserName = "HANA.MOSTAFA",
+                            PasswordHash = "AQAAAAIAAYagAAAAEAiM8WxWli2V7srdU9nY5Gxtd92lUDmQ/9ve7SFxdamJMS36k/zTQe9R38aHzkHNGQ==",
+                            PhoneNumber = "5566778899",
+                            PhoneNumberConfirmed = false,
+                            ProfilePictureUrl = "",
+                            SecurityStamp = "df129406-5091-45bb-80da-c3c10f3b93d2",
+                            TwoFactorEnabled = false,
+                            UserName = "hana.mostafa"
+                        });
                 });
 
             modelBuilder.Entity("EdufyAPI.Models.Roles.Student", b =>
@@ -623,6 +778,48 @@ namespace EdufyAPI.Migrations
                     b.HasBaseType("EdufyAPI.Models.Roles.AppUser");
 
                     b.HasDiscriminator().HasValue("Student");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "626b8c7f-f4d4-4467-bb37-570f1aa6fd77",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "f102c648-90a0-47ae-9182-9afe5120638f",
+                            Email = "ali.mahmoud@example.com",
+                            EmailConfirmed = false,
+                            FirstName = "Ali",
+                            LastName = "Mahmoud",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ALI.MAHMOUD@EXAMPLE.COM",
+                            NormalizedUserName = "ALI.MAHMOUD",
+                            PasswordHash = "AQAAAAIAAYagAAAAEBNmy/dG0t5S/77VMtsokdH2d7j7nhIVG3+O7KgKMvo/373PilQZg0NvGbMIoUb8hw==",
+                            PhoneNumber = "1234567890",
+                            PhoneNumberConfirmed = false,
+                            ProfilePictureUrl = "",
+                            SecurityStamp = "76ae1c98-894a-4a53-aa7b-85c6481d92b8",
+                            TwoFactorEnabled = false,
+                            UserName = "ali.mahmoud"
+                        },
+                        new
+                        {
+                            Id = "e452e625-327a-4bf2-9540-3db6577ab68f",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "28ee6904-d38e-47d3-a3ce-bfc24e689350",
+                            Email = "salma.ahmed@example.com",
+                            EmailConfirmed = false,
+                            FirstName = "Salma",
+                            LastName = "Ahmed",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "SALMA.AHMED@EXAMPLE.COM",
+                            NormalizedUserName = "SALMA.AHMED",
+                            PasswordHash = "AQAAAAIAAYagAAAAEESKx3ptzJ4nJDQnCBfVjT8lXoMTUm8EiJJIQ7YU4gwkJ2gwOsU9ST9x1gyTZgoyNA==",
+                            PhoneNumber = "0987654321",
+                            PhoneNumberConfirmed = false,
+                            ProfilePictureUrl = "",
+                            SecurityStamp = "59128164-4061-4e4b-9e2e-414824298d2b",
+                            TwoFactorEnabled = false,
+                            UserName = "salma.ahmed"
+                        });
                 });
 
             modelBuilder.Entity("EduConnectAPI.Models.Certificate", b =>
@@ -630,32 +827,40 @@ namespace EdufyAPI.Migrations
                     b.HasOne("EdufyAPI.Models.Progress", "Progress")
                         .WithOne("Certificate")
                         .HasForeignKey("EduConnectAPI.Models.Certificate", "ProgressId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Progress");
                 });
 
-            modelBuilder.Entity("EdufyAPI.Models.Answer", b =>
-                {
-                    b.HasOne("EdufyAPI.Models.Question", "Question")
-                        .WithMany("Answers")
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Question");
-                });
-
             modelBuilder.Entity("EdufyAPI.Models.Course", b =>
                 {
                     b.HasOne("EdufyAPI.Models.Roles.Instructor", "Instructor")
-                        .WithMany("CoursesCreated")
+                        .WithMany("Courses")
                         .HasForeignKey("InstructorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Instructor");
+                });
+
+            modelBuilder.Entity("EdufyAPI.Models.Enrollment", b =>
+                {
+                    b.HasOne("EdufyAPI.Models.Course", "Course")
+                        .WithMany("Enrollments")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("EdufyAPI.Models.Roles.Student", "Student")
+                        .WithMany("Enrollments")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+
+                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("EdufyAPI.Models.Lesson", b =>
@@ -663,7 +868,7 @@ namespace EdufyAPI.Migrations
                     b.HasOne("EdufyAPI.Models.Course", "Course")
                         .WithMany("Lessons")
                         .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Course");
@@ -674,73 +879,111 @@ namespace EdufyAPI.Migrations
                     b.HasOne("EdufyAPI.Models.Course", "Course")
                         .WithMany("CourseProgress")
                         .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("EdufyAPI.Models.Roles.Student", null)
+                        .WithMany("Progresses")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("EdufyAPI.Models.Enrollment", "Enrollment")
+                        .WithOne("Progress")
+                        .HasForeignKey("EdufyAPI.Models.Progress", "StudentId", "CourseId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Course");
+
+                    b.Navigation("Enrollment");
                 });
 
-            modelBuilder.Entity("EdufyAPI.Models.Question", b =>
+            modelBuilder.Entity("EdufyAPI.Models.QuizModels.Answer", b =>
                 {
-                    b.HasOne("EdufyAPI.Models.Quiz", "Quiz")
+                    b.HasOne("EdufyAPI.Models.QuizModels.Question", "Question")
+                        .WithMany("Answers")
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Question");
+                });
+
+            modelBuilder.Entity("EdufyAPI.Models.QuizModels.Question", b =>
+                {
+                    b.HasOne("EdufyAPI.Models.QuizModels.Quiz", "Quiz")
                         .WithMany("Questions")
                         .HasForeignKey("QuizId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Quiz");
                 });
 
-            modelBuilder.Entity("EdufyAPI.Models.Quiz", b =>
+            modelBuilder.Entity("EdufyAPI.Models.QuizModels.Quiz", b =>
                 {
                     b.HasOne("EdufyAPI.Models.Lesson", "Lesson")
                         .WithOne("Quiz")
-                        .HasForeignKey("EdufyAPI.Models.Quiz", "LessonId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("EdufyAPI.Models.QuizModels.Quiz", "LessonId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Lesson");
                 });
 
-            modelBuilder.Entity("EdufyAPI.Models.QuizAttemp", b =>
+            modelBuilder.Entity("EdufyAPI.Models.QuizModels.QuizAttemp", b =>
                 {
                     b.HasOne("EdufyAPI.Models.Progress", "Progress")
-                        .WithMany("QuizResults")
+                        .WithMany("QuizAttemps")
                         .HasForeignKey("ProgressId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Progress");
-                });
-
-            modelBuilder.Entity("EdufyAPI.Models.StudentAnswer", b =>
-                {
-                    b.HasOne("EdufyAPI.Models.QuizAttemp", "QuizAttemp")
-                        .WithMany("StudentAnswers")
-                        .HasForeignKey("QuizResultId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("QuizAttemp");
-                });
-
-            modelBuilder.Entity("EdufyAPI.Models.StudentCourse", b =>
-                {
-                    b.HasOne("EdufyAPI.Models.Course", "Course")
-                        .WithMany("StudentCourses")
-                        .HasForeignKey("CourseId")
+                    b.HasOne("EdufyAPI.Models.QuizModels.Quiz", "Quiz")
+                        .WithMany("QuizResult")
+                        .HasForeignKey("QuizId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("EdufyAPI.Models.Roles.Student", "Student")
-                        .WithMany("StudentCourses")
+                        .WithMany("QuizAttemps")
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Course");
+                    b.Navigation("Progress");
+
+                    b.Navigation("Quiz");
 
                     b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("EdufyAPI.Models.QuizModels.StudentAnswer", b =>
+                {
+                    b.HasOne("EdufyAPI.Models.QuizModels.Answer", "Answer")
+                        .WithOne("StudentAnswer")
+                        .HasForeignKey("EdufyAPI.Models.QuizModels.StudentAnswer", "AnswerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("EdufyAPI.Models.QuizModels.Question", "Question")
+                        .WithMany("StudentAnswers")
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("EdufyAPI.Models.QuizModels.QuizAttemp", "QuizResult")
+                        .WithMany("StudentAnswers")
+                        .HasForeignKey("QuizResultId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Answer");
+
+                    b.Navigation("Question");
+
+                    b.Navigation("QuizResult");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -748,7 +991,7 @@ namespace EdufyAPI.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -757,7 +1000,7 @@ namespace EdufyAPI.Migrations
                     b.HasOne("EdufyAPI.Models.Roles.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -766,7 +1009,7 @@ namespace EdufyAPI.Migrations
                     b.HasOne("EdufyAPI.Models.Roles.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -775,13 +1018,13 @@ namespace EdufyAPI.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("EdufyAPI.Models.Roles.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -790,7 +1033,7 @@ namespace EdufyAPI.Migrations
                     b.HasOne("EdufyAPI.Models.Roles.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -798,9 +1041,15 @@ namespace EdufyAPI.Migrations
                 {
                     b.Navigation("CourseProgress");
 
-                    b.Navigation("Lessons");
+                    b.Navigation("Enrollments");
 
-                    b.Navigation("StudentCourses");
+                    b.Navigation("Lessons");
+                });
+
+            modelBuilder.Entity("EdufyAPI.Models.Enrollment", b =>
+                {
+                    b.Navigation("Progress")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("EdufyAPI.Models.Lesson", b =>
@@ -813,32 +1062,46 @@ namespace EdufyAPI.Migrations
                     b.Navigation("Certificate")
                         .IsRequired();
 
-                    b.Navigation("QuizResults");
+                    b.Navigation("QuizAttemps");
                 });
 
-            modelBuilder.Entity("EdufyAPI.Models.Question", b =>
+            modelBuilder.Entity("EdufyAPI.Models.QuizModels.Answer", b =>
+                {
+                    b.Navigation("StudentAnswer")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("EdufyAPI.Models.QuizModels.Question", b =>
                 {
                     b.Navigation("Answers");
+
+                    b.Navigation("StudentAnswers");
                 });
 
-            modelBuilder.Entity("EdufyAPI.Models.Quiz", b =>
+            modelBuilder.Entity("EdufyAPI.Models.QuizModels.Quiz", b =>
                 {
                     b.Navigation("Questions");
+
+                    b.Navigation("QuizResult");
                 });
 
-            modelBuilder.Entity("EdufyAPI.Models.QuizAttemp", b =>
+            modelBuilder.Entity("EdufyAPI.Models.QuizModels.QuizAttemp", b =>
                 {
                     b.Navigation("StudentAnswers");
                 });
 
             modelBuilder.Entity("EdufyAPI.Models.Roles.Instructor", b =>
                 {
-                    b.Navigation("CoursesCreated");
+                    b.Navigation("Courses");
                 });
 
             modelBuilder.Entity("EdufyAPI.Models.Roles.Student", b =>
                 {
-                    b.Navigation("StudentCourses");
+                    b.Navigation("Enrollments");
+
+                    b.Navigation("Progresses");
+
+                    b.Navigation("QuizAttemps");
                 });
 #pragma warning restore 612, 618
         }

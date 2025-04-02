@@ -1,4 +1,5 @@
 ﻿using EdufyAPI.Models.Roles;
+using EdufyAPI.RoleSeeding;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -70,16 +71,21 @@ namespace EdufyAPI.Models
                       .OnDelete(DeleteBehavior.Restrict);
             });
 
-
             // Define the FK relationship between Progress and Enrollment
             modelBuilder.Entity<Progress>()
                 .HasOne(p => p.Enrollment)
                 .WithOne(e => e.Progress)
-                .HasForeignKey<Progress>(p => new { p.CourseId, p.StudentId });
+                .HasForeignKey<Progress>(p => new { p.StudentId, p.CourseId })
+                .OnDelete(DeleteBehavior.Restrict); // Avoid cascading delete
+
+
 
             #endregion
 
-
+            IdentitySeeding.Seed(modelBuilder); // Apply role and user seeding
+            CourseSeeding.Seed(modelBuilder); // Seed Courses
+            EnrollmentSeeding.Seed(modelBuilder); // Seed Enrollments
+            ProgressSeeding.Seed(modelBuilder); // Seed Progresses
         }
     }
 }
