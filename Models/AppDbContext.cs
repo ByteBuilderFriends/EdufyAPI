@@ -95,17 +95,8 @@ namespace EdufyAPI.Models
 
             #endregion
 
-            IdentitySeeding.Seed(modelBuilder); // Apply role and user seeding
-            CourseSeeding.Seed(modelBuilder); // Seed Courses
-            EnrollmentSeeding.Seed(modelBuilder); // Seed Enrollments
-            ProgressSeeding.Seed(modelBuilder); // Seed Progresses
-            LessonSeeding.Seed(modelBuilder); // Seed Lessons
-            QuizSeeding.Seed(modelBuilder); // Seed Quizzes
-            QuestionSeeding.Seed(modelBuilder); // Seed Questions
-            AnswerSeeding.Seed(modelBuilder); // Seed Answers
-            QuizAttempSeeding.Seed(modelBuilder); // Seed Quiz Attempts
-            StudentAnswerSeeding.Seed(modelBuilder); // Seed Student Answers
-
+            // Seed the database with initial data
+            RolesSeeding.Seed(modelBuilder);
         }
     }
 }
