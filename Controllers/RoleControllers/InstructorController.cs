@@ -79,7 +79,7 @@ namespace EdufyAPI.Controllers.RoleControllers
         /// <returns>Instructor details for course</returns>
         /// <response code="200">Returns associated instructor</response>
         /// <response code="404">Course or instructor not found</response>
-        [HttpPost("{id}/Instructor")]
+        [HttpGet("{id}/Instructor")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetInstructorByCourseId(string id)

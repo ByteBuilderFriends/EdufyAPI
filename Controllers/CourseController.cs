@@ -87,6 +87,8 @@ namespace EdufyAPI.Controllers
         public async Task<ActionResult<CourseReadDTO>> CreateCourse([FromForm] CourseCreateDTO courseCreateDto)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
+            var instructorExists = await _unitOfWork.InstructorRepository.GetByIdAsync(courseCreateDto.InstructorId);
+            if (instructorExists == null) return BadRequest("The specified instructor does not exist");
             var imageUrl = await FileUploadHelper.UploadFileAsync(courseCreateDto.Thumbnail, "course-thumbnails");
             var course = _mapper.Map<Course>(courseCreateDto);
             course.ThumbnailUrl = imageUrl;
