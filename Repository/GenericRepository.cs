@@ -100,6 +100,12 @@ namespace EdufyAPI.Repository
             _dbSet.RemoveRange(entities);
             _context.SaveChangesAsync();
         }
+
+        // CountAsync
+        public async Task<int> CountAsync(Expression<Func<T, bool>> expression)
+        {
+            return await _dbSet.CountAsync(expression);
+        }
     }
 }
 

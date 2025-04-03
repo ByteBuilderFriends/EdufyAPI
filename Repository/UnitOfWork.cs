@@ -3,6 +3,7 @@ using EdufyAPI.Models;
 using EdufyAPI.Models.QuizModels;
 using EdufyAPI.Models.Roles;
 using EdufyAPI.Repository.Interfaces;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace EdufyAPI.Repository
 {
@@ -69,6 +70,11 @@ namespace EdufyAPI.Repository
         public void Dispose()
         {
             _context.Dispose();
+        }
+
+        public async Task<IDbContextTransaction> BeginTransactionAsync()
+        {
+            return await _context.Database.BeginTransactionAsync();
         }
     }
 

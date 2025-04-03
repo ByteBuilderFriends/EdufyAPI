@@ -26,7 +26,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "EdufyAPI API", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "AskAMuslim API", Version = "v1" });
 
     // Add JWT support
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme

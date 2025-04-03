@@ -78,21 +78,6 @@ namespace EdufyAPI.Models
                 .HasForeignKey<Progress>(p => new { p.StudentId, p.CourseId })
                 .OnDelete(DeleteBehavior.Restrict); // Avoid cascading delete
 
-
-            //// Define the FK relationship between StudentAnswer and QuizAttempt
-            //modelBuilder.Entity<StudentAnswer>()
-            //    .HasOne(sa => sa.QuizResult)
-            //    .WithMany(qa => qa.StudentAnswers)
-            //    .HasForeignKey(sa => sa.QuizResultId)
-            //    .OnDelete(DeleteBehavior.Restrict); // Avoid cascading delete
-
-            //// Define the FK relationship between QuizAttempt and StudentAnswer
-            //modelBuilder.Entity<QuizAttemp>()
-            //    .HasMany(qa => qa.StudentAnswers)
-            //    .WithOne(sa => sa.QuizResult)
-            //    .HasForeignKey(sa => sa.QuizResultId)
-            //    .OnDelete(DeleteBehavior.Restrict); // Avoid cascading delete
-
             #endregion
 
             // Seed the database with initial data

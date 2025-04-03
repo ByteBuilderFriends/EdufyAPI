@@ -22,15 +22,19 @@ namespace EdufyAPI.Models
         {
             get
             {
-                var totalLessons = Course.Lessons.Count;
-                return totalLessons > 0 ? (double)TotalLessonsCompleted / totalLessons * 100 : 0;
+                if (Course?.Lessons == null || Course.Lessons.Count == 0)
+                    return 0;
+
+                int totalLessons = Course.Lessons.Count;
+                return Math.Round(((double)TotalLessonsCompleted / totalLessons) * 100, 2);
             }
         }
+
 
         // Grant a certificate to the student when they complete the course.
 
         #region Certificate Generation
-        public bool IsCompleted => LessonCompletionRate == 100;
+        public bool IsCompleted => LessonCompletionRate >= 100;
 
         public bool IsCertified => Certificate != null;
 

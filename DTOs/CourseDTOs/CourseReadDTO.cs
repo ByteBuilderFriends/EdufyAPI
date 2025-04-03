@@ -1,5 +1,4 @@
 ﻿using EdufyAPI.DTOs.LessonDTOs;
-using EdufyAPI.DTOs.ProgressDTOs;
 
 namespace EdufyAPI.DTOs
 {
@@ -12,8 +11,8 @@ namespace EdufyAPI.DTOs
 
         public string InstructorID { get; set; }
         public ICollection<LessonReadDTO> Lessons { get; set; }
-        public ICollection<ProgressReadDTO> progresses { get; set; }
 
         // Add number of students enrolled here
+        public int NumberOfStudentsEnrolled { get; set; } = 0;
     }
 }

@@ -16,6 +16,8 @@ namespace EdufyAPI.Models
         public string? Description { get; set; } = string.Empty;
         public string? ThumbnailUrl { get; set; } = string.Empty;
 
+        public int NumberOfStudentsEnrolled { get; set; } = 0;
+
 
         #region Relationships
 

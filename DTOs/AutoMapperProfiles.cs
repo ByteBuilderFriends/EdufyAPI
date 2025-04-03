@@ -66,10 +66,12 @@ namespace EdufyAPI.DTOs
             #endregion
 
             #region Course AutoMapper
-            CreateMap<Course, CourseReadDTO>();
-            CreateMap<CourseCreateDTO, Course>();
+            CreateMap<Course, CourseReadDTO>()
+                 .ForMember(dest => dest.NumberOfStudentsEnrolled, opt => opt.MapFrom(src => src.NumberOfStudentsEnrolled)); CreateMap<CourseCreateDTO, Course>();
             CreateMap<CourseUpdateDTO, Course>()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null)); //This ensures only non-null properties are mapped, preventing overwriting existing values with null.
+
+
             #endregion
 
             #region Lesson AutoMapper

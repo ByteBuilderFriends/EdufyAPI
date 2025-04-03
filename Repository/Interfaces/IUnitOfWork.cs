@@ -2,6 +2,7 @@
 using EdufyAPI.Models;
 using EdufyAPI.Models.QuizModels;
 using EdufyAPI.Models.Roles;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace EdufyAPI.Repository.Interfaces
 {
@@ -21,7 +22,7 @@ namespace EdufyAPI.Repository.Interfaces
         GenericRepository<StudentAnswer> StudentAnswerRepository { get; }
         GenericRepository<Enrollment> EnrollmentRepository { get; }
 
-
+        Task<IDbContextTransaction> BeginTransactionAsync();
         Task<int> SaveChangesAsync();
     }
 }

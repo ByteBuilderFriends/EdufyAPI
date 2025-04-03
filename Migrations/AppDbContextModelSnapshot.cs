@@ -64,6 +64,9 @@ namespace EdufyAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<int>("NumberOfStudentsEnrolled")
+                        .HasColumnType("int");
+
                     b.Property<string>("ThumbnailUrl")
                         .HasColumnType("nvarchar(max)");
 
@@ -83,6 +86,7 @@ namespace EdufyAPI.Migrations
                             Id = "1c700ea4-ac54-487f-80e4-25c7b348b9e0",
                             Description = "Learn the basics of C# programming, including syntax, OOP concepts, and best practices.",
                             InstructorId = "58ec4bbf-4913-4dc1-96b7-381159ce0878",
+                            NumberOfStudentsEnrolled = 0,
                             ThumbnailUrl = "csharp_course_thumbnail.jpg",
                             Title = "Introduction to C#"
                         },
@@ -91,6 +95,7 @@ namespace EdufyAPI.Migrations
                             Id = "2d7df053-81d5-4bb8-994d-76619c341c46",
                             Description = "Deep dive into .NET framework, dependency injection, middleware, and microservices.",
                             InstructorId = "a86582e6-8511-4b78-b548-e17a2eaf0d3e",
+                            NumberOfStudentsEnrolled = 0,
                             ThumbnailUrl = "dotnet_course_thumbnail.jpg",
                             Title = "Advanced .NET Development"
                         });
@@ -240,7 +245,7 @@ namespace EdufyAPI.Migrations
                         {
                             Id = "PROG-1001",
                             CourseId = "1c700ea4-ac54-487f-80e4-25c7b348b9e0",
-                            LastUpdated = new DateTime(2025, 4, 2, 5, 57, 26, 888, DateTimeKind.Utc).AddTicks(4830),
+                            LastUpdated = new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9151),
                             StudentId = "626b8c7f-f4d4-4467-bb37-570f1aa6fd77",
                             TotalLessonsCompleted = 5
                         },
@@ -248,7 +253,7 @@ namespace EdufyAPI.Migrations
                         {
                             Id = "PROG-1002",
                             CourseId = "1c700ea4-ac54-487f-80e4-25c7b348b9e0",
-                            LastUpdated = new DateTime(2025, 4, 2, 5, 57, 26, 888, DateTimeKind.Utc).AddTicks(4848),
+                            LastUpdated = new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9165),
                             StudentId = "e452e625-327a-4bf2-9540-3db6577ab68f",
                             TotalLessonsCompleted = 7
                         },
@@ -256,7 +261,7 @@ namespace EdufyAPI.Migrations
                         {
                             Id = "PROG-1003",
                             CourseId = "2d7df053-81d5-4bb8-994d-76619c341c46",
-                            LastUpdated = new DateTime(2025, 4, 2, 5, 57, 26, 888, DateTimeKind.Utc).AddTicks(4853),
+                            LastUpdated = new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9187),
                             StudentId = "626b8c7f-f4d4-4467-bb37-570f1aa6fd77",
                             TotalLessonsCompleted = 10
                         },
@@ -264,7 +269,7 @@ namespace EdufyAPI.Migrations
                         {
                             Id = "PROG-1004",
                             CourseId = "2d7df053-81d5-4bb8-994d-76619c341c46",
-                            LastUpdated = new DateTime(2025, 4, 2, 5, 57, 26, 888, DateTimeKind.Utc).AddTicks(4856),
+                            LastUpdated = new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9192),
                             StudentId = "e452e625-327a-4bf2-9540-3db6577ab68f",
                             TotalLessonsCompleted = 12
                         });
@@ -315,7 +320,7 @@ namespace EdufyAPI.Migrations
                         new
                         {
                             Id = "ANSWER-4001",
-                            CreatedAt = new DateTime(2025, 4, 2, 5, 57, 26, 888, DateTimeKind.Utc).AddTicks(5099),
+                            CreatedAt = new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9498),
                             CreatedBy = "System",
                             IsCorrect = true,
                             OrderIndex = 1,
@@ -325,7 +330,7 @@ namespace EdufyAPI.Migrations
                         new
                         {
                             Id = "ANSWER-4002",
-                            CreatedAt = new DateTime(2025, 4, 2, 5, 57, 26, 888, DateTimeKind.Utc).AddTicks(5104),
+                            CreatedAt = new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9501),
                             CreatedBy = "System",
                             IsCorrect = false,
                             OrderIndex = 2,
@@ -335,7 +340,7 @@ namespace EdufyAPI.Migrations
                         new
                         {
                             Id = "ANSWER-4003",
-                            CreatedAt = new DateTime(2025, 4, 2, 5, 57, 26, 888, DateTimeKind.Utc).AddTicks(5108),
+                            CreatedAt = new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9503),
                             CreatedBy = "System",
                             IsCorrect = true,
                             OrderIndex = 1,
@@ -345,7 +350,7 @@ namespace EdufyAPI.Migrations
                         new
                         {
                             Id = "ANSWER-4004",
-                            CreatedAt = new DateTime(2025, 4, 2, 5, 57, 26, 888, DateTimeKind.Utc).AddTicks(5110),
+                            CreatedAt = new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9507),
                             CreatedBy = "System",
                             IsCorrect = false,
                             OrderIndex = 2,
@@ -355,7 +360,7 @@ namespace EdufyAPI.Migrations
                         new
                         {
                             Id = "ANSWER-4005",
-                            CreatedAt = new DateTime(2025, 4, 2, 5, 57, 26, 888, DateTimeKind.Utc).AddTicks(5113),
+                            CreatedAt = new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9509),
                             CreatedBy = "System",
                             IsCorrect = true,
                             OrderIndex = 1,
@@ -365,7 +370,7 @@ namespace EdufyAPI.Migrations
                         new
                         {
                             Id = "ANSWER-4006",
-                            CreatedAt = new DateTime(2025, 4, 2, 5, 57, 26, 888, DateTimeKind.Utc).AddTicks(5117),
+                            CreatedAt = new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9512),
                             CreatedBy = "System",
                             IsCorrect = false,
                             OrderIndex = 2,
@@ -427,7 +432,7 @@ namespace EdufyAPI.Migrations
                         {
                             Id = "QUESTION-3001",
                             Answer = "Paris",
-                            CreatedAt = new DateTime(2025, 4, 2, 5, 57, 26, 888, DateTimeKind.Utc).AddTicks(5035),
+                            CreatedAt = new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9428),
                             CreatedBy = "System",
                             Explanation = "The capital of France is Paris.",
                             OrderIndex = 1,
@@ -440,7 +445,7 @@ namespace EdufyAPI.Migrations
                         {
                             Id = "QUESTION-3002",
                             Answer = "4",
-                            CreatedAt = new DateTime(2025, 4, 2, 5, 57, 26, 888, DateTimeKind.Utc).AddTicks(5050),
+                            CreatedAt = new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9439),
                             CreatedBy = "System",
                             Explanation = "2 + 2 equals 4.",
                             OrderIndex = 2,
@@ -453,7 +458,7 @@ namespace EdufyAPI.Migrations
                         {
                             Id = "QUESTION-3003",
                             Answer = "George Orwell",
-                            CreatedAt = new DateTime(2025, 4, 2, 5, 57, 26, 888, DateTimeKind.Utc).AddTicks(5055),
+                            CreatedAt = new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9442),
                             CreatedBy = "System",
                             Explanation = "The author of '1984' is George Orwell.",
                             OrderIndex = 1,
@@ -466,7 +471,7 @@ namespace EdufyAPI.Migrations
                         {
                             Id = "QUESTION-3004",
                             Answer = "Pacific Ocean",
-                            CreatedAt = new DateTime(2025, 4, 2, 5, 57, 26, 888, DateTimeKind.Utc).AddTicks(5058),
+                            CreatedAt = new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9445),
                             CreatedBy = "System",
                             Explanation = "The largest ocean on Earth is the Pacific Ocean.",
                             OrderIndex = 2,
@@ -530,7 +535,7 @@ namespace EdufyAPI.Migrations
                         new
                         {
                             Id = "QUIZ-2001",
-                            CreatedAt = new DateTime(2025, 4, 2, 5, 57, 26, 888, DateTimeKind.Utc).AddTicks(4980),
+                            CreatedAt = new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9344),
                             CreatedBy = "System",
                             Description = "This quiz tests your knowledge on basic programming concepts.",
                             IsActive = true,
@@ -543,7 +548,7 @@ namespace EdufyAPI.Migrations
                         new
                         {
                             Id = "QUIZ-2002",
-                            CreatedAt = new DateTime(2025, 4, 2, 5, 57, 26, 888, DateTimeKind.Utc).AddTicks(4986),
+                            CreatedAt = new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9348),
                             CreatedBy = "System",
                             Description = "This quiz tests your understanding of variables and data types.",
                             IsActive = true,
@@ -556,7 +561,7 @@ namespace EdufyAPI.Migrations
                         new
                         {
                             Id = "QUIZ-2003",
-                            CreatedAt = new DateTime(2025, 4, 2, 5, 57, 26, 888, DateTimeKind.Utc).AddTicks(4989),
+                            CreatedAt = new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9353),
                             CreatedBy = "System",
                             Description = "This quiz evaluates your understanding of complex algorithms.",
                             IsActive = true,
@@ -621,49 +626,49 @@ namespace EdufyAPI.Migrations
                         new
                         {
                             Id = "QUIZATTEMPT-10001",
-                            CompletedAt = new DateTime(2025, 4, 2, 5, 57, 26, 888, DateTimeKind.Utc).AddTicks(5207),
-                            CreatedAt = new DateTime(2025, 4, 2, 5, 57, 26, 888, DateTimeKind.Utc).AddTicks(5200),
+                            CompletedAt = new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9650),
+                            CreatedAt = new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9636),
                             CreatedBy = "System",
                             ProgressId = "PROG-1001",
                             QuizId = "QUIZ-2001",
                             Score = 85.0,
-                            StartedAt = new DateTime(2025, 4, 2, 5, 42, 26, 888, DateTimeKind.Utc).AddTicks(5203),
+                            StartedAt = new DateTime(2025, 4, 3, 3, 19, 53, 917, DateTimeKind.Utc).AddTicks(9641),
                             StudentId = "e452e625-327a-4bf2-9540-3db6577ab68f"
                         },
                         new
                         {
                             Id = "QUIZATTEMPT-10002",
-                            CompletedAt = new DateTime(2025, 4, 2, 5, 57, 26, 888, DateTimeKind.Utc).AddTicks(5212),
-                            CreatedAt = new DateTime(2025, 4, 2, 5, 57, 26, 888, DateTimeKind.Utc).AddTicks(5211),
+                            CompletedAt = new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9657),
+                            CreatedAt = new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9656),
                             CreatedBy = "System",
                             ProgressId = "PROG-1002",
                             QuizId = "QUIZ-2002",
                             Score = 60.0,
-                            StartedAt = new DateTime(2025, 4, 2, 5, 37, 26, 888, DateTimeKind.Utc).AddTicks(5212),
+                            StartedAt = new DateTime(2025, 4, 3, 3, 14, 53, 917, DateTimeKind.Utc).AddTicks(9657),
                             StudentId = "626b8c7f-f4d4-4467-bb37-570f1aa6fd77"
                         },
                         new
                         {
                             Id = "QUIZATTEMPT-10003",
-                            CompletedAt = new DateTime(2025, 4, 2, 5, 57, 26, 888, DateTimeKind.Utc).AddTicks(5221),
-                            CreatedAt = new DateTime(2025, 4, 2, 5, 57, 26, 888, DateTimeKind.Utc).AddTicks(5220),
+                            CompletedAt = new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9670),
+                            CreatedAt = new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9667),
                             CreatedBy = "System",
                             ProgressId = "PROG-1001",
                             QuizId = "QUIZ-2002",
                             Score = 90.0,
-                            StartedAt = new DateTime(2025, 4, 2, 5, 47, 26, 888, DateTimeKind.Utc).AddTicks(5220),
+                            StartedAt = new DateTime(2025, 4, 3, 3, 24, 53, 917, DateTimeKind.Utc).AddTicks(9669),
                             StudentId = "e452e625-327a-4bf2-9540-3db6577ab68f"
                         },
                         new
                         {
                             Id = "QUIZATTEMPT-10004",
-                            CompletedAt = new DateTime(2025, 4, 2, 5, 57, 26, 888, DateTimeKind.Utc).AddTicks(5268),
-                            CreatedAt = new DateTime(2025, 4, 2, 5, 57, 26, 888, DateTimeKind.Utc).AddTicks(5267),
+                            CompletedAt = new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9755),
+                            CreatedAt = new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9754),
                             CreatedBy = "System",
                             ProgressId = "PROG-1002",
                             QuizId = "QUIZ-2001",
                             Score = 75.0,
-                            StartedAt = new DateTime(2025, 4, 2, 5, 32, 26, 888, DateTimeKind.Utc).AddTicks(5267),
+                            StartedAt = new DateTime(2025, 4, 3, 3, 9, 53, 917, DateTimeKind.Utc).AddTicks(9755),
                             StudentId = "626b8c7f-f4d4-4467-bb37-570f1aa6fd77"
                         });
                 });
@@ -727,27 +732,27 @@ namespace EdufyAPI.Migrations
                         {
                             Id = "STUDENTANSWER-7001",
                             AnswerId = "ANSWER-4001",
-                            CreatedAt = new DateTime(2025, 4, 2, 5, 57, 26, 888, DateTimeKind.Utc).AddTicks(5333),
+                            CreatedAt = new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9855),
                             CreatedBy = "System",
                             IsCorrect = true,
                             QuestionId = "QUESTION-3001",
                             QuizResultId = "QUIZATTEMPT-10001",
                             SelectedAnswerIds = "[]",
                             SubmittedAnswer = "Option A: Correct answer for question 1",
-                            SubmittedAt = new DateTime(2025, 4, 2, 5, 57, 26, 888, DateTimeKind.Utc).AddTicks(5335)
+                            SubmittedAt = new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9857)
                         },
                         new
                         {
                             Id = "STUDENTANSWER-7004",
                             AnswerId = "ANSWER-4002",
-                            CreatedAt = new DateTime(2025, 4, 2, 5, 57, 26, 888, DateTimeKind.Utc).AddTicks(5337),
+                            CreatedAt = new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9861),
                             CreatedBy = "System",
                             IsCorrect = false,
                             QuestionId = "QUESTION-3001",
                             QuizResultId = "QUIZATTEMPT-10002",
                             SelectedAnswerIds = "[]",
                             SubmittedAnswer = "Option B: Incorrect answer for question 1",
-                            SubmittedAt = new DateTime(2025, 4, 2, 5, 57, 26, 888, DateTimeKind.Utc).AddTicks(5338)
+                            SubmittedAt = new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9862)
                         });
                 });
 
@@ -1009,7 +1014,7 @@ namespace EdufyAPI.Migrations
                         {
                             Id = "58ec4bbf-4913-4dc1-96b7-381159ce0878",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "1b7795c4-332b-40be-a452-ff1bc9c6a91f",
+                            ConcurrencyStamp = "ad4c8219-a15f-483e-bcf2-ce3d36fcb31d",
                             Email = "omar.tarek@example.com",
                             EmailConfirmed = false,
                             FirstName = "Omar",
@@ -1017,11 +1022,11 @@ namespace EdufyAPI.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "OMAR.TAREK@EXAMPLE.COM",
                             NormalizedUserName = "OMAR.TAREK",
-                            PasswordHash = "AQAAAAIAAYagAAAAEHfG3kVSDGYlE19W+GpKUzz5SOhN9LinHSy3q/y6Ozl3Xl5vmGpKEtKO7IR3HjPV9w==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEN2pvhm7tzbFRycH1VwDB3mX5yYalkxT26LTDyF9Gh4osoT5CgBG3EIUFdVgnn6szQ==",
                             PhoneNumber = "1122334455",
                             PhoneNumberConfirmed = false,
                             ProfilePictureUrl = "",
-                            SecurityStamp = "a6afba5a-0909-4c12-958e-810f60ab37a3",
+                            SecurityStamp = "529502b7-6759-4bcb-a2a1-18f77f965c92",
                             TwoFactorEnabled = false,
                             UserName = "omar.tarek"
                         },
@@ -1029,7 +1034,7 @@ namespace EdufyAPI.Migrations
                         {
                             Id = "a86582e6-8511-4b78-b548-e17a2eaf0d3e",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "7527958f-dc1b-42be-9c19-856c8b660dbd",
+                            ConcurrencyStamp = "eb51ba1a-76f2-4143-9181-94bdafc40b5d",
                             Email = "hana.mostafa@example.com",
                             EmailConfirmed = false,
                             FirstName = "Hana",
@@ -1037,11 +1042,11 @@ namespace EdufyAPI.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "HANA.MOSTAFA@EXAMPLE.COM",
                             NormalizedUserName = "HANA.MOSTAFA",
-                            PasswordHash = "AQAAAAIAAYagAAAAEHxGfFe6Mr7oxyO1gMMyiDObSQgFYTwMYArJhmL5PQARw/l8aWs42hYyq6P+9i/7GA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEK6Wu+tVawuzWkP4DLqRx4Tnj6EAR0K8wXt2Wkro/6uHglTVTSQODeqjf6qyToUu4w==",
                             PhoneNumber = "5566778899",
                             PhoneNumberConfirmed = false,
                             ProfilePictureUrl = "",
-                            SecurityStamp = "d4240263-ea88-47bc-aed7-7e66e28063ab",
+                            SecurityStamp = "d76cf065-1170-4aa6-b14c-1799311fbe02",
                             TwoFactorEnabled = false,
                             UserName = "hana.mostafa"
                         });
@@ -1058,7 +1063,7 @@ namespace EdufyAPI.Migrations
                         {
                             Id = "626b8c7f-f4d4-4467-bb37-570f1aa6fd77",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "d7c5d3d7-d959-4c74-89a0-a6de9df0888a",
+                            ConcurrencyStamp = "d8d9d936-2457-48b5-b025-a881a1b3cd65",
                             Email = "ali.mahmoud@example.com",
                             EmailConfirmed = false,
                             FirstName = "Ali",
@@ -1066,11 +1071,11 @@ namespace EdufyAPI.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ALI.MAHMOUD@EXAMPLE.COM",
                             NormalizedUserName = "ALI.MAHMOUD",
-                            PasswordHash = "AQAAAAIAAYagAAAAEPFBrUDr9mI9Ha4vir7abB26qAJDjek5hjRafR4ewwl+4Mf+gKTnieAlYnkA7vEQmQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEGtfl6cWHBXOVszeze9c1UOnW78PjjxeFNHzHqf80EBmfZkzPwgbbO/8awLc1bOcyg==",
                             PhoneNumber = "1234567890",
                             PhoneNumberConfirmed = false,
                             ProfilePictureUrl = "",
-                            SecurityStamp = "272f69db-d44c-4ea9-9ef0-56e332d9adb4",
+                            SecurityStamp = "ed34a4f1-508a-43b6-a959-480b443c4156",
                             TwoFactorEnabled = false,
                             UserName = "ali.mahmoud"
                         },
@@ -1078,7 +1083,7 @@ namespace EdufyAPI.Migrations
                         {
                             Id = "e452e625-327a-4bf2-9540-3db6577ab68f",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "082576e7-5464-4608-8329-8c7fc8247f0c",
+                            ConcurrencyStamp = "e3a56f72-071e-4622-b8d0-4541ef08e752",
                             Email = "salma.ahmed@example.com",
                             EmailConfirmed = false,
                             FirstName = "Salma",
@@ -1086,11 +1091,11 @@ namespace EdufyAPI.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "SALMA.AHMED@EXAMPLE.COM",
                             NormalizedUserName = "SALMA.AHMED",
-                            PasswordHash = "AQAAAAIAAYagAAAAEMAjCq9BOGCh12VESDso69qMu1ziu/K9MkVxMqUE93K/9XObh7TOZK2ZtZqJKcJCoQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAECAip/M9N/yWzU+c5tXh1z2ZrEYOZR754UoOJuDoXrqboGKIDnbYq3rAsQLmJJCptw==",
                             PhoneNumber = "0987654321",
                             PhoneNumberConfirmed = false,
                             ProfilePictureUrl = "",
-                            SecurityStamp = "04bbf8d3-d318-45cd-ae87-e7f911d18e7b",
+                            SecurityStamp = "4674983e-ef83-4b01-8a7b-4b74a7707c4b",
                             TwoFactorEnabled = false,
                             UserName = "salma.ahmed"
                         });
