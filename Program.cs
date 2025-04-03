@@ -118,6 +118,7 @@ builder.Services.AddLogging(); // This ensures logging is available
 builder.Services.AddHttpClient<PrayerTimesService>();
 builder.Services.AddHttpClient<QiblaDirectionService>();
 builder.Services.AddMemoryCache();
+builder.Services.AddScoped<ICacheService, CacheService>(); // Register the cache service
 #endregion
 
 
