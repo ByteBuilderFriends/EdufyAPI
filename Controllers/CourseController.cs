@@ -5,6 +5,7 @@ using EdufyAPI.Helpers;
 using EdufyAPI.Models;
 using EdufyAPI.Repository.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace EdufyAPI.Controllers
 {
@@ -14,12 +15,14 @@ namespace EdufyAPI.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IMemoryCache _memoryCache;
         private readonly string ThumbnailsFolderName = "course-thumbnails";
 
-        public CourseController(IUnitOfWork unitOfWork, IMapper mapper)
+        public CourseController(IUnitOfWork unitOfWork, IMapper mapper, IMemoryCache memoryCache)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _memoryCache = memoryCache;
         }
 
         /// <summary>
@@ -29,15 +32,26 @@ namespace EdufyAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CourseReadDTO>>> GetCourses()
         {
-            var courses = await _unitOfWork.CourseRepository.GetAllAsync();
-            if (!courses.Any())
-                return Ok(Enumerable.Empty<CourseReadDTO>());
-
-            var courseDtos = _mapper.Map<IEnumerable<CourseReadDTO>>(courses);
-            foreach (var courseDto in courseDtos)
+            const string cacheKey = "all_courses";  // Cache key for all courses.
+            if (!_memoryCache.TryGetValue(cacheKey, out IEnumerable<CourseReadDTO> courseDtos))
             {
-                courseDto.ThumbnailUrl = ConstructFileUrlHelper.ConstructFileUrl(Request, ThumbnailsFolderName, courseDto.ThumbnailUrl);
+                // Cache is empty, so retrieve from database.
+                var courses = await _unitOfWork.CourseRepository.GetAllAsync();
+                if (!courses.Any())
+                    return Ok(Enumerable.Empty<CourseReadDTO>());
+
+                courseDtos = _mapper.Map<IEnumerable<CourseReadDTO>>(courses);
+                foreach (var courseDto in courseDtos)
+                {
+                    courseDto.ThumbnailUrl = ConstructFileUrlHelper.ConstructFileUrl(Request, ThumbnailsFolderName, courseDto.ThumbnailUrl);
+                }
+
+                // Set the cache with a 5-minute expiration time.
+                var cacheEntryOptions = new MemoryCacheEntryOptions()
+                    .SetSlidingExpiration(TimeSpan.FromMinutes(5));  // Optional: Adjust the sliding expiration time.
+                _memoryCache.Set(cacheKey, courseDtos, cacheEntryOptions);
             }
+
             return Ok(courseDtos);
         }
 
@@ -49,12 +63,25 @@ namespace EdufyAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<CourseReadDTO>> GetCourseById(string id)
         {
-            var course = await _unitOfWork.CourseRepository.GetByIdAsync(id);
-            if (course == null)
-                return NotFound("Course not found.");
+            const string cacheKeyPrefix = "course_";  // Cache prefix for individual course.
+            var cacheKey = $"{cacheKeyPrefix}{id}";
 
-            var courseDto = _mapper.Map<CourseReadDTO>(course);
-            courseDto.ThumbnailUrl = ConstructFileUrlHelper.ConstructFileUrl(Request, ThumbnailsFolderName, courseDto.ThumbnailUrl);
+            if (!_memoryCache.TryGetValue(cacheKey, out CourseReadDTO courseDto))
+            {
+                // Cache is empty, so retrieve from database.
+                var course = await _unitOfWork.CourseRepository.GetByIdAsync(id);
+                if (course == null)
+                    return NotFound("Course not found.");
+
+                courseDto = _mapper.Map<CourseReadDTO>(course);
+                courseDto.ThumbnailUrl = ConstructFileUrlHelper.ConstructFileUrl(Request, ThumbnailsFolderName, courseDto.ThumbnailUrl);
+
+                // Set the cache with a 5-minute expiration time.
+                var cacheEntryOptions = new MemoryCacheEntryOptions()
+                    .SetSlidingExpiration(TimeSpan.FromMinutes(5));
+                _memoryCache.Set(cacheKey, courseDto, cacheEntryOptions);
+            }
+
             return Ok(courseDto);
         }
 
@@ -66,15 +93,28 @@ namespace EdufyAPI.Controllers
         [HttpGet("{instructorId}")]
         public async Task<ActionResult<IEnumerable<CourseReadDTO>>> GetInstructorCourses(string instructorId)
         {
-            var courses = await _unitOfWork.CourseRepository.GetByCondition(c => c.InstructorId == instructorId);
-            if (!courses.Any())
-                return Ok(Enumerable.Empty<CourseReadDTO>());
+            const string cacheKeyPrefix = "instructor_courses_";  // Cache prefix for courses by instructor.
+            var cacheKey = $"{cacheKeyPrefix}{instructorId}";
 
-            var courseDtos = _mapper.Map<IEnumerable<CourseReadDTO>>(courses);
-            foreach (var courseDto in courseDtos)
+            if (!_memoryCache.TryGetValue(cacheKey, out IEnumerable<CourseReadDTO> courseDtos))
             {
-                courseDto.ThumbnailUrl = ConstructFileUrlHelper.ConstructFileUrl(Request, ThumbnailsFolderName, courseDto.ThumbnailUrl);
+                // Cache is empty, so retrieve from database.
+                var courses = await _unitOfWork.CourseRepository.GetByCondition(c => c.InstructorId == instructorId);
+                if (!courses.Any())
+                    return Ok(Enumerable.Empty<CourseReadDTO>());
+
+                courseDtos = _mapper.Map<IEnumerable<CourseReadDTO>>(courses);
+                foreach (var courseDto in courseDtos)
+                {
+                    courseDto.ThumbnailUrl = ConstructFileUrlHelper.ConstructFileUrl(Request, ThumbnailsFolderName, courseDto.ThumbnailUrl);
+                }
+
+                // Set the cache with a 5-minute expiration time.
+                var cacheEntryOptions = new MemoryCacheEntryOptions()
+                    .SetSlidingExpiration(TimeSpan.FromMinutes(5));
+                _memoryCache.Set(cacheKey, courseDtos, cacheEntryOptions);
             }
+
             return Ok(courseDtos);
         }
 
@@ -89,12 +129,17 @@ namespace EdufyAPI.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
             var instructorExists = await _unitOfWork.InstructorRepository.GetByIdAsync(courseCreateDto.InstructorId);
             if (instructorExists == null) return BadRequest("The specified instructor does not exist");
+
             var imageUrl = await FileUploadHelper.UploadFileAsync(courseCreateDto.Thumbnail, "course-thumbnails");
             var course = _mapper.Map<Course>(courseCreateDto);
             course.ThumbnailUrl = imageUrl;
             await _unitOfWork.CourseRepository.AddAsync(course);
             await _unitOfWork.SaveChangesAsync();
             var courseReadDto = _mapper.Map<CourseReadDTO>(course);
+
+            // Invalidate the cache for all courses after a new course is created.
+            _memoryCache.Remove("all_courses");
+
             return CreatedAtAction(nameof(GetCourseById), new { id = course.Id }, courseReadDto);
         }
 
@@ -118,6 +163,11 @@ namespace EdufyAPI.Controllers
             }
             await _unitOfWork.CourseRepository.UpdateAsync(course);
             await _unitOfWork.SaveChangesAsync();
+
+            // Invalidate the cache for the specific course and all courses.
+            _memoryCache.Remove($"course_{id}");
+            _memoryCache.Remove("all_courses");
+
             return Ok(_mapper.Map<CourseReadDTO>(course));
         }
 
@@ -134,6 +184,11 @@ namespace EdufyAPI.Controllers
             FileUploadHelper.DeleteFile(course.ThumbnailUrl);
             await _unitOfWork.CourseRepository.DeleteAsync(course);
             await _unitOfWork.SaveChangesAsync();
+
+            // Invalidate the cache for the specific course and all courses.
+            _memoryCache.Remove($"course_{id}");
+            _memoryCache.Remove("all_courses");
+
             return NoContent();
         }
     }
