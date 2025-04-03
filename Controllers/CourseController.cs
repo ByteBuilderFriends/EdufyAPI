@@ -17,13 +17,13 @@ namespace EdufyAPI.Controllers
         private readonly IMapper _mapper;
         private readonly ICacheService _memoryCache;
         private readonly string ThumbnailsFolderName = "course-thumbnails";
-        private readonly ILogger _logger;
+        private readonly ILogger<CourseController> _logger;
 
         public CourseController(
             IUnitOfWork unitOfWork,
             IMapper mapper,
             ICacheService memoryCache,
-            ILogger logger)
+            ILogger<CourseController> logger)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
