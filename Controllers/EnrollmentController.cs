@@ -5,8 +5,8 @@ using EdufyAPI.DTOs.StudentCourseDTOs;
 using EdufyAPI.DTOs.StudentDTOs;
 using EdufyAPI.Models;
 using EdufyAPI.Repository.Interfaces;
+using EdufyAPI.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Memory;
 
 namespace EdufyAPI.Controllers
 {
@@ -16,46 +16,57 @@ namespace EdufyAPI.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly IMemoryCache _cache;
+        private readonly ICacheService _cache;
+        private readonly ILogger<EnrollmentController> _logger;
 
-        public EnrollmentController(IUnitOfWork unitOfWork, IMapper mapper, IMemoryCache cache)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EnrollmentController"/> class.
+        /// </summary>
+        /// <param name="unitOfWork">Unit of Work for database transactions.</param>
+        /// <param name="mapper">AutoMapper instance.</param>
+        /// <param name="cache">Cache service for caching data.</param>
+        public EnrollmentController(IUnitOfWork unitOfWork, IMapper mapper, ICacheService cache, ILogger<EnrollmentController> logger)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _cache = cache;
+            _logger = logger;
         }
 
         /// <summary>
-        /// Retrieves all course enrollments.
+        /// Retrieves all enrollments.
         /// </summary>
-        /// <returns>A list of enrollments.</returns>
+        /// <returns>A list of all enrollments.</returns>
         [HttpGet]
         public async Task<IActionResult> GetAllEnrollments()
         {
             var cacheKey = "allEnrollments";
-            if (!_cache.TryGetValue(cacheKey, out IEnumerable<EnrollmentReadDTO> enrollmentDtos))
+            try
             {
-                var enrollments = await _unitOfWork.EnrollmentRepository.GetAllAsync();
-                if (!enrollments.Any())
+                var enrollmentDtos = await _cache.GetDataAsync<IEnumerable<EnrollmentReadDTO>>(cacheKey);
+
+                if (enrollmentDtos == null)
                 {
-                    return Ok(Enumerable.Empty<EnrollmentReadDTO>());
+                    var enrollments = await _unitOfWork.EnrollmentRepository.GetAllAsync();
+                    if (!enrollments.Any())
+                        return Ok(Enumerable.Empty<EnrollmentReadDTO>());
+
+                    enrollmentDtos = _mapper.Map<IEnumerable<EnrollmentReadDTO>>(enrollments);
+                    await _cache.SetDataAsync(cacheKey, enrollmentDtos, DateTimeOffset.Now.AddMinutes(10));
                 }
 
-                enrollmentDtos = _mapper.Map<IEnumerable<EnrollmentReadDTO>>(enrollments);
-
-                // Set cache options
-                var cacheOptions = new MemoryCacheEntryOptions()
-                    .SetSlidingExpiration(TimeSpan.FromMinutes(10)) // Cache for 10 minutes
-                    .SetAbsoluteExpiration(TimeSpan.FromHours(1)); // Cache expires after 1 hour
-
-                _cache.Set(cacheKey, enrollmentDtos, cacheOptions);
+                return Ok(enrollmentDtos);
             }
 
-            return Ok(enrollmentDtos);
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving all enrollments.");
+                return StatusCode(500, $"An error occurred while retrieving enrollments. {ex.Message}");
+            }
         }
 
         /// <summary>
-        /// Retrieves a specific enrollment based on student ID and course ID.
+        /// Retrieves an enrollment by student and course IDs.
         /// </summary>
         /// <param name="studentId">The ID of the student.</param>
         /// <param name="courseId">The ID of the course.</param>
@@ -64,81 +75,104 @@ namespace EdufyAPI.Controllers
         public async Task<IActionResult> GetEnrollmentAsync(string studentId, string courseId)
         {
             var cacheKey = $"enrollment-{studentId}-{courseId}";
-            if (!_cache.TryGetValue(cacheKey, out EnrollmentReadDTO enrollmentDto))
+            try
             {
-                var enrollment = await _unitOfWork.EnrollmentRepository.GetAsync(studentId, courseId);
-                if (enrollment == null) return NotFound("Enrollment not found.");
+                var enrollmentDto = await _cache.GetDataAsync<EnrollmentReadDTO>(cacheKey);
 
-                enrollmentDto = _mapper.Map<EnrollmentReadDTO>(enrollment);
+                if (enrollmentDto == null)
+                {
+                    var enrollment = await _unitOfWork.EnrollmentRepository.GetAsync(studentId, courseId);
+                    if (enrollment == null)
+                        return NotFound("Enrollment not found.");
 
-                // Set cache options
-                var cacheOptions = new MemoryCacheEntryOptions()
-                    .SetSlidingExpiration(TimeSpan.FromMinutes(10));
+                    enrollmentDto = _mapper.Map<EnrollmentReadDTO>(enrollment);
+                    await _cache.SetDataAsync(cacheKey, enrollmentDto, DateTimeOffset.Now.AddMinutes(10));
+                }
 
-                _cache.Set(cacheKey, enrollmentDto, cacheOptions);
+                return Ok(enrollmentDto);
             }
-
-            return Ok(enrollmentDto);
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving enrollment.");
+                return StatusCode(500, $"An error occurred while retrieving the enrollment. {ex.Message}");
+            }
         }
 
-        // Get all courses enrolled by a student
+        /// <summary>
+        /// Retrieves the courses a student is enrolled in.
+        /// </summary>
+        /// <param name="studentId">The student's ID.</param>
+        /// <returns>A list of courses the student is enrolled in.</returns>
         [HttpGet]
         public async Task<IActionResult> GetEnrolledCoursesByStudent(string studentId)
         {
             var cacheKey = $"student-courses-{studentId}";
-            if (!_cache.TryGetValue(cacheKey, out IEnumerable<CourseReadDTO> courseDtos))
+            try
             {
-                var enrollments = await _unitOfWork.EnrollmentRepository.GetByCondition(e => e.StudentId == studentId);
-                if (!enrollments.Any())
-                    return NotFound("No enrollments found for this student.");
+                var courseDtos = await _cache.GetDataAsync<IEnumerable<CourseReadDTO>>(cacheKey);
 
-                courseDtos = _mapper.Map<IEnumerable<CourseReadDTO>>(enrollments.Select(e => e.Course));
+                if (courseDtos == null)
+                {
+                    var enrollments = await _unitOfWork.EnrollmentRepository.GetByCondition(e => e.StudentId == studentId);
+                    if (!enrollments.Any())
+                        return NotFound("No enrollments found for this student.");
 
-                // Set cache options
-                var cacheOptions = new MemoryCacheEntryOptions()
-                    .SetSlidingExpiration(TimeSpan.FromMinutes(10));
+                    courseDtos = _mapper.Map<IEnumerable<CourseReadDTO>>(enrollments.Select(e => e.Course));
+                    await _cache.SetDataAsync(cacheKey, courseDtos, DateTimeOffset.Now.AddMinutes(10));
+                }
 
-                _cache.Set(cacheKey, courseDtos, cacheOptions);
+                return Ok(courseDtos);
             }
-
-            return Ok(courseDtos);
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving courses for student.");
+                return StatusCode(500, $"An error occurred while retrieving courses for the student. {ex.Message}");
+            }
         }
 
-        // Get all students enrolled in a course
+        /// <summary>
+        /// Retrieves students enrolled in a specific course.
+        /// </summary>
+        /// <param name="courseId">The course ID.</param>
+        /// <returns>A list of students enrolled in the course.</returns>
         [HttpGet]
         public async Task<IActionResult> GetStudentsEnrolledInCourse(string courseId)
         {
             var cacheKey = $"course-students-{courseId}";
-            if (!_cache.TryGetValue(cacheKey, out IEnumerable<StudentReadDTO> studentDtos))
+            try
             {
-                var enrollments = await _unitOfWork.EnrollmentRepository.GetByCondition(e => e.CourseId == courseId);
-                if (!enrollments.Any())
-                    return NotFound("No students enrolled in this course.");
+                var studentDtos = await _cache.GetDataAsync<IEnumerable<StudentReadDTO>>(cacheKey);
 
-                studentDtos = _mapper.Map<IEnumerable<StudentReadDTO>>(enrollments.Select(e => e.Student));
+                if (studentDtos == null)
+                {
+                    var enrollments = await _unitOfWork.EnrollmentRepository.GetByCondition(e => e.CourseId == courseId);
+                    if (!enrollments.Any())
+                        return NotFound("No students enrolled in this course.");
 
-                // Set cache options
-                var cacheOptions = new MemoryCacheEntryOptions()
-                    .SetSlidingExpiration(TimeSpan.FromMinutes(10));
+                    studentDtos = _mapper.Map<IEnumerable<StudentReadDTO>>(enrollments.Select(e => e.Student));
+                    await _cache.SetDataAsync(cacheKey, studentDtos, DateTimeOffset.Now.AddMinutes(10));
+                }
 
-                _cache.Set(cacheKey, studentDtos, cacheOptions);
+                return Ok(studentDtos);
             }
-
-            return Ok(studentDtos);
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving students enrolled in course.");
+                return StatusCode(500, $"An error occurred while retrieving students enrolled in the course. {ex.Message}");
+            }
         }
 
         /// <summary>
         /// Enrolls a student in a course.
         /// </summary>
-        /// <param name="enrollmentDto">The enrollment details.</param>
-        /// <returns>A success message if enrollment is successful.</returns>
+        /// <param name="enrollmentDto">Enrollment details.</param>
+        /// <returns>Enrollment confirmation.</returns>
         [HttpPost]
         public async Task<IActionResult> Enroll(EnrollmentCreateDTO enrollmentDto)
         {
-            // Invalidate relevant caches after enrollment action
-            _cache.Remove("allEnrollments");
-            _cache.Remove($"student-courses-{enrollmentDto.StudentId}");
-            _cache.Remove($"course-students-{enrollmentDto.CourseId}");
+            await _cache.RemoveDataAsync("allEnrollments");
+            await _cache.RemoveDataAsync($"student-courses-{enrollmentDto.StudentId}");
+            await _cache.RemoveDataAsync($"course-students-{enrollmentDto.CourseId}");
 
             if (await _unitOfWork.EnrollmentRepository.GetAsync(enrollmentDto.StudentId, enrollmentDto.CourseId) != null)
                 return BadRequest("Already enrolled.");
@@ -147,51 +181,47 @@ namespace EdufyAPI.Controllers
             if (course == null)
                 return NotFound("Course not found.");
 
-            using (var transaction = await _unitOfWork.BeginTransactionAsync())
+            using var transaction = await _unitOfWork.BeginTransactionAsync();
+            try
             {
-                try
+                var enrollment = _mapper.Map<Enrollment>(enrollmentDto);
+                await _unitOfWork.EnrollmentRepository.AddAsync(enrollment);
+
+                // Add course progress for the student
+                var progress = new Progress
                 {
-                    var enrollment = _mapper.Map<Enrollment>(enrollmentDto);
-                    await _unitOfWork.EnrollmentRepository.AddAsync(enrollment);
+                    StudentId = enrollmentDto.StudentId,
+                    CourseId = enrollmentDto.CourseId,
+                    TotalLessonsCompleted = 0
+                };
+                await _unitOfWork.ProgressRepository.AddAsync(progress);
 
-                    // Add course progress for the student
-                    var progress = new Progress
-                    {
-                        StudentId = enrollmentDto.StudentId,
-                        CourseId = enrollmentDto.CourseId,
-                        TotalLessonsCompleted = 0
-                    };
-                    await _unitOfWork.ProgressRepository.AddAsync(progress);
+                // Update the student count before committing
+                course.NumberOfStudentsEnrolled = await _unitOfWork.EnrollmentRepository.CountAsync(e => e.CourseId == enrollmentDto.CourseId);
+                await _unitOfWork.CourseRepository.UpdateAsync(course);
 
-                    // Update the student count before committing
-                    course.NumberOfStudentsEnrolled = await _unitOfWork.EnrollmentRepository.CountAsync(e => e.CourseId == enrollmentDto.CourseId);
-                    await _unitOfWork.CourseRepository.UpdateAsync(course);
-
-                    await transaction.CommitAsync();
-
-                    return Ok("Enrollment successful.");
-                }
-                catch (Exception ex)
-                {
-                    await transaction.RollbackAsync();
-                    return StatusCode(500, $"An error occurred: {ex.Message}");
-                }
+                await transaction.CommitAsync();
+                return Ok("Enrollment successful.");
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                return StatusCode(500, $"An error occurred: {ex.Message}");
             }
         }
 
         /// <summary>
         /// Unenrolls a student from a course.
         /// </summary>
-        /// <param name="studentId">The ID of the student.</param>
-        /// <param name="courseId">The ID of the course.</param>
-        /// <returns>A success message if unenrollment is successful.</returns>
+        /// <param name="studentId">The student's ID.</param>
+        /// <param name="courseId">The course ID.</param>
+        /// <returns>Unenrollment confirmation.</returns>
         [HttpDelete]
         public async Task<IActionResult> UnEnroll(string studentId, string courseId)
         {
-            // Invalidate relevant caches after unenrollment action
-            _cache.Remove("allEnrollments");
-            _cache.Remove($"student-courses-{studentId}");
-            _cache.Remove($"course-students-{courseId}");
+            await _cache.RemoveDataAsync("allEnrollments");
+            await _cache.RemoveDataAsync($"student-courses-{studentId}");
+            await _cache.RemoveDataAsync($"course-students-{courseId}");
 
             var enrollment = await _unitOfWork.EnrollmentRepository.GetAsync(studentId, courseId);
             if (enrollment == null)
@@ -202,9 +232,7 @@ namespace EdufyAPI.Controllers
             // Remove course progress if it exists
             var progress = await _unitOfWork.ProgressRepository.GetAsync(studentId, courseId);
             if (progress != null)
-            {
                 await _unitOfWork.ProgressRepository.DeleteAsync(studentId, courseId);
-            }
 
             return Ok("Unenrollment successful.");
         }

@@ -76,9 +76,36 @@ namespace EdufyAPI.Repository
         //Delete by object
         public async Task DeleteAsync(T entity)
         {
-            _context.Set<T>().Remove(entity);
-            await _context.SaveChangesAsync();
+            // Check if the entity is null before proceeding
+            if (entity == null)
+            {
+                throw new ArgumentNullException(nameof(entity), "Entity cannot be null");
+            }
+
+            try
+            {
+                // Get the entry for the entity to check its state
+                var entry = _context.Entry(entity);
+
+                // If the entity is not being tracked (detached), attach it to the context
+                if (entry.State == EntityState.Detached)
+                {
+                    _dbSet.Attach(entity);
+                }
+
+                // Remove the entity from the DbSet, marking it for deletion
+                _dbSet.Remove(entity);
+
+                // Save the changes to the database asynchronously
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                // Catch any exception that occurs and wrap it in a new exception with a custom message
+                throw new Exception("An error occurred while deleting the entity", ex);
+            }
         }
+
 
         //Enrollment only
         public async Task<Enrollment?> GetAsync(string studentId, string courseId)
