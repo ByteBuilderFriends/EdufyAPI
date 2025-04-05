@@ -111,7 +111,7 @@ namespace EdufyAPI.Controllers.QuizModelsControllers
         }
         // Search questions by text
         [HttpGet("search")]
-        public async Task<IActionResult> SearchQuestions(string text, bool isCaseSensitive = false)
+        public async Task<IActionResult> SearchQuestions(string quizId, string text, bool isCaseSensitive = false)
         {
             if (string.IsNullOrWhiteSpace(text))
                 return BadRequest("Search text cannot be empty.");
@@ -124,12 +124,15 @@ namespace EdufyAPI.Controllers.QuizModelsControllers
                 // SQL_Latin1_General_CP1_CS_AS → A case-sensitive collation (CS = Case-Sensitive).
                 // Show this https://youtu.be/AIbSuR0ndak?si=aUtnTinNgiYiClzq
                 questions = await _unitOfWork.QuestionRepository.GetByCondition(q =>
+                    q.QuizId == quizId &&
                     EF.Functions.Collate(q.Text, "SQL_Latin1_General_CP1_CS_AS").Contains(text));
             }
             else
             {
                 //By default, SQL Server collation is case-insensitive (CI), meaning "math" and "Math" are treated as the same.
-                questions = await _unitOfWork.QuestionRepository.GetByCondition(q => q.Text.Contains(text));
+                questions = await _unitOfWork.QuestionRepository.GetByCondition(q =>
+                    q.QuizId == quizId &&
+                    q.Text.Contains(text));
             }
 
             var questionDTOs = _mapper.Map<IEnumerable<QuestionReadDTO>>(questions);
@@ -139,12 +142,12 @@ namespace EdufyAPI.Controllers.QuizModelsControllers
         // Filter questions by type & points range
         [HttpGet("filter")]
         public async Task<IActionResult> FilterQuestionsAsync(
+             string quizId,
              string? text = null,
              bool isCaseSensitive = false,
              QuestionType? type = null,
              int? minPoints = null,
-             int? maxPoints = null,
-             string? quizId = null)
+             int? maxPoints = null)
         {
             // Build dynamic query with filters
             Expression<Func<Question, bool>> filter = q =>
