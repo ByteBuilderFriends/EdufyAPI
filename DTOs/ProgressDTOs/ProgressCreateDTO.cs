@@ -7,5 +7,7 @@
         //public string EnrollmentId { get; set; }
         public string StudentId { get; set; }
         public int TotalLessonsCompleted { get; set; }
+
+        public bool CompletedProgress { get; set; } = false;
     }
 }

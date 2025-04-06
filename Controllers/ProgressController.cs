@@ -136,6 +136,7 @@ public class ProgressController : ControllerBase
 
         if (!progress.IsCompleted) return BadRequest("Progress is not yet completed.");
 
+        progress.CompletedProgress = true;
         await _unitOfWork.SaveChangesAsync();
         return NoContent();
     }

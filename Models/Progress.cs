@@ -12,6 +12,8 @@ namespace EdufyAPI.Models
         /// The total number of lessons completed in the course.
         public int TotalLessonsCompleted { get; set; } = 0;
 
+        public bool CompletedProgress { get; set; } = false;
+
         /// Calculates the student's average quiz score in this course.
         /// NOTE: make quiz resylt PK as int
         //public double AverageScore => QuizResults.Any() ? QuizResults.Average(q => q.Score) : 0;

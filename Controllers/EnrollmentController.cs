@@ -192,7 +192,8 @@ namespace EdufyAPI.Controllers
                 {
                     StudentId = enrollmentDto.StudentId,
                     CourseId = enrollmentDto.CourseId,
-                    TotalLessonsCompleted = 0
+                    TotalLessonsCompleted = 0,
+                    CompletedProgress = false
                 };
                 await _unitOfWork.ProgressRepository.AddAsync(progress);
 
