@@ -20,7 +20,6 @@ namespace EdufyAPI.Repository.Interfaces
         GenericRepository<Quiz> QuizRepository { get; }
         GenericRepository<Question> QuestionRepository { get; }
         GenericRepository<Option> OptionRepository { get; }
-
         GenericRepository<Answer> AnswerRepository { get; }
 
         Task<IDbContextTransaction> BeginTransactionAsync();
