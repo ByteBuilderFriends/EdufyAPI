@@ -1,32 +1,19 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EdufyAPI.Models.QuizModels
 {
-    // 2. Question class - contains the actual questions
-    public class Question : QuizModelsBaseEntity
+    public class Question
     {
-        [Required]
-        public string Text { get; set; } = string.Empty;
+        public string Id { get; set; } = Guid.NewGuid().ToString();
 
-        public string? Explanation { get; set; }
+        public string QuestionText { get; set; } = string.Empty;
 
-        [Range(1, 100)]
-        public int Points { get; set; } = 1;
+        public int Marks { get; set; } = 0;
 
-        public QuestionType Type { get; set; } = QuestionType.SingleChoice;
+        [ForeignKey(nameof(Quiz))]
+        public string QuizId { get; set; } = string.Empty;
+        public virtual Quiz Quiz { get; set; } = new Quiz();
+        public virtual ICollection<Option> Options { get; set; } = new List<Option>();
 
-        public int OrderIndex { get; set; }
-
-        public string Answer { get; set; } = string.Empty;
-
-        #region Relationships
-        [ForeignKey("Quiz")]
-        public string QuizId { get; set; }
-        public virtual Quiz Quiz { get; set; }
-
-        public virtual List<Answer> Answers { get; set; } = new();
-        public virtual List<StudentAnswer> StudentAnswers { get; set; } = new();
-        #endregion
     }
 }

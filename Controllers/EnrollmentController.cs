@@ -5,7 +5,7 @@ using EdufyAPI.DTOs.StudentCourseDTOs;
 using EdufyAPI.DTOs.StudentDTOs;
 using EdufyAPI.Models;
 using EdufyAPI.Repository.Interfaces;
-using EdufyAPI.Services;
+using EdufyAPI.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EdufyAPI.Controllers

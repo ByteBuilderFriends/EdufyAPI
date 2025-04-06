@@ -1,4 +1,5 @@
-﻿using EdufyAPI.Models.Roles;
+﻿using EdufyAPI.Models.QuizModels;
+using EdufyAPI.Models.Roles;
 using EdufyAPI.RoleSeeding;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -77,6 +78,17 @@ namespace EdufyAPI.Models
                 .WithOne(e => e.Progress)
                 .HasForeignKey<Progress>(p => new { p.StudentId, p.CourseId })
                 .OnDelete(DeleteBehavior.Restrict); // Avoid cascading delete
+
+
+
+            modelBuilder.Entity<Answer>(model =>
+            {
+                model.HasOne(a => a.Student)
+                    .WithMany(s => s.Answers)
+                    .HasForeignKey(a => a.StudentId)
+                    .OnDelete(DeleteBehavior.Restrict);
+                model.HasKey(a => new { a.StudentId, a.QuestionId });
+            });
 
             #endregion
 

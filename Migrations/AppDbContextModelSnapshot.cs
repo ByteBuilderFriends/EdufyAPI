@@ -217,6 +217,9 @@ namespace EdufyAPI.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<bool>("CompletedProgress")
+                        .HasColumnType("bit");
+
                     b.Property<string>("CourseId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -244,32 +247,36 @@ namespace EdufyAPI.Migrations
                         new
                         {
                             Id = "PROG-1001",
+                            CompletedProgress = false,
                             CourseId = "1c700ea4-ac54-487f-80e4-25c7b348b9e0",
-                            LastUpdated = new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9151),
+                            LastUpdated = new DateTime(2025, 4, 6, 9, 10, 33, 573, DateTimeKind.Utc).AddTicks(8693),
                             StudentId = "626b8c7f-f4d4-4467-bb37-570f1aa6fd77",
                             TotalLessonsCompleted = 5
                         },
                         new
                         {
                             Id = "PROG-1002",
+                            CompletedProgress = false,
                             CourseId = "1c700ea4-ac54-487f-80e4-25c7b348b9e0",
-                            LastUpdated = new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9165),
+                            LastUpdated = new DateTime(2025, 4, 6, 9, 10, 33, 573, DateTimeKind.Utc).AddTicks(8705),
                             StudentId = "e452e625-327a-4bf2-9540-3db6577ab68f",
                             TotalLessonsCompleted = 7
                         },
                         new
                         {
                             Id = "PROG-1003",
+                            CompletedProgress = false,
                             CourseId = "2d7df053-81d5-4bb8-994d-76619c341c46",
-                            LastUpdated = new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9187),
+                            LastUpdated = new DateTime(2025, 4, 6, 9, 10, 33, 573, DateTimeKind.Utc).AddTicks(8738),
                             StudentId = "626b8c7f-f4d4-4467-bb37-570f1aa6fd77",
                             TotalLessonsCompleted = 10
                         },
                         new
                         {
                             Id = "PROG-1004",
+                            CompletedProgress = false,
                             CourseId = "2d7df053-81d5-4bb8-994d-76619c341c46",
-                            LastUpdated = new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9192),
+                            LastUpdated = new DateTime(2025, 4, 6, 9, 10, 33, 573, DateTimeKind.Utc).AddTicks(8759),
                             StudentId = "e452e625-327a-4bf2-9540-3db6577ab68f",
                             TotalLessonsCompleted = 12
                         });
@@ -277,106 +284,48 @@ namespace EdufyAPI.Migrations
 
             modelBuilder.Entity("EdufyAPI.Models.QuizModels.Answer", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<string>("StudentId")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnOrder(1);
+
+                    b.Property<string>("QuestionId")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnOrder(2);
+
+                    b.Property<string>("SelectedOptionId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                    b.HasKey("StudentId", "QuestionId");
 
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.HasIndex("QuestionId");
 
-                    b.Property<string>("Explanation")
-                        .HasColumnType("nvarchar(max)");
+                    b.HasIndex("SelectedOptionId");
+
+                    b.ToTable("Answers");
+                });
+
+            modelBuilder.Entity("EdufyAPI.Models.QuizModels.Option", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("IsCorrect")
                         .HasColumnType("bit");
 
-                    b.Property<int>("OrderIndex")
-                        .HasColumnType("int");
+                    b.Property<string>("OptionText")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("QuestionId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Text")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("QuestionId");
 
-                    b.ToTable("Answers");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "ANSWER-4001",
-                            CreatedAt = new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9498),
-                            CreatedBy = "System",
-                            IsCorrect = true,
-                            OrderIndex = 1,
-                            QuestionId = "QUESTION-3001",
-                            Text = "Option A: Correct answer for question 1"
-                        },
-                        new
-                        {
-                            Id = "ANSWER-4002",
-                            CreatedAt = new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9501),
-                            CreatedBy = "System",
-                            IsCorrect = false,
-                            OrderIndex = 2,
-                            QuestionId = "QUESTION-3001",
-                            Text = "Option B: Incorrect answer for question 1"
-                        },
-                        new
-                        {
-                            Id = "ANSWER-4003",
-                            CreatedAt = new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9503),
-                            CreatedBy = "System",
-                            IsCorrect = true,
-                            OrderIndex = 1,
-                            QuestionId = "QUESTION-3002",
-                            Text = "Option A: Correct answer for question 2"
-                        },
-                        new
-                        {
-                            Id = "ANSWER-4004",
-                            CreatedAt = new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9507),
-                            CreatedBy = "System",
-                            IsCorrect = false,
-                            OrderIndex = 2,
-                            QuestionId = "QUESTION-3002",
-                            Text = "Option B: Incorrect answer for question 2"
-                        },
-                        new
-                        {
-                            Id = "ANSWER-4005",
-                            CreatedAt = new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9509),
-                            CreatedBy = "System",
-                            IsCorrect = true,
-                            OrderIndex = 1,
-                            QuestionId = "QUESTION-3003",
-                            Text = "Option A: Correct answer for question 3"
-                        },
-                        new
-                        {
-                            Id = "ANSWER-4006",
-                            CreatedAt = new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9512),
-                            CreatedBy = "System",
-                            IsCorrect = false,
-                            OrderIndex = 2,
-                            QuestionId = "QUESTION-3003",
-                            Text = "Option B: Incorrect answer for question 3"
-                        });
+                    b.ToTable("Options");
                 });
 
             modelBuilder.Entity("EdufyAPI.Models.QuizModels.Question", b =>
@@ -384,102 +333,22 @@ namespace EdufyAPI.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Answer")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Explanation")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("OrderIndex")
+                    b.Property<int>("Marks")
                         .HasColumnType("int");
 
-                    b.Property<int>("Points")
-                        .HasColumnType("int");
+                    b.Property<string>("QuestionText")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("QuizId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Text")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("QuizId");
 
                     b.ToTable("Questions");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "QUESTION-3001",
-                            Answer = "Paris",
-                            CreatedAt = new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9428),
-                            CreatedBy = "System",
-                            Explanation = "The capital of France is Paris.",
-                            OrderIndex = 1,
-                            Points = 10,
-                            QuizId = "QUIZ-2002",
-                            Text = "What is the capital of France?",
-                            Type = 1
-                        },
-                        new
-                        {
-                            Id = "QUESTION-3002",
-                            Answer = "4",
-                            CreatedAt = new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9439),
-                            CreatedBy = "System",
-                            Explanation = "2 + 2 equals 4.",
-                            OrderIndex = 2,
-                            Points = 5,
-                            QuizId = "QUIZ-2002",
-                            Text = "What is 2 + 2?",
-                            Type = 1
-                        },
-                        new
-                        {
-                            Id = "QUESTION-3003",
-                            Answer = "George Orwell",
-                            CreatedAt = new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9442),
-                            CreatedBy = "System",
-                            Explanation = "The author of '1984' is George Orwell.",
-                            OrderIndex = 1,
-                            Points = 10,
-                            QuizId = "QUIZ-2003",
-                            Text = "Who is the author of '1984'?",
-                            Type = 1
-                        },
-                        new
-                        {
-                            Id = "QUESTION-3004",
-                            Answer = "Pacific Ocean",
-                            CreatedAt = new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9445),
-                            CreatedBy = "System",
-                            Explanation = "The largest ocean on Earth is the Pacific Ocean.",
-                            OrderIndex = 2,
-                            Points = 5,
-                            QuizId = "QUIZ-2003",
-                            Text = "What is the largest ocean on Earth?",
-                            Type = 1
-                        });
                 });
 
             modelBuilder.Entity("EdufyAPI.Models.QuizModels.Quiz", b =>
@@ -487,273 +356,41 @@ namespace EdufyAPI.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
 
                     b.Property<string>("LessonId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("PassingScore")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TimeLimit")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LessonId")
-                        .IsUnique();
-
-                    b.ToTable("Quizzes");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "QUIZ-2001",
-                            CreatedAt = new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9344),
-                            CreatedBy = "System",
-                            Description = "This quiz tests your knowledge on basic programming concepts.",
-                            IsActive = true,
-                            IsDeleted = false,
-                            LessonId = "LESSON-1001",
-                            PassingScore = 80,
-                            TimeLimit = 300,
-                            Title = "Introduction to Programming Quiz"
-                        },
-                        new
-                        {
-                            Id = "QUIZ-2002",
-                            CreatedAt = new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9348),
-                            CreatedBy = "System",
-                            Description = "This quiz tests your understanding of variables and data types.",
-                            IsActive = true,
-                            IsDeleted = false,
-                            LessonId = "LESSON-1002",
-                            PassingScore = 70,
-                            TimeLimit = 300,
-                            Title = "Variables and Data Types Quiz"
-                        },
-                        new
-                        {
-                            Id = "QUIZ-2003",
-                            CreatedAt = new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9353),
-                            CreatedBy = "System",
-                            Description = "This quiz evaluates your understanding of complex algorithms.",
-                            IsActive = true,
-                            IsDeleted = false,
-                            LessonId = "LESSON-1003",
-                            PassingScore = 85,
-                            TimeLimit = 300,
-                            Title = "Advanced Algorithms Quiz"
-                        });
-                });
-
-            modelBuilder.Entity("EdufyAPI.Models.QuizModels.QuizAttemp", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime?>("CompletedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ProgressId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("QuizId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<double>("Score")
-                        .HasColumnType("float");
-
-                    b.Property<DateTime>("StartedAt")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("StudentId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("StudentQuizEvaluation")
+                        .HasColumnType("int");
 
-                    b.Property<string>("UpdatedBy")
+                    b.Property<int>("StudentQuizResult")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TotalMarks")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalQuestions")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProgressId");
-
-                    b.HasIndex("QuizId");
+                    b.HasIndex("LessonId");
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("QuizResults");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "QUIZATTEMPT-10001",
-                            CompletedAt = new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9650),
-                            CreatedAt = new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9636),
-                            CreatedBy = "System",
-                            ProgressId = "PROG-1001",
-                            QuizId = "QUIZ-2001",
-                            Score = 85.0,
-                            StartedAt = new DateTime(2025, 4, 3, 3, 19, 53, 917, DateTimeKind.Utc).AddTicks(9641),
-                            StudentId = "e452e625-327a-4bf2-9540-3db6577ab68f"
-                        },
-                        new
-                        {
-                            Id = "QUIZATTEMPT-10002",
-                            CompletedAt = new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9657),
-                            CreatedAt = new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9656),
-                            CreatedBy = "System",
-                            ProgressId = "PROG-1002",
-                            QuizId = "QUIZ-2002",
-                            Score = 60.0,
-                            StartedAt = new DateTime(2025, 4, 3, 3, 14, 53, 917, DateTimeKind.Utc).AddTicks(9657),
-                            StudentId = "626b8c7f-f4d4-4467-bb37-570f1aa6fd77"
-                        },
-                        new
-                        {
-                            Id = "QUIZATTEMPT-10003",
-                            CompletedAt = new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9670),
-                            CreatedAt = new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9667),
-                            CreatedBy = "System",
-                            ProgressId = "PROG-1001",
-                            QuizId = "QUIZ-2002",
-                            Score = 90.0,
-                            StartedAt = new DateTime(2025, 4, 3, 3, 24, 53, 917, DateTimeKind.Utc).AddTicks(9669),
-                            StudentId = "e452e625-327a-4bf2-9540-3db6577ab68f"
-                        },
-                        new
-                        {
-                            Id = "QUIZATTEMPT-10004",
-                            CompletedAt = new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9755),
-                            CreatedAt = new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9754),
-                            CreatedBy = "System",
-                            ProgressId = "PROG-1002",
-                            QuizId = "QUIZ-2001",
-                            Score = 75.0,
-                            StartedAt = new DateTime(2025, 4, 3, 3, 9, 53, 917, DateTimeKind.Utc).AddTicks(9755),
-                            StudentId = "626b8c7f-f4d4-4467-bb37-570f1aa6fd77"
-                        });
-                });
-
-            modelBuilder.Entity("EdufyAPI.Models.QuizModels.StudentAnswer", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("AnswerId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsCorrect")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("QuestionId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("QuizResultId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("SelectedAnswerIds")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SubmittedAnswer")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("SubmittedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AnswerId")
-                        .IsUnique();
-
-                    b.HasIndex("QuestionId");
-
-                    b.HasIndex("QuizResultId");
-
-                    b.ToTable("StudentAnswer");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "STUDENTANSWER-7001",
-                            AnswerId = "ANSWER-4001",
-                            CreatedAt = new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9855),
-                            CreatedBy = "System",
-                            IsCorrect = true,
-                            QuestionId = "QUESTION-3001",
-                            QuizResultId = "QUIZATTEMPT-10001",
-                            SelectedAnswerIds = "[]",
-                            SubmittedAnswer = "Option A: Correct answer for question 1",
-                            SubmittedAt = new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9857)
-                        },
-                        new
-                        {
-                            Id = "STUDENTANSWER-7004",
-                            AnswerId = "ANSWER-4002",
-                            CreatedAt = new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9861),
-                            CreatedBy = "System",
-                            IsCorrect = false,
-                            QuestionId = "QUESTION-3001",
-                            QuizResultId = "QUIZATTEMPT-10002",
-                            SelectedAnswerIds = "[]",
-                            SubmittedAnswer = "Option B: Incorrect answer for question 1",
-                            SubmittedAt = new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9862)
-                        });
+                    b.ToTable("Quizzes");
                 });
 
             modelBuilder.Entity("EdufyAPI.Models.Roles.AppUser", b =>
@@ -1014,7 +651,7 @@ namespace EdufyAPI.Migrations
                         {
                             Id = "58ec4bbf-4913-4dc1-96b7-381159ce0878",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "ad4c8219-a15f-483e-bcf2-ce3d36fcb31d",
+                            ConcurrencyStamp = "7d7510f9-0674-438a-b440-d069a296d4c2",
                             Email = "omar.tarek@example.com",
                             EmailConfirmed = false,
                             FirstName = "Omar",
@@ -1022,11 +659,11 @@ namespace EdufyAPI.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "OMAR.TAREK@EXAMPLE.COM",
                             NormalizedUserName = "OMAR.TAREK",
-                            PasswordHash = "AQAAAAIAAYagAAAAEN2pvhm7tzbFRycH1VwDB3mX5yYalkxT26LTDyF9Gh4osoT5CgBG3EIUFdVgnn6szQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEKyNr4gvOkqx4BubZ79bVDwRlGB+jdro86XMV6hVkqs2P6tIStD1coT1ASarAjDECA==",
                             PhoneNumber = "1122334455",
                             PhoneNumberConfirmed = false,
                             ProfilePictureUrl = "",
-                            SecurityStamp = "529502b7-6759-4bcb-a2a1-18f77f965c92",
+                            SecurityStamp = "e7114318-0834-4ed9-8c3b-ed5b687086f4",
                             TwoFactorEnabled = false,
                             UserName = "omar.tarek"
                         },
@@ -1034,7 +671,7 @@ namespace EdufyAPI.Migrations
                         {
                             Id = "a86582e6-8511-4b78-b548-e17a2eaf0d3e",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "eb51ba1a-76f2-4143-9181-94bdafc40b5d",
+                            ConcurrencyStamp = "b65b7768-0972-45f1-a649-e5fc1e72cffe",
                             Email = "hana.mostafa@example.com",
                             EmailConfirmed = false,
                             FirstName = "Hana",
@@ -1042,11 +679,11 @@ namespace EdufyAPI.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "HANA.MOSTAFA@EXAMPLE.COM",
                             NormalizedUserName = "HANA.MOSTAFA",
-                            PasswordHash = "AQAAAAIAAYagAAAAEK6Wu+tVawuzWkP4DLqRx4Tnj6EAR0K8wXt2Wkro/6uHglTVTSQODeqjf6qyToUu4w==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEALp1JSPpSEZ12Yj2OR1FzRZ6gsk6fSa2qSLuKY+c6BWED98ntlVHp2dBdAzxBVLzw==",
                             PhoneNumber = "5566778899",
                             PhoneNumberConfirmed = false,
                             ProfilePictureUrl = "",
-                            SecurityStamp = "d76cf065-1170-4aa6-b14c-1799311fbe02",
+                            SecurityStamp = "28db5904-9760-447b-9a32-3f8ba5b89826",
                             TwoFactorEnabled = false,
                             UserName = "hana.mostafa"
                         });
@@ -1063,7 +700,7 @@ namespace EdufyAPI.Migrations
                         {
                             Id = "626b8c7f-f4d4-4467-bb37-570f1aa6fd77",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "d8d9d936-2457-48b5-b025-a881a1b3cd65",
+                            ConcurrencyStamp = "53687b06-4b24-4588-b0e9-58d7c2756ca2",
                             Email = "ali.mahmoud@example.com",
                             EmailConfirmed = false,
                             FirstName = "Ali",
@@ -1071,11 +708,11 @@ namespace EdufyAPI.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ALI.MAHMOUD@EXAMPLE.COM",
                             NormalizedUserName = "ALI.MAHMOUD",
-                            PasswordHash = "AQAAAAIAAYagAAAAEGtfl6cWHBXOVszeze9c1UOnW78PjjxeFNHzHqf80EBmfZkzPwgbbO/8awLc1bOcyg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEHvfJBgcwCTaksXyFYTsICgYgN7kKRiL4KdJAyTMEwJDYzu/O7qVqEZ2s8fPF+wBCQ==",
                             PhoneNumber = "1234567890",
                             PhoneNumberConfirmed = false,
                             ProfilePictureUrl = "",
-                            SecurityStamp = "ed34a4f1-508a-43b6-a959-480b443c4156",
+                            SecurityStamp = "5cc64961-e9cc-4e4d-9d09-94ed0dcdedc2",
                             TwoFactorEnabled = false,
                             UserName = "ali.mahmoud"
                         },
@@ -1083,7 +720,7 @@ namespace EdufyAPI.Migrations
                         {
                             Id = "e452e625-327a-4bf2-9540-3db6577ab68f",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "e3a56f72-071e-4622-b8d0-4541ef08e752",
+                            ConcurrencyStamp = "ba5bacdb-874a-43ba-ab6b-44f82d3655e6",
                             Email = "salma.ahmed@example.com",
                             EmailConfirmed = false,
                             FirstName = "Salma",
@@ -1091,11 +728,11 @@ namespace EdufyAPI.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "SALMA.AHMED@EXAMPLE.COM",
                             NormalizedUserName = "SALMA.AHMED",
-                            PasswordHash = "AQAAAAIAAYagAAAAECAip/M9N/yWzU+c5tXh1z2ZrEYOZR754UoOJuDoXrqboGKIDnbYq3rAsQLmJJCptw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEGhirF3reXTHS0R2i9HNZk7kyXHYVslUnTHYvN2lie86TohS2me3W4y6lCtUYJ4Dfw==",
                             PhoneNumber = "0987654321",
                             PhoneNumberConfirmed = false,
                             ProfilePictureUrl = "",
-                            SecurityStamp = "4674983e-ef83-4b01-8a7b-4b74a7707c4b",
+                            SecurityStamp = "e7d4554b-c9c5-4767-929e-814313f05e62",
                             TwoFactorEnabled = false,
                             UserName = "salma.ahmed"
                         });
@@ -1181,7 +818,34 @@ namespace EdufyAPI.Migrations
             modelBuilder.Entity("EdufyAPI.Models.QuizModels.Answer", b =>
                 {
                     b.HasOne("EdufyAPI.Models.QuizModels.Question", "Question")
+                        .WithMany()
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("EdufyAPI.Models.QuizModels.Option", "Option")
+                        .WithMany()
+                        .HasForeignKey("SelectedOptionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("EdufyAPI.Models.Roles.Student", "Student")
                         .WithMany("Answers")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Option");
+
+                    b.Navigation("Question");
+
+                    b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("EdufyAPI.Models.QuizModels.Option", b =>
+                {
+                    b.HasOne("EdufyAPI.Models.QuizModels.Question", "Question")
+                        .WithMany("Options")
                         .HasForeignKey("QuestionId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -1203,66 +867,20 @@ namespace EdufyAPI.Migrations
             modelBuilder.Entity("EdufyAPI.Models.QuizModels.Quiz", b =>
                 {
                     b.HasOne("EdufyAPI.Models.Lesson", "Lesson")
-                        .WithOne("Quiz")
-                        .HasForeignKey("EdufyAPI.Models.QuizModels.Quiz", "LessonId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Lesson");
-                });
-
-            modelBuilder.Entity("EdufyAPI.Models.QuizModels.QuizAttemp", b =>
-                {
-                    b.HasOne("EdufyAPI.Models.Progress", "Progress")
-                        .WithMany("QuizAttemps")
-                        .HasForeignKey("ProgressId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("EdufyAPI.Models.QuizModels.Quiz", "Quiz")
-                        .WithMany("QuizResult")
-                        .HasForeignKey("QuizId")
+                        .WithMany()
+                        .HasForeignKey("LessonId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("EdufyAPI.Models.Roles.Student", "Student")
-                        .WithMany("QuizAttemps")
+                        .WithMany("Quizzes")
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Progress");
-
-                    b.Navigation("Quiz");
+                    b.Navigation("Lesson");
 
                     b.Navigation("Student");
-                });
-
-            modelBuilder.Entity("EdufyAPI.Models.QuizModels.StudentAnswer", b =>
-                {
-                    b.HasOne("EdufyAPI.Models.QuizModels.Answer", "Answer")
-                        .WithOne("StudentAnswer")
-                        .HasForeignKey("EdufyAPI.Models.QuizModels.StudentAnswer", "AnswerId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("EdufyAPI.Models.QuizModels.Question", "Question")
-                        .WithMany("StudentAnswers")
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("EdufyAPI.Models.QuizModels.QuizAttemp", "QuizResult")
-                        .WithMany("StudentAnswers")
-                        .HasForeignKey("QuizResultId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Answer");
-
-                    b.Navigation("Question");
-
-                    b.Navigation("QuizResult");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -1331,42 +949,20 @@ namespace EdufyAPI.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("EdufyAPI.Models.Lesson", b =>
-                {
-                    b.Navigation("Quiz");
-                });
-
             modelBuilder.Entity("EdufyAPI.Models.Progress", b =>
                 {
                     b.Navigation("Certificate")
-                        .IsRequired();
-
-                    b.Navigation("QuizAttemps");
-                });
-
-            modelBuilder.Entity("EdufyAPI.Models.QuizModels.Answer", b =>
-                {
-                    b.Navigation("StudentAnswer")
                         .IsRequired();
                 });
 
             modelBuilder.Entity("EdufyAPI.Models.QuizModels.Question", b =>
                 {
-                    b.Navigation("Answers");
-
-                    b.Navigation("StudentAnswers");
+                    b.Navigation("Options");
                 });
 
             modelBuilder.Entity("EdufyAPI.Models.QuizModels.Quiz", b =>
                 {
                     b.Navigation("Questions");
-
-                    b.Navigation("QuizResult");
-                });
-
-            modelBuilder.Entity("EdufyAPI.Models.QuizModels.QuizAttemp", b =>
-                {
-                    b.Navigation("StudentAnswers");
                 });
 
             modelBuilder.Entity("EdufyAPI.Models.Roles.Instructor", b =>
@@ -1376,11 +972,13 @@ namespace EdufyAPI.Migrations
 
             modelBuilder.Entity("EdufyAPI.Models.Roles.Student", b =>
                 {
+                    b.Navigation("Answers");
+
                     b.Navigation("Enrollments");
 
                     b.Navigation("Progresses");
 
-                    b.Navigation("QuizAttemps");
+                    b.Navigation("Quizzes");
                 });
 #pragma warning restore 612, 618
         }

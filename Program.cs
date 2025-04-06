@@ -5,6 +5,7 @@ using EdufyAPI.Models.Roles;
 using EdufyAPI.Repository;
 using EdufyAPI.Repository.Interfaces; // Add the namespace for repositories
 using EdufyAPI.Services;
+using EdufyAPI.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -119,6 +120,7 @@ builder.Services.AddHttpClient<PrayerTimesService>();
 builder.Services.AddHttpClient<QiblaDirectionService>();
 builder.Services.AddMemoryCache();
 builder.Services.AddScoped<ICacheService, CacheService>(); // Register the cache service
+builder.Services.AddScoped<IQuizEvaluationService, QuizEvaluationService>(); // Register the quiz evaluation service
 #endregion
 
 

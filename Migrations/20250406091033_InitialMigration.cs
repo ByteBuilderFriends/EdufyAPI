@@ -237,6 +237,7 @@ namespace EdufyAPI.Migrations
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     TotalLessonsCompleted = table.Column<int>(type: "int", nullable: false),
+                    CompletedProgress = table.Column<bool>(type: "bit", nullable: false),
                     LastUpdated = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CourseId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     StudentId = table.Column<string>(type: "nvarchar(450)", nullable: false)
@@ -269,21 +270,24 @@ namespace EdufyAPI.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PassingScore = table.Column<int>(type: "int", nullable: false),
-                    TimeLimit = table.Column<int>(type: "int", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TotalQuestions = table.Column<int>(type: "int", nullable: false),
+                    TotalMarks = table.Column<int>(type: "int", nullable: false),
+                    StudentQuizEvaluation = table.Column<int>(type: "int", nullable: false),
+                    StudentQuizResult = table.Column<int>(type: "int", nullable: false),
                     LessonId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    StudentId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Quizzes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Quizzes_AspNetUsers_StudentId",
+                        column: x => x.StudentId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Quizzes_Lessons_LessonId",
                         column: x => x.LessonId,
@@ -318,17 +322,9 @@ namespace EdufyAPI.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Explanation = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Points = table.Column<int>(type: "int", nullable: false),
-                    Type = table.Column<int>(type: "int", nullable: false),
-                    OrderIndex = table.Column<int>(type: "int", nullable: false),
-                    Answer = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    QuizId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    QuestionText = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Marks = table.Column<int>(type: "int", nullable: false),
+                    QuizId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -342,40 +338,21 @@ namespace EdufyAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "QuizResults",
+                name: "Options",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Score = table.Column<double>(type: "float", nullable: false),
-                    StartedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CompletedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ProgressId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    QuizId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    StudentId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    OptionText = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsCorrect = table.Column<bool>(type: "bit", nullable: false),
+                    QuestionId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_QuizResults", x => x.Id);
+                    table.PrimaryKey("PK_Options", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_QuizResults_AspNetUsers_StudentId",
-                        column: x => x.StudentId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_QuizResults_Progresses_ProgressId",
-                        column: x => x.ProgressId,
-                        principalTable: "Progresses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_QuizResults_Quizzes_QuizId",
-                        column: x => x.QuizId,
-                        principalTable: "Quizzes",
+                        name: "FK_Options_Questions_QuestionId",
+                        column: x => x.QuestionId,
+                        principalTable: "Questions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -384,64 +361,29 @@ namespace EdufyAPI.Migrations
                 name: "Answers",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsCorrect = table.Column<bool>(type: "bit", nullable: false),
-                    Explanation = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    OrderIndex = table.Column<int>(type: "int", nullable: false),
+                    StudentId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     QuestionId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    SelectedOptionId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Answers", x => x.Id);
+                    table.PrimaryKey("PK_Answers", x => new { x.StudentId, x.QuestionId });
+                    table.ForeignKey(
+                        name: "FK_Answers_AspNetUsers_StudentId",
+                        column: x => x.StudentId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Answers_Options_SelectedOptionId",
+                        column: x => x.SelectedOptionId,
+                        principalTable: "Options",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Answers_Questions_QuestionId",
                         column: x => x.QuestionId,
                         principalTable: "Questions",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "StudentAnswer",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    SubmittedAnswer = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SubmittedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsCorrect = table.Column<bool>(type: "bit", nullable: false),
-                    SelectedAnswerIds = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    QuizResultId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    QuestionId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    AnswerId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_StudentAnswer", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_StudentAnswer_Answers_AnswerId",
-                        column: x => x.AnswerId,
-                        principalTable: "Answers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_StudentAnswer_Questions_QuestionId",
-                        column: x => x.QuestionId,
-                        principalTable: "Questions",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_StudentAnswer_QuizResults_QuizResultId",
-                        column: x => x.QuizResultId,
-                        principalTable: "QuizResults",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -461,10 +403,10 @@ namespace EdufyAPI.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Discriminator", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "ProfilePictureUrl", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "58ec4bbf-4913-4dc1-96b7-381159ce0878", 0, "ad4c8219-a15f-483e-bcf2-ce3d36fcb31d", "Instructor", "omar.tarek@example.com", false, "Omar", "Tarek", false, null, "OMAR.TAREK@EXAMPLE.COM", "OMAR.TAREK", "AQAAAAIAAYagAAAAEN2pvhm7tzbFRycH1VwDB3mX5yYalkxT26LTDyF9Gh4osoT5CgBG3EIUFdVgnn6szQ==", "1122334455", false, "", "529502b7-6759-4bcb-a2a1-18f77f965c92", false, "omar.tarek" },
-                    { "626b8c7f-f4d4-4467-bb37-570f1aa6fd77", 0, "d8d9d936-2457-48b5-b025-a881a1b3cd65", "Student", "ali.mahmoud@example.com", false, "Ali", "Mahmoud", false, null, "ALI.MAHMOUD@EXAMPLE.COM", "ALI.MAHMOUD", "AQAAAAIAAYagAAAAEGtfl6cWHBXOVszeze9c1UOnW78PjjxeFNHzHqf80EBmfZkzPwgbbO/8awLc1bOcyg==", "1234567890", false, "", "ed34a4f1-508a-43b6-a959-480b443c4156", false, "ali.mahmoud" },
-                    { "a86582e6-8511-4b78-b548-e17a2eaf0d3e", 0, "eb51ba1a-76f2-4143-9181-94bdafc40b5d", "Instructor", "hana.mostafa@example.com", false, "Hana", "Mostafa", false, null, "HANA.MOSTAFA@EXAMPLE.COM", "HANA.MOSTAFA", "AQAAAAIAAYagAAAAEK6Wu+tVawuzWkP4DLqRx4Tnj6EAR0K8wXt2Wkro/6uHglTVTSQODeqjf6qyToUu4w==", "5566778899", false, "", "d76cf065-1170-4aa6-b14c-1799311fbe02", false, "hana.mostafa" },
-                    { "e452e625-327a-4bf2-9540-3db6577ab68f", 0, "e3a56f72-071e-4622-b8d0-4541ef08e752", "Student", "salma.ahmed@example.com", false, "Salma", "Ahmed", false, null, "SALMA.AHMED@EXAMPLE.COM", "SALMA.AHMED", "AQAAAAIAAYagAAAAECAip/M9N/yWzU+c5tXh1z2ZrEYOZR754UoOJuDoXrqboGKIDnbYq3rAsQLmJJCptw==", "0987654321", false, "", "4674983e-ef83-4b01-8a7b-4b74a7707c4b", false, "salma.ahmed" }
+                    { "58ec4bbf-4913-4dc1-96b7-381159ce0878", 0, "7d7510f9-0674-438a-b440-d069a296d4c2", "Instructor", "omar.tarek@example.com", false, "Omar", "Tarek", false, null, "OMAR.TAREK@EXAMPLE.COM", "OMAR.TAREK", "AQAAAAIAAYagAAAAEKyNr4gvOkqx4BubZ79bVDwRlGB+jdro86XMV6hVkqs2P6tIStD1coT1ASarAjDECA==", "1122334455", false, "", "e7114318-0834-4ed9-8c3b-ed5b687086f4", false, "omar.tarek" },
+                    { "626b8c7f-f4d4-4467-bb37-570f1aa6fd77", 0, "53687b06-4b24-4588-b0e9-58d7c2756ca2", "Student", "ali.mahmoud@example.com", false, "Ali", "Mahmoud", false, null, "ALI.MAHMOUD@EXAMPLE.COM", "ALI.MAHMOUD", "AQAAAAIAAYagAAAAEHvfJBgcwCTaksXyFYTsICgYgN7kKRiL4KdJAyTMEwJDYzu/O7qVqEZ2s8fPF+wBCQ==", "1234567890", false, "", "5cc64961-e9cc-4e4d-9d09-94ed0dcdedc2", false, "ali.mahmoud" },
+                    { "a86582e6-8511-4b78-b548-e17a2eaf0d3e", 0, "b65b7768-0972-45f1-a649-e5fc1e72cffe", "Instructor", "hana.mostafa@example.com", false, "Hana", "Mostafa", false, null, "HANA.MOSTAFA@EXAMPLE.COM", "HANA.MOSTAFA", "AQAAAAIAAYagAAAAEALp1JSPpSEZ12Yj2OR1FzRZ6gsk6fSa2qSLuKY+c6BWED98ntlVHp2dBdAzxBVLzw==", "5566778899", false, "", "28db5904-9760-447b-9a32-3f8ba5b89826", false, "hana.mostafa" },
+                    { "e452e625-327a-4bf2-9540-3db6577ab68f", 0, "ba5bacdb-874a-43ba-ab6b-44f82d3655e6", "Student", "salma.ahmed@example.com", false, "Salma", "Ahmed", false, null, "SALMA.AHMED@EXAMPLE.COM", "SALMA.AHMED", "AQAAAAIAAYagAAAAEGhirF3reXTHS0R2i9HNZk7kyXHYVslUnTHYvN2lie86TohS2me3W4y6lCtUYJ4Dfw==", "0987654321", false, "", "e7d4554b-c9c5-4767-929e-814313f05e62", false, "salma.ahmed" }
                 });
 
             migrationBuilder.InsertData(
@@ -500,73 +442,24 @@ namespace EdufyAPI.Migrations
 
             migrationBuilder.InsertData(
                 table: "Progresses",
-                columns: new[] { "Id", "CourseId", "LastUpdated", "StudentId", "TotalLessonsCompleted" },
+                columns: new[] { "Id", "CompletedProgress", "CourseId", "LastUpdated", "StudentId", "TotalLessonsCompleted" },
                 values: new object[,]
                 {
-                    { "PROG-1001", "1c700ea4-ac54-487f-80e4-25c7b348b9e0", new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9151), "626b8c7f-f4d4-4467-bb37-570f1aa6fd77", 5 },
-                    { "PROG-1002", "1c700ea4-ac54-487f-80e4-25c7b348b9e0", new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9165), "e452e625-327a-4bf2-9540-3db6577ab68f", 7 },
-                    { "PROG-1003", "2d7df053-81d5-4bb8-994d-76619c341c46", new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9187), "626b8c7f-f4d4-4467-bb37-570f1aa6fd77", 10 },
-                    { "PROG-1004", "2d7df053-81d5-4bb8-994d-76619c341c46", new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9192), "e452e625-327a-4bf2-9540-3db6577ab68f", 12 }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Quizzes",
-                columns: new[] { "Id", "CreatedAt", "CreatedBy", "Description", "IsActive", "IsDeleted", "LessonId", "PassingScore", "TimeLimit", "Title", "UpdatedAt", "UpdatedBy" },
-                values: new object[,]
-                {
-                    { "QUIZ-2001", new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9344), "System", "This quiz tests your knowledge on basic programming concepts.", true, false, "LESSON-1001", 80, 300, "Introduction to Programming Quiz", null, null },
-                    { "QUIZ-2002", new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9348), "System", "This quiz tests your understanding of variables and data types.", true, false, "LESSON-1002", 70, 300, "Variables and Data Types Quiz", null, null },
-                    { "QUIZ-2003", new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9353), "System", "This quiz evaluates your understanding of complex algorithms.", true, false, "LESSON-1003", 85, 300, "Advanced Algorithms Quiz", null, null }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Questions",
-                columns: new[] { "Id", "Answer", "CreatedAt", "CreatedBy", "Explanation", "OrderIndex", "Points", "QuizId", "Text", "Type", "UpdatedAt", "UpdatedBy" },
-                values: new object[,]
-                {
-                    { "QUESTION-3001", "Paris", new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9428), "System", "The capital of France is Paris.", 1, 10, "QUIZ-2002", "What is the capital of France?", 1, null, null },
-                    { "QUESTION-3002", "4", new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9439), "System", "2 + 2 equals 4.", 2, 5, "QUIZ-2002", "What is 2 + 2?", 1, null, null },
-                    { "QUESTION-3003", "George Orwell", new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9442), "System", "The author of '1984' is George Orwell.", 1, 10, "QUIZ-2003", "Who is the author of '1984'?", 1, null, null },
-                    { "QUESTION-3004", "Pacific Ocean", new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9445), "System", "The largest ocean on Earth is the Pacific Ocean.", 2, 5, "QUIZ-2003", "What is the largest ocean on Earth?", 1, null, null }
-                });
-
-            migrationBuilder.InsertData(
-                table: "QuizResults",
-                columns: new[] { "Id", "CompletedAt", "CreatedAt", "CreatedBy", "ProgressId", "QuizId", "Score", "StartedAt", "StudentId", "UpdatedAt", "UpdatedBy" },
-                values: new object[,]
-                {
-                    { "QUIZATTEMPT-10001", new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9650), new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9636), "System", "PROG-1001", "QUIZ-2001", 85.0, new DateTime(2025, 4, 3, 3, 19, 53, 917, DateTimeKind.Utc).AddTicks(9641), "e452e625-327a-4bf2-9540-3db6577ab68f", null, null },
-                    { "QUIZATTEMPT-10002", new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9657), new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9656), "System", "PROG-1002", "QUIZ-2002", 60.0, new DateTime(2025, 4, 3, 3, 14, 53, 917, DateTimeKind.Utc).AddTicks(9657), "626b8c7f-f4d4-4467-bb37-570f1aa6fd77", null, null },
-                    { "QUIZATTEMPT-10003", new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9670), new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9667), "System", "PROG-1001", "QUIZ-2002", 90.0, new DateTime(2025, 4, 3, 3, 24, 53, 917, DateTimeKind.Utc).AddTicks(9669), "e452e625-327a-4bf2-9540-3db6577ab68f", null, null },
-                    { "QUIZATTEMPT-10004", new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9755), new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9754), "System", "PROG-1002", "QUIZ-2001", 75.0, new DateTime(2025, 4, 3, 3, 9, 53, 917, DateTimeKind.Utc).AddTicks(9755), "626b8c7f-f4d4-4467-bb37-570f1aa6fd77", null, null }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Answers",
-                columns: new[] { "Id", "CreatedAt", "CreatedBy", "Explanation", "IsCorrect", "OrderIndex", "QuestionId", "Text", "UpdatedAt", "UpdatedBy" },
-                values: new object[,]
-                {
-                    { "ANSWER-4001", new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9498), "System", null, true, 1, "QUESTION-3001", "Option A: Correct answer for question 1", null, null },
-                    { "ANSWER-4002", new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9501), "System", null, false, 2, "QUESTION-3001", "Option B: Incorrect answer for question 1", null, null },
-                    { "ANSWER-4003", new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9503), "System", null, true, 1, "QUESTION-3002", "Option A: Correct answer for question 2", null, null },
-                    { "ANSWER-4004", new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9507), "System", null, false, 2, "QUESTION-3002", "Option B: Incorrect answer for question 2", null, null },
-                    { "ANSWER-4005", new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9509), "System", null, true, 1, "QUESTION-3003", "Option A: Correct answer for question 3", null, null },
-                    { "ANSWER-4006", new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9512), "System", null, false, 2, "QUESTION-3003", "Option B: Incorrect answer for question 3", null, null }
-                });
-
-            migrationBuilder.InsertData(
-                table: "StudentAnswer",
-                columns: new[] { "Id", "AnswerId", "CreatedAt", "CreatedBy", "IsCorrect", "QuestionId", "QuizResultId", "SelectedAnswerIds", "SubmittedAnswer", "SubmittedAt", "UpdatedAt", "UpdatedBy" },
-                values: new object[,]
-                {
-                    { "STUDENTANSWER-7001", "ANSWER-4001", new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9855), "System", true, "QUESTION-3001", "QUIZATTEMPT-10001", "[]", "Option A: Correct answer for question 1", new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9857), null, null },
-                    { "STUDENTANSWER-7004", "ANSWER-4002", new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9861), "System", false, "QUESTION-3001", "QUIZATTEMPT-10002", "[]", "Option B: Incorrect answer for question 1", new DateTime(2025, 4, 3, 3, 34, 53, 917, DateTimeKind.Utc).AddTicks(9862), null, null }
+                    { "PROG-1001", false, "1c700ea4-ac54-487f-80e4-25c7b348b9e0", new DateTime(2025, 4, 6, 9, 10, 33, 573, DateTimeKind.Utc).AddTicks(8693), "626b8c7f-f4d4-4467-bb37-570f1aa6fd77", 5 },
+                    { "PROG-1002", false, "1c700ea4-ac54-487f-80e4-25c7b348b9e0", new DateTime(2025, 4, 6, 9, 10, 33, 573, DateTimeKind.Utc).AddTicks(8705), "e452e625-327a-4bf2-9540-3db6577ab68f", 7 },
+                    { "PROG-1003", false, "2d7df053-81d5-4bb8-994d-76619c341c46", new DateTime(2025, 4, 6, 9, 10, 33, 573, DateTimeKind.Utc).AddTicks(8738), "626b8c7f-f4d4-4467-bb37-570f1aa6fd77", 10 },
+                    { "PROG-1004", false, "2d7df053-81d5-4bb8-994d-76619c341c46", new DateTime(2025, 4, 6, 9, 10, 33, 573, DateTimeKind.Utc).AddTicks(8759), "e452e625-327a-4bf2-9540-3db6577ab68f", 12 }
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Answers_QuestionId",
                 table: "Answers",
                 column: "QuestionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Answers_SelectedOptionId",
+                table: "Answers",
+                column: "SelectedOptionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -629,6 +522,11 @@ namespace EdufyAPI.Migrations
                 column: "CourseId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Options_QuestionId",
+                table: "Options",
+                column: "QuestionId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Progresses_CourseId",
                 table: "Progresses",
                 column: "CourseId");
@@ -645,46 +543,22 @@ namespace EdufyAPI.Migrations
                 column: "QuizId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_QuizResults_ProgressId",
-                table: "QuizResults",
-                column: "ProgressId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_QuizResults_QuizId",
-                table: "QuizResults",
-                column: "QuizId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_QuizResults_StudentId",
-                table: "QuizResults",
-                column: "StudentId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Quizzes_LessonId",
                 table: "Quizzes",
-                column: "LessonId",
-                unique: true);
+                column: "LessonId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_StudentAnswer_AnswerId",
-                table: "StudentAnswer",
-                column: "AnswerId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_StudentAnswer_QuestionId",
-                table: "StudentAnswer",
-                column: "QuestionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_StudentAnswer_QuizResultId",
-                table: "StudentAnswer",
-                column: "QuizResultId");
+                name: "IX_Quizzes_StudentId",
+                table: "Quizzes",
+                column: "StudentId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Answers");
+
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -704,28 +578,22 @@ namespace EdufyAPI.Migrations
                 name: "Certificate");
 
             migrationBuilder.DropTable(
-                name: "StudentAnswer");
+                name: "Options");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Answers");
-
-            migrationBuilder.DropTable(
-                name: "QuizResults");
+                name: "Progresses");
 
             migrationBuilder.DropTable(
                 name: "Questions");
 
             migrationBuilder.DropTable(
-                name: "Progresses");
+                name: "Enrollment");
 
             migrationBuilder.DropTable(
                 name: "Quizzes");
-
-            migrationBuilder.DropTable(
-                name: "Enrollment");
 
             migrationBuilder.DropTable(
                 name: "Lessons");

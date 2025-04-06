@@ -6,14 +6,9 @@ using EdufyAPI.DTOs.EnrollmentDTOs;
 using EdufyAPI.DTOs.InstructorDTOs;
 using EdufyAPI.DTOs.LessonDTOs;
 using EdufyAPI.DTOs.ProgressDTOs;
-using EdufyAPI.DTOs.QuizModelsDTOs.AnswerDTOs;
-using EdufyAPI.DTOs.QuizModelsDTOs.QuestionDTOs;
-using EdufyAPI.DTOs.QuizModelsDTOs.QuizAttempDTOs;
-using EdufyAPI.DTOs.QuizModelsDTOs.QuizDTOs;
 using EdufyAPI.DTOs.StudentCourseDTOs;
 using EdufyAPI.DTOs.StudentDTOs;
 using EdufyAPI.Models;
-using EdufyAPI.Models.QuizModels;
 using EdufyAPI.Models.Roles;
 using EdufyAPI.ViewModels;
 
@@ -86,24 +81,6 @@ namespace EdufyAPI.DTOs
             CreateMap<ProgressCreateDTO, Progress>();
             CreateMap<ProgressUpdateDTO, Progress>()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
-            #endregion
-
-            #region Quiz AutoMapper
-            CreateMap<Quiz, QuizReadDTO>();
-            CreateMap<Quiz, QuizDetailsDTO>();
-            CreateMap<QuizCreateDTO, Quiz>();
-            CreateMap<QuizUpdateDTO, Quiz>();
-            CreateMap<QuizAttemp, QuizAttempReadDTO>().ReverseMap();
-            CreateMap<QuizAttempCreateDTO, QuizAttemp>();
-            CreateMap<StudentAnswerReadDTO, StudentAnswer>().ReverseMap();
-
-            #endregion
-
-            #region Question AutoMapper
-            CreateMap<Question, QuestionReadDTO>().ReverseMap();
-            CreateMap<QuestionCreateDTO, Question>();
-            CreateMap<QuestionUpdateDTO, Question>();
-            CreateMap<QuestionBulkUpdateDTO, Question>();
             #endregion
 
             #region Enrollment AutoMapper

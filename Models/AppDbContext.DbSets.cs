@@ -15,13 +15,14 @@ namespace EdufyAPI.Models
         public DbSet<Course> Courses { get; set; }
         public DbSet<Lesson> Lessons { get; set; }
         public DbSet<Progress> Progresses { get; set; }
-        public DbSet<Quiz> Quizzes { get; set; }
-        public DbSet<Question> Questions { get; set; }
-        public DbSet<Answer> Answers { get; set; }
-        public DbSet<QuizAttemp> QuizResults { get; set; }
-        public DbSet<StudentAnswer> StudentAnswer { get; set; }
         public DbSet<Enrollment> Enrollment { get; set; }
         public DbSet<Certificate> Certificate { get; set; }
+
+        public DbSet<Quiz> Quizzes { get; set; }
+        public DbSet<Question> Questions { get; set; }
+        public DbSet<Option> Options { get; set; }
+        public DbSet<Answer> Answers { get; set; }
+
 
         #endregion
     }

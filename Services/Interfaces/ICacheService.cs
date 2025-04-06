@@ -1,4 +1,4 @@
-﻿namespace EdufyAPI.Services
+﻿namespace EdufyAPI.Services.Interfaces
 {
     public interface ICacheService
     {

@@ -2,7 +2,7 @@
 using EduConnectAPI.Models;
 using EdufyAPI.DTOs.CertificateDTOs;
 using EdufyAPI.Repository.Interfaces;
-using EdufyAPI.Services;
+using EdufyAPI.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EdufyAPI.Controllers

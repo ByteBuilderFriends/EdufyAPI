@@ -1,5 +1,4 @@
 ﻿using EduConnectAPI.Models;
-using EdufyAPI.Models.QuizModels;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EdufyAPI.Models
@@ -55,7 +54,6 @@ namespace EdufyAPI.Models
 
 
         /// The list of quiz results related to this course progress.
-        public virtual List<QuizAttemp> QuizAttemps { get; set; } = new List<QuizAttemp>();
         public virtual Certificate Certificate { get; set; }
         #endregion
 

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Caching.Memory;
+﻿using EdufyAPI.Services.Interfaces;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace EdufyAPI.Services
 {

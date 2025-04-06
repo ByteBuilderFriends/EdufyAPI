@@ -1,35 +1,36 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using EdufyAPI.Models.Roles;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EdufyAPI.Models.QuizModels
 {
-    // 1. Main Quiz class - parent container
-    public class Quiz : QuizModelsBaseEntity
+    public class Quiz
     {
-        [Required]
-        [MaxLength(100)]
+        public string Id { get; set; } = Guid.NewGuid().ToString();
+
         public string Title { get; set; } = string.Empty;
-        public string? Description { get; set; }
+        public string Description { get; set; } = string.Empty;
 
-        [Range(0, 100)]
-        public int PassingScore { get; set; } = 50;
+        public int TotalQuestions { get; set; } = 0;
 
-        [Range(0, 300)]
-        public int TimeLimit { get; set; } = 0;
+        public int TotalMarks { get; set; } = 0;
 
-        public bool IsActive { get; set; } = true;
-        public bool IsDeleted { get; set; } = false;
-
-        public int TotalQuestions => Questions?.Count ?? 0;
-        public int TotalPoints => Questions?.Sum(q => q.Points) ?? 0;
+        public int StudentQuizEvaluation { get; set; } = 0;
+        public int StudentQuizResult { get; set; } = 0;
 
         #region Relationships
-        [ForeignKey("Lesson")]
+        [Required]
         public string LessonId { get; set; }
-        public virtual Lesson Lesson { get; set; }
 
-        public virtual List<Question> Questions { get; set; } = new();
-        public virtual List<QuizAttemp> QuizResult { get; set; } = new();
+        public virtual Lesson Lesson { get; set; } = new Lesson();
+
+        [ForeignKey(nameof(Student))]
+        public string StudentId { get; set; } = string.Empty;
+        public virtual Student Student { get; set; } = new Student();
+
+
+        public virtual ICollection<Question> Questions { get; set; } = new List<Question>();
         #endregion
+
     }
 }
