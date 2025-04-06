@@ -6,6 +6,8 @@ using EdufyAPI.Repository;
 using EdufyAPI.Repository.Interfaces; // Add the namespace for repositories
 using EdufyAPI.Services;
 using EdufyAPI.Services.Interfaces;
+using EdufyAPI.Services.Interfaces.QuizModelsServicesInterfaces;
+using EdufyAPI.Services.QuizModelsServices;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

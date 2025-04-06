@@ -1,6 +1,6 @@
 ﻿using EdufyAPI.DTOs.QuizModelsDTOs.QuizDTOs;
 
-namespace EdufyAPI.Services.Interfaces
+namespace EdufyAPI.Services.Interfaces.QuizModelsServicesInterfaces
 {
     public interface IQuizEvaluationService
     {

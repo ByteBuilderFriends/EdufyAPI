@@ -2,11 +2,11 @@
 using EdufyAPI.DTOs.QuizModelsDTOs.QuestionDTOs;
 using EdufyAPI.Models.QuizModels;
 using EdufyAPI.Repository.Interfaces;
-using EdufyAPI.Services.Interfaces;
+using EdufyAPI.Services.Interfaces.QuizModelsServicesInterfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-namespace EdufyAPI.Services
+namespace EdufyAPI.Services.QuizModelsServices
 {
     public class QuestionService : IQuestionService
     {

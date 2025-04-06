@@ -1,5 +1,5 @@
 ﻿using EdufyAPI.DTOs.QuizModelsDTOs.QuestionDTOs;
-using EdufyAPI.Services.Interfaces;
+using EdufyAPI.Services.Interfaces.QuizModelsServicesInterfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EdufyAPI.Controllers.QuizModelsControllers
