@@ -1,4 +1,4 @@
-using EdufyAPI.DTOs;
+﻿using EdufyAPI.DTOs;
 using EdufyAPI.Helpers;
 using EdufyAPI.Models;
 using EdufyAPI.Models.Roles;
@@ -121,6 +121,7 @@ builder.Services.AddHttpClient<QiblaDirectionService>();
 builder.Services.AddMemoryCache();
 builder.Services.AddScoped<ICacheService, CacheService>(); // Register the cache service
 builder.Services.AddScoped<IQuizEvaluationService, QuizEvaluationService>(); // Register the quiz evaluation service
+builder.Services.AddScoped<IQuestionService, QuestionService>();
 #endregion
 
 
@@ -172,6 +173,13 @@ if (app.Environment.IsDevelopment())
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "EdufyAPI API V1");
     });
 }
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+;
 
 app.UseHttpsRedirection();
 

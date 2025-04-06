@@ -1,4 +1,4 @@
-﻿namespace EdufyAPI.DTOs.QuizDTOs
+﻿namespace EdufyAPI.DTOs.QuizModelsDTOs.QuizDTOs
 {
     public class QuizResultDTO
     {

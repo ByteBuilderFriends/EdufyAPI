@@ -6,9 +6,12 @@ using EdufyAPI.DTOs.EnrollmentDTOs;
 using EdufyAPI.DTOs.InstructorDTOs;
 using EdufyAPI.DTOs.LessonDTOs;
 using EdufyAPI.DTOs.ProgressDTOs;
+using EdufyAPI.DTOs.QuizModelsDTOs.OptionDTOs;
+using EdufyAPI.DTOs.QuizModelsDTOs.QuestionDTOs;
 using EdufyAPI.DTOs.StudentCourseDTOs;
 using EdufyAPI.DTOs.StudentDTOs;
 using EdufyAPI.Models;
+using EdufyAPI.Models.QuizModels;
 using EdufyAPI.Models.Roles;
 using EdufyAPI.ViewModels;
 
@@ -88,6 +91,16 @@ namespace EdufyAPI.DTOs
                 .ForMember(dest => dest.StudentName, opt => opt.MapFrom(src => src.Student.FullName))
                 .ForMember(dest => dest.CourseTitle, opt => opt.MapFrom(src => src.Course.Title));
             CreateMap<EnrollmentCreateDTO, Enrollment>();
+            #endregion
+
+            #region Question AutoMapper
+            CreateMap<Question, QuestionReadDTO>();
+            CreateMap<QuestionCreateDTO, Question>();
+            #endregion
+
+            #region Option AutoMapper
+            CreateMap<Option, OptionReadDTO>();
+            CreateMap<OptionCreateDTO, Option>();
             #endregion
         }
     }

@@ -1,4 +1,4 @@
-﻿using EdufyAPI.DTOs.QuizDTOs;
+﻿using EdufyAPI.DTOs.QuizModelsDTOs.QuizDTOs;
 using EdufyAPI.Repository.Interfaces;
 using EdufyAPI.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;

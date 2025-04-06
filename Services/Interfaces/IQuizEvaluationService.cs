@@ -1,4 +1,4 @@
-﻿using EdufyAPI.DTOs.QuizDTOs;
+﻿using EdufyAPI.DTOs.QuizModelsDTOs.QuizDTOs;
 
 namespace EdufyAPI.Services.Interfaces
 {
