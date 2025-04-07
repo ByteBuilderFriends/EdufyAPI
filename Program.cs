@@ -125,6 +125,7 @@ builder.Services.AddScoped<ICacheService, CacheService>(); // Register the cache
 builder.Services.AddScoped<IQuizEvaluationService, QuizEvaluationService>(); // Register the quiz evaluation service
 builder.Services.AddScoped<IQuizService, QuizService>();
 builder.Services.AddScoped<IQuestionService, QuestionService>();
+builder.Services.AddScoped<IOptionService, OptionService>();
 #endregion
 
 

@@ -111,6 +111,7 @@ namespace EdufyAPI.DTOs
             #region Option AutoMapper
             CreateMap<Option, OptionReadDTO>();
             CreateMap<OptionCreateDTO, Option>();
+            CreateMap<OptionUpdateDTO, Option>();
             #endregion
         }
     }
