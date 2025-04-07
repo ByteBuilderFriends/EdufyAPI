@@ -1,5 +1,4 @@
-﻿using EdufyAPI.Models.Roles;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EdufyAPI.Models.QuizModels
@@ -23,12 +22,12 @@ namespace EdufyAPI.Models.QuizModels
         #region Relationships
         [Required]
         [ForeignKey(nameof(Lesson))]
-        public string LessonId { get; set; }
-        public virtual Lesson Lesson { get; set; } = new Lesson();
+        public string LessonId { get; set; } = string.Empty;
+        public virtual Lesson Lesson { get; set; }
 
-        [ForeignKey(nameof(Student))]
-        public string StudentId { get; set; } = string.Empty;
-        public virtual Student Student { get; set; } = new Student();
+        //[ForeignKey(nameof(Student))]
+        //public string? StudentId { get; set; } = string.Empty;
+        //public virtual Student? Student { get; set; }
 
 
         public virtual ICollection<Question> Questions { get; set; } = new List<Question>();

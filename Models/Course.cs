@@ -6,6 +6,7 @@ namespace EdufyAPI.Models
 {
     public class Course
     {
+        [Key]
         public string Id { get; set; } = Guid.NewGuid().ToString();
 
         /// The title of the course.

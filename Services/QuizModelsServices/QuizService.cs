@@ -23,7 +23,7 @@ namespace EdufyAPI.Services.QuizModelsServices
             return _mapper.Map<IEnumerable<QuizReadDTO>>(quizzes);
         }
 
-        public async Task<QuizReadDTO> GetQuizByIdAsync(string id)
+        public async Task<QuizReadDTO?> GetQuizByIdAsync(string id)
         {
             var quiz = await _unitOfWork.QuizRepository.GetByIdAsync(id);
             return quiz == null ? null : _mapper.Map<QuizReadDTO>(quiz);
@@ -31,11 +31,20 @@ namespace EdufyAPI.Services.QuizModelsServices
 
         public async Task<QuizReadDTO> CreateQuizAsync(QuizCreateDTO dto)
         {
+            // Check if lesson exists
+            var lesson = await _unitOfWork.LessonRepository.GetByIdAsync(dto.LessonId);
+            if (lesson == null)
+                throw new KeyNotFoundException($"Lesson not found.");
+            if (lesson.Quiz != null)
+                throw new InvalidOperationException($"Lesson already has a quiz.");
+
             var quiz = _mapper.Map<Quiz>(dto);
             await _unitOfWork.QuizRepository.AddAsync(quiz);
             await _unitOfWork.SaveChangesAsync();
+
             return _mapper.Map<QuizReadDTO>(quiz);
         }
+
 
         public async Task<QuizReadDTO> UpdateQuizAsync(string id, QuizUpdateDTO dto)
         {
@@ -55,7 +64,7 @@ namespace EdufyAPI.Services.QuizModelsServices
             var quiz = await _unitOfWork.QuizRepository.GetByIdAsync(id);
             if (quiz == null) return false;
 
-            _unitOfWork.QuizRepository.DeleteAsync(quiz);
+            await _unitOfWork.QuizRepository.DeleteAsync(quiz);
             await _unitOfWork.SaveChangesAsync();
             return true;
         }

@@ -14,13 +14,13 @@ namespace EdufyAPI.Models.Roles
         public string FullName => $"{FirstName} {LastName}".Trim();
 
 
-        [Phone]
-        [Display(Name = "Phone Number")]
-        public override string PhoneNumber { get; set; }
+        //[Phone]
+        //[Display(Name = "Phone Number")]
+        //public override string PhoneNumber { get; set; }
 
-        [Required]
-        [Display(Name = "Email or Username")]
-        public override string Email { get; set; }
+        //[Required]
+        //[Display(Name = "Email or Username")]
+        //public override string Email { get; set; } = string.Empty;
 
         public string? ProfilePictureUrl { get; set; } = string.Empty;
     }

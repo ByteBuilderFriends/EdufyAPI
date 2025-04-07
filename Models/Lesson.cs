@@ -7,6 +7,7 @@ namespace EdufyAPI.Models
     /// Represents an individual lesson within a course.
     public class Lesson
     {
+        [Key]
         public string Id { get; set; } = Guid.NewGuid().ToString();
 
         /// The title of the lesson.
@@ -27,7 +28,7 @@ namespace EdufyAPI.Models
         #region Relationships
         /// Foreign key reference to the course this lesson belongs to.
         [ForeignKey("Course")]
-        public string CourseId { get; set; }
+        public string CourseId { get; set; } = string.Empty;
         public virtual Course Course { get; set; }
 
         public virtual Quiz Quiz { get; set; }
