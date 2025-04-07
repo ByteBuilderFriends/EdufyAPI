@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using EdufyAPI.Models.QuizModels;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EdufyAPI.Models
@@ -29,6 +30,7 @@ namespace EdufyAPI.Models
         public string CourseId { get; set; }
         public virtual Course Course { get; set; }
 
+        public virtual Quiz Quiz { get; set; }
         #endregion
     }
 }

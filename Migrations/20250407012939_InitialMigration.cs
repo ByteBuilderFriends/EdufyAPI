@@ -274,6 +274,7 @@ namespace EdufyAPI.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TotalQuestions = table.Column<int>(type: "int", nullable: false),
                     TotalMarks = table.Column<int>(type: "int", nullable: false),
+                    Duration = table.Column<int>(type: "int", nullable: false),
                     StudentQuizEvaluation = table.Column<int>(type: "int", nullable: false),
                     StudentQuizResult = table.Column<int>(type: "int", nullable: false),
                     LessonId = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -403,10 +404,10 @@ namespace EdufyAPI.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Discriminator", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "ProfilePictureUrl", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "58ec4bbf-4913-4dc1-96b7-381159ce0878", 0, "7d7510f9-0674-438a-b440-d069a296d4c2", "Instructor", "omar.tarek@example.com", false, "Omar", "Tarek", false, null, "OMAR.TAREK@EXAMPLE.COM", "OMAR.TAREK", "AQAAAAIAAYagAAAAEKyNr4gvOkqx4BubZ79bVDwRlGB+jdro86XMV6hVkqs2P6tIStD1coT1ASarAjDECA==", "1122334455", false, "", "e7114318-0834-4ed9-8c3b-ed5b687086f4", false, "omar.tarek" },
-                    { "626b8c7f-f4d4-4467-bb37-570f1aa6fd77", 0, "53687b06-4b24-4588-b0e9-58d7c2756ca2", "Student", "ali.mahmoud@example.com", false, "Ali", "Mahmoud", false, null, "ALI.MAHMOUD@EXAMPLE.COM", "ALI.MAHMOUD", "AQAAAAIAAYagAAAAEHvfJBgcwCTaksXyFYTsICgYgN7kKRiL4KdJAyTMEwJDYzu/O7qVqEZ2s8fPF+wBCQ==", "1234567890", false, "", "5cc64961-e9cc-4e4d-9d09-94ed0dcdedc2", false, "ali.mahmoud" },
-                    { "a86582e6-8511-4b78-b548-e17a2eaf0d3e", 0, "b65b7768-0972-45f1-a649-e5fc1e72cffe", "Instructor", "hana.mostafa@example.com", false, "Hana", "Mostafa", false, null, "HANA.MOSTAFA@EXAMPLE.COM", "HANA.MOSTAFA", "AQAAAAIAAYagAAAAEALp1JSPpSEZ12Yj2OR1FzRZ6gsk6fSa2qSLuKY+c6BWED98ntlVHp2dBdAzxBVLzw==", "5566778899", false, "", "28db5904-9760-447b-9a32-3f8ba5b89826", false, "hana.mostafa" },
-                    { "e452e625-327a-4bf2-9540-3db6577ab68f", 0, "ba5bacdb-874a-43ba-ab6b-44f82d3655e6", "Student", "salma.ahmed@example.com", false, "Salma", "Ahmed", false, null, "SALMA.AHMED@EXAMPLE.COM", "SALMA.AHMED", "AQAAAAIAAYagAAAAEGhirF3reXTHS0R2i9HNZk7kyXHYVslUnTHYvN2lie86TohS2me3W4y6lCtUYJ4Dfw==", "0987654321", false, "", "e7d4554b-c9c5-4767-929e-814313f05e62", false, "salma.ahmed" }
+                    { "58ec4bbf-4913-4dc1-96b7-381159ce0878", 0, "fixed-concurrency-stamp-3", "Instructor", "omar.tarek@example.com", false, "Omar", "Tarek", false, null, "OMAR.TAREK@EXAMPLE.COM", "OMAR.TAREK", "AQAAAAIAAYagAAAAEIEFFZPEU/nNgqEj7ZCMxyMIcvuy7rDN1N7UktJrGfLtMez+FMA9FVsHV0uSWh10Vg==", "1122334455", false, "", "fixed-security-stamp-3", false, "omar.tarek" },
+                    { "626b8c7f-f4d4-4467-bb37-570f1aa6fd77", 0, "fixed-concurrency-stamp-1", "Student", "ali.mahmoud@example.com", false, "Ali", "Mahmoud", false, null, "ALI.MAHMOUD@EXAMPLE.COM", "ALI.MAHMOUD", "AQAAAAIAAYagAAAAEKsmLRBJp6I5tKPy0WDNs07ql09VZX8z4DGjbn3fzmT2LbzkPQnDg7czDSEiGsR3PA==", "1234567890", false, "", "fixed-security-stamp-1", false, "ali.mahmoud" },
+                    { "a86582e6-8511-4b78-b548-e17a2eaf0d3e", 0, "fixed-concurrency-stamp-4", "Instructor", "hana.mostafa@example.com", false, "Hana", "Mostafa", false, null, "HANA.MOSTAFA@EXAMPLE.COM", "HANA.MOSTAFA", "AQAAAAIAAYagAAAAEHPqW8zE13+x8zKJxUJx9qqMKhiBl17crU5Lb9YX4hYOrhNJWYyDUOPbo9p6D5xzQA==", "5566778899", false, "", "fixed-security-stamp-4", false, "hana.mostafa" },
+                    { "e452e625-327a-4bf2-9540-3db6577ab68f", 0, "fixed-concurrency-stamp-2", "Student", "salma.ahmed@example.com", false, "Salma", "Ahmed", false, null, "SALMA.AHMED@EXAMPLE.COM", "SALMA.AHMED", "AQAAAAIAAYagAAAAEKhfABcexVBa2CPOgHa7LU7h2tgaGe2VQbOMGe9uCcuVEb8tAwxqru9YHFTtJK3glw==", "0987654321", false, "", "fixed-security-stamp-2", false, "salma.ahmed" }
                 });
 
             migrationBuilder.InsertData(
@@ -445,10 +446,10 @@ namespace EdufyAPI.Migrations
                 columns: new[] { "Id", "CompletedProgress", "CourseId", "LastUpdated", "StudentId", "TotalLessonsCompleted" },
                 values: new object[,]
                 {
-                    { "PROG-1001", false, "1c700ea4-ac54-487f-80e4-25c7b348b9e0", new DateTime(2025, 4, 6, 9, 10, 33, 573, DateTimeKind.Utc).AddTicks(8693), "626b8c7f-f4d4-4467-bb37-570f1aa6fd77", 5 },
-                    { "PROG-1002", false, "1c700ea4-ac54-487f-80e4-25c7b348b9e0", new DateTime(2025, 4, 6, 9, 10, 33, 573, DateTimeKind.Utc).AddTicks(8705), "e452e625-327a-4bf2-9540-3db6577ab68f", 7 },
-                    { "PROG-1003", false, "2d7df053-81d5-4bb8-994d-76619c341c46", new DateTime(2025, 4, 6, 9, 10, 33, 573, DateTimeKind.Utc).AddTicks(8738), "626b8c7f-f4d4-4467-bb37-570f1aa6fd77", 10 },
-                    { "PROG-1004", false, "2d7df053-81d5-4bb8-994d-76619c341c46", new DateTime(2025, 4, 6, 9, 10, 33, 573, DateTimeKind.Utc).AddTicks(8759), "e452e625-327a-4bf2-9540-3db6577ab68f", 12 }
+                    { "PROG-1001", false, "1c700ea4-ac54-487f-80e4-25c7b348b9e0", new DateTime(2025, 4, 7, 0, 0, 0, 0, DateTimeKind.Utc), "626b8c7f-f4d4-4467-bb37-570f1aa6fd77", 5 },
+                    { "PROG-1002", false, "1c700ea4-ac54-487f-80e4-25c7b348b9e0", new DateTime(2025, 4, 7, 0, 0, 0, 0, DateTimeKind.Utc), "e452e625-327a-4bf2-9540-3db6577ab68f", 7 },
+                    { "PROG-1003", false, "2d7df053-81d5-4bb8-994d-76619c341c46", new DateTime(2025, 4, 7, 0, 0, 0, 0, DateTimeKind.Utc), "626b8c7f-f4d4-4467-bb37-570f1aa6fd77", 10 },
+                    { "PROG-1004", false, "2d7df053-81d5-4bb8-994d-76619c341c46", new DateTime(2025, 4, 7, 0, 0, 0, 0, DateTimeKind.Utc), "e452e625-327a-4bf2-9540-3db6577ab68f", 12 }
                 });
 
             migrationBuilder.CreateIndex(
@@ -545,7 +546,8 @@ namespace EdufyAPI.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Quizzes_LessonId",
                 table: "Quizzes",
-                column: "LessonId");
+                column: "LessonId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Quizzes_StudentId",

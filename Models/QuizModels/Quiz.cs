@@ -22,8 +22,8 @@ namespace EdufyAPI.Models.QuizModels
 
         #region Relationships
         [Required]
+        [ForeignKey(nameof(Lesson))]
         public string LessonId { get; set; }
-
         public virtual Lesson Lesson { get; set; } = new Lesson();
 
         [ForeignKey(nameof(Student))]

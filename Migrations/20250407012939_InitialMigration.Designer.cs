@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EdufyAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250407001209_SeedingUpdate")]
-    partial class SeedingUpdate
+    [Migration("20250407012939_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -252,7 +252,7 @@ namespace EdufyAPI.Migrations
                             Id = "PROG-1001",
                             CompletedProgress = false,
                             CourseId = "1c700ea4-ac54-487f-80e4-25c7b348b9e0",
-                            LastUpdated = new DateTime(2025, 4, 7, 0, 12, 7, 564, DateTimeKind.Utc).AddTicks(669),
+                            LastUpdated = new DateTime(2025, 4, 7, 0, 0, 0, 0, DateTimeKind.Utc),
                             StudentId = "626b8c7f-f4d4-4467-bb37-570f1aa6fd77",
                             TotalLessonsCompleted = 5
                         },
@@ -261,7 +261,7 @@ namespace EdufyAPI.Migrations
                             Id = "PROG-1002",
                             CompletedProgress = false,
                             CourseId = "1c700ea4-ac54-487f-80e4-25c7b348b9e0",
-                            LastUpdated = new DateTime(2025, 4, 7, 0, 12, 7, 564, DateTimeKind.Utc).AddTicks(673),
+                            LastUpdated = new DateTime(2025, 4, 7, 0, 0, 0, 0, DateTimeKind.Utc),
                             StudentId = "e452e625-327a-4bf2-9540-3db6577ab68f",
                             TotalLessonsCompleted = 7
                         },
@@ -270,7 +270,7 @@ namespace EdufyAPI.Migrations
                             Id = "PROG-1003",
                             CompletedProgress = false,
                             CourseId = "2d7df053-81d5-4bb8-994d-76619c341c46",
-                            LastUpdated = new DateTime(2025, 4, 7, 0, 12, 7, 564, DateTimeKind.Utc).AddTicks(677),
+                            LastUpdated = new DateTime(2025, 4, 7, 0, 0, 0, 0, DateTimeKind.Utc),
                             StudentId = "626b8c7f-f4d4-4467-bb37-570f1aa6fd77",
                             TotalLessonsCompleted = 10
                         },
@@ -279,7 +279,7 @@ namespace EdufyAPI.Migrations
                             Id = "PROG-1004",
                             CompletedProgress = false,
                             CourseId = "2d7df053-81d5-4bb8-994d-76619c341c46",
-                            LastUpdated = new DateTime(2025, 4, 7, 0, 12, 7, 564, DateTimeKind.Utc).AddTicks(679),
+                            LastUpdated = new DateTime(2025, 4, 7, 0, 0, 0, 0, DateTimeKind.Utc),
                             StudentId = "e452e625-327a-4bf2-9540-3db6577ab68f",
                             TotalLessonsCompleted = 12
                         });
@@ -392,7 +392,8 @@ namespace EdufyAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LessonId");
+                    b.HasIndex("LessonId")
+                        .IsUnique();
 
                     b.HasIndex("StudentId");
 
@@ -657,7 +658,7 @@ namespace EdufyAPI.Migrations
                         {
                             Id = "58ec4bbf-4913-4dc1-96b7-381159ce0878",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "aa69aeef-abe7-4014-82d4-5ad653a7cb54",
+                            ConcurrencyStamp = "fixed-concurrency-stamp-3",
                             Email = "omar.tarek@example.com",
                             EmailConfirmed = false,
                             FirstName = "Omar",
@@ -665,11 +666,11 @@ namespace EdufyAPI.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "OMAR.TAREK@EXAMPLE.COM",
                             NormalizedUserName = "OMAR.TAREK",
-                            PasswordHash = "AQAAAAIAAYagAAAAECdIBKZfi4z6aOXJzj0QfBmT4rZ4u4MUUuVpAxSvpcJrki2hWz/ZwvW3gtmuI9oREg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEIEFFZPEU/nNgqEj7ZCMxyMIcvuy7rDN1N7UktJrGfLtMez+FMA9FVsHV0uSWh10Vg==",
                             PhoneNumber = "1122334455",
                             PhoneNumberConfirmed = false,
                             ProfilePictureUrl = "",
-                            SecurityStamp = "50655cd3-0af4-4549-84f0-57f17d96f1ed",
+                            SecurityStamp = "fixed-security-stamp-3",
                             TwoFactorEnabled = false,
                             UserName = "omar.tarek"
                         },
@@ -677,7 +678,7 @@ namespace EdufyAPI.Migrations
                         {
                             Id = "a86582e6-8511-4b78-b548-e17a2eaf0d3e",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "25032349-409d-4e98-8a40-f97db7f9f37a",
+                            ConcurrencyStamp = "fixed-concurrency-stamp-4",
                             Email = "hana.mostafa@example.com",
                             EmailConfirmed = false,
                             FirstName = "Hana",
@@ -685,11 +686,11 @@ namespace EdufyAPI.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "HANA.MOSTAFA@EXAMPLE.COM",
                             NormalizedUserName = "HANA.MOSTAFA",
-                            PasswordHash = "AQAAAAIAAYagAAAAEJoiQdm0y5IZpZF3BLXERkWstuy+8EU8jUfOtDnpLcyoqiwq6wIke/LyLQcrmxpFCw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEHPqW8zE13+x8zKJxUJx9qqMKhiBl17crU5Lb9YX4hYOrhNJWYyDUOPbo9p6D5xzQA==",
                             PhoneNumber = "5566778899",
                             PhoneNumberConfirmed = false,
                             ProfilePictureUrl = "",
-                            SecurityStamp = "e14da933-e6c7-44b3-8045-c82cd1c52292",
+                            SecurityStamp = "fixed-security-stamp-4",
                             TwoFactorEnabled = false,
                             UserName = "hana.mostafa"
                         });
@@ -706,7 +707,7 @@ namespace EdufyAPI.Migrations
                         {
                             Id = "626b8c7f-f4d4-4467-bb37-570f1aa6fd77",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "f2866e8f-7f5c-4940-a81b-5c9afbe5554a",
+                            ConcurrencyStamp = "fixed-concurrency-stamp-1",
                             Email = "ali.mahmoud@example.com",
                             EmailConfirmed = false,
                             FirstName = "Ali",
@@ -714,11 +715,11 @@ namespace EdufyAPI.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ALI.MAHMOUD@EXAMPLE.COM",
                             NormalizedUserName = "ALI.MAHMOUD",
-                            PasswordHash = "AQAAAAIAAYagAAAAENRQGCT+AnEhC2tjkQ0uWCI30AUaBIOIL0JPGJnX279r8+iopdFqJ3w992SeN3J5vQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEKsmLRBJp6I5tKPy0WDNs07ql09VZX8z4DGjbn3fzmT2LbzkPQnDg7czDSEiGsR3PA==",
                             PhoneNumber = "1234567890",
                             PhoneNumberConfirmed = false,
                             ProfilePictureUrl = "",
-                            SecurityStamp = "34bed44d-0982-4caf-b2fb-be03f44dc381",
+                            SecurityStamp = "fixed-security-stamp-1",
                             TwoFactorEnabled = false,
                             UserName = "ali.mahmoud"
                         },
@@ -726,7 +727,7 @@ namespace EdufyAPI.Migrations
                         {
                             Id = "e452e625-327a-4bf2-9540-3db6577ab68f",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "19caa602-33ca-4e29-9dfd-d04f700634e4",
+                            ConcurrencyStamp = "fixed-concurrency-stamp-2",
                             Email = "salma.ahmed@example.com",
                             EmailConfirmed = false,
                             FirstName = "Salma",
@@ -734,11 +735,11 @@ namespace EdufyAPI.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "SALMA.AHMED@EXAMPLE.COM",
                             NormalizedUserName = "SALMA.AHMED",
-                            PasswordHash = "AQAAAAIAAYagAAAAEJkRk/RFb1ZVrpUzqe2Wzx4XJJV3xK97u7+8jCynLmaDJeg+d/Ec3297gFtTQyZsdA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEKhfABcexVBa2CPOgHa7LU7h2tgaGe2VQbOMGe9uCcuVEb8tAwxqru9YHFTtJK3glw==",
                             PhoneNumber = "0987654321",
                             PhoneNumberConfirmed = false,
                             ProfilePictureUrl = "",
-                            SecurityStamp = "dcc112b5-8bf7-4949-864d-38aaa190377e",
+                            SecurityStamp = "fixed-security-stamp-2",
                             TwoFactorEnabled = false,
                             UserName = "salma.ahmed"
                         });
@@ -873,8 +874,8 @@ namespace EdufyAPI.Migrations
             modelBuilder.Entity("EdufyAPI.Models.QuizModels.Quiz", b =>
                 {
                     b.HasOne("EdufyAPI.Models.Lesson", "Lesson")
-                        .WithMany()
-                        .HasForeignKey("LessonId")
+                        .WithOne("Quiz")
+                        .HasForeignKey("EdufyAPI.Models.QuizModels.Quiz", "LessonId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -952,6 +953,12 @@ namespace EdufyAPI.Migrations
             modelBuilder.Entity("EdufyAPI.Models.Enrollment", b =>
                 {
                     b.Navigation("Progress")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("EdufyAPI.Models.Lesson", b =>
+                {
+                    b.Navigation("Quiz")
                         .IsRequired();
                 });
 
