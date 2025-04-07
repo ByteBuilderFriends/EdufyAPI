@@ -14,5 +14,7 @@ namespace EdufyAPI.Models.QuizModels
         [ForeignKey(nameof(Question))]
         public string QuestionId { get; set; } = string.Empty;
         public virtual Question Question { get; set; }
+
+        public virtual Answer Answer { get; set; }
     }
 }

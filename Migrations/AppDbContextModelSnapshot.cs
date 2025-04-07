@@ -298,11 +298,27 @@ namespace EdufyAPI.Migrations
 
                     b.HasKey("StudentId", "QuestionId");
 
-                    b.HasIndex("QuestionId");
+                    b.HasIndex("QuestionId")
+                        .IsUnique();
 
-                    b.HasIndex("SelectedOptionId");
+                    b.HasIndex("SelectedOptionId")
+                        .IsUnique();
 
                     b.ToTable("Answers");
+
+                    b.HasData(
+                        new
+                        {
+                            StudentId = "626b8c7f-f4d4-4467-bb37-570f1aa6fd77",
+                            QuestionId = "QUESTION-1",
+                            SelectedOptionId = "OPTION-2"
+                        },
+                        new
+                        {
+                            StudentId = "626b8c7f-f4d4-4467-bb37-570f1aa6fd77",
+                            QuestionId = "QUESTION-2",
+                            SelectedOptionId = "OPTION-1"
+                        });
                 });
 
             modelBuilder.Entity("EdufyAPI.Models.QuizModels.Option", b =>
@@ -911,14 +927,14 @@ namespace EdufyAPI.Migrations
             modelBuilder.Entity("EdufyAPI.Models.QuizModels.Answer", b =>
                 {
                     b.HasOne("EdufyAPI.Models.QuizModels.Question", "Question")
-                        .WithMany()
-                        .HasForeignKey("QuestionId")
+                        .WithOne("Answer")
+                        .HasForeignKey("EdufyAPI.Models.QuizModels.Answer", "QuestionId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("EdufyAPI.Models.QuizModels.Option", "Option")
-                        .WithMany()
-                        .HasForeignKey("SelectedOptionId")
+                        .WithOne("Answer")
+                        .HasForeignKey("EdufyAPI.Models.QuizModels.Answer", "SelectedOptionId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -1046,8 +1062,17 @@ namespace EdufyAPI.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("EdufyAPI.Models.QuizModels.Option", b =>
+                {
+                    b.Navigation("Answer")
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("EdufyAPI.Models.QuizModels.Question", b =>
                 {
+                    b.Navigation("Answer")
+                        .IsRequired();
+
                     b.Navigation("Options");
                 });
 

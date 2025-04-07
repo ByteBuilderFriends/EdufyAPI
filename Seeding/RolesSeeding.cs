@@ -31,6 +31,9 @@ namespace EdufyAPI.RoleSeeding
             // Seed Options
             OptionSeeding.Seed(modelBuilder);
 
+            // Seed Answers
+            AnswerSeeding.Seed(modelBuilder);
+
         }
     }
 }

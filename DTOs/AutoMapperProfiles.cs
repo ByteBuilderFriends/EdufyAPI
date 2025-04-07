@@ -6,6 +6,7 @@ using EdufyAPI.DTOs.EnrollmentDTOs;
 using EdufyAPI.DTOs.InstructorDTOs;
 using EdufyAPI.DTOs.LessonDTOs;
 using EdufyAPI.DTOs.ProgressDTOs;
+using EdufyAPI.DTOs.QuizModelsDTOs.AnswerDTOs;
 using EdufyAPI.DTOs.QuizModelsDTOs.OptionDTOs;
 using EdufyAPI.DTOs.QuizModelsDTOs.QuestionDTOs;
 using EdufyAPI.DTOs.QuizModelsDTOs.QuizDTOs;
@@ -112,6 +113,15 @@ namespace EdufyAPI.DTOs
             CreateMap<Option, OptionReadDTO>();
             CreateMap<OptionCreateDTO, Option>();
             CreateMap<OptionUpdateDTO, Option>();
+            #endregion
+
+            #region Answer AutoMapper
+
+            CreateMap<Answer, AnswerReadDTO>();
+            CreateMap<AnswerCreateDTO, Answer>();
+            CreateMap<AnswerUpdateDTO, Answer>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
             #endregion
         }
     }

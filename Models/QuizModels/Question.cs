@@ -13,7 +13,11 @@ namespace EdufyAPI.Models.QuizModels
         [ForeignKey(nameof(Quiz))]
         public string QuizId { get; set; } = string.Empty;
         public virtual Quiz Quiz { get; set; }
+
+        public virtual Answer Answer { get; set; }
         public virtual ICollection<Option> Options { get; set; } = new List<Option>();
+
+
 
     }
 }

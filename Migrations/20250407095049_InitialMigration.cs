@@ -470,18 +470,33 @@ namespace EdufyAPI.Migrations
                     { "OPTION-1", false, "3", "QUESTION-1" },
                     { "OPTION-2", true, "4", "QUESTION-1" },
                     { "OPTION-3", false, "5", "QUESTION-1" },
-                    { "OPTION-4", false, "6", "QUESTION-1" }
+                    { "OPTION-4", false, "6", "QUESTION-1" },
+                    { "OPTION-5", false, "Berlin", "QUESTION-2" },
+                    { "OPTION-6", false, "Madrid", "QUESTION-2" },
+                    { "OPTION-7", true, "Paris", "QUESTION-2" },
+                    { "OPTION-8", false, "Rome", "QUESTION-2" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Answers",
+                columns: new[] { "QuestionId", "StudentId", "SelectedOptionId" },
+                values: new object[,]
+                {
+                    { "QUESTION-1", "626b8c7f-f4d4-4467-bb37-570f1aa6fd77", "OPTION-2" },
+                    { "QUESTION-2", "626b8c7f-f4d4-4467-bb37-570f1aa6fd77", "OPTION-1" }
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Answers_QuestionId",
                 table: "Answers",
-                column: "QuestionId");
+                column: "QuestionId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Answers_SelectedOptionId",
                 table: "Answers",
-                column: "SelectedOptionId");
+                column: "SelectedOptionId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

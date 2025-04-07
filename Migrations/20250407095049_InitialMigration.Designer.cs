@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EdufyAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250407061756_InitialMigration")]
+    [Migration("20250407095049_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -301,11 +301,27 @@ namespace EdufyAPI.Migrations
 
                     b.HasKey("StudentId", "QuestionId");
 
-                    b.HasIndex("QuestionId");
+                    b.HasIndex("QuestionId")
+                        .IsUnique();
 
-                    b.HasIndex("SelectedOptionId");
+                    b.HasIndex("SelectedOptionId")
+                        .IsUnique();
 
                     b.ToTable("Answers");
+
+                    b.HasData(
+                        new
+                        {
+                            StudentId = "626b8c7f-f4d4-4467-bb37-570f1aa6fd77",
+                            QuestionId = "QUESTION-1",
+                            SelectedOptionId = "OPTION-2"
+                        },
+                        new
+                        {
+                            StudentId = "626b8c7f-f4d4-4467-bb37-570f1aa6fd77",
+                            QuestionId = "QUESTION-2",
+                            SelectedOptionId = "OPTION-1"
+                        });
                 });
 
             modelBuilder.Entity("EdufyAPI.Models.QuizModels.Option", b =>
@@ -358,6 +374,34 @@ namespace EdufyAPI.Migrations
                             IsCorrect = false,
                             OptionText = "6",
                             QuestionId = "QUESTION-1"
+                        },
+                        new
+                        {
+                            Id = "OPTION-5",
+                            IsCorrect = false,
+                            OptionText = "Berlin",
+                            QuestionId = "QUESTION-2"
+                        },
+                        new
+                        {
+                            Id = "OPTION-6",
+                            IsCorrect = false,
+                            OptionText = "Madrid",
+                            QuestionId = "QUESTION-2"
+                        },
+                        new
+                        {
+                            Id = "OPTION-7",
+                            IsCorrect = true,
+                            OptionText = "Paris",
+                            QuestionId = "QUESTION-2"
+                        },
+                        new
+                        {
+                            Id = "OPTION-8",
+                            IsCorrect = false,
+                            OptionText = "Rome",
+                            QuestionId = "QUESTION-2"
                         });
                 });
 
@@ -886,14 +930,14 @@ namespace EdufyAPI.Migrations
             modelBuilder.Entity("EdufyAPI.Models.QuizModels.Answer", b =>
                 {
                     b.HasOne("EdufyAPI.Models.QuizModels.Question", "Question")
-                        .WithMany()
-                        .HasForeignKey("QuestionId")
+                        .WithOne("Answer")
+                        .HasForeignKey("EdufyAPI.Models.QuizModels.Answer", "QuestionId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("EdufyAPI.Models.QuizModels.Option", "Option")
-                        .WithMany()
-                        .HasForeignKey("SelectedOptionId")
+                        .WithOne("Answer")
+                        .HasForeignKey("EdufyAPI.Models.QuizModels.Answer", "SelectedOptionId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -1021,8 +1065,17 @@ namespace EdufyAPI.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("EdufyAPI.Models.QuizModels.Option", b =>
+                {
+                    b.Navigation("Answer")
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("EdufyAPI.Models.QuizModels.Question", b =>
                 {
+                    b.Navigation("Answer")
+                        .IsRequired();
+
                     b.Navigation("Options");
                 });
 
