@@ -31,7 +31,7 @@ namespace EdufyAPI.Services.QuizModelsServices
             return Task.FromResult(true);
         }
 
-        public Task<bool> DeleteAnswerAsync(string id)
+        public async Task<bool> DeleteAnswerAsync(string id)
         {
             var answer = _unitOfWork.AnswerRepository.GetByIdAsync(id);
             if (answer == null)
@@ -39,14 +39,14 @@ namespace EdufyAPI.Services.QuizModelsServices
 
             try
             {
-                _unitOfWork.AnswerRepository.DeleteAsync(id);
-                return Task.FromResult(true);
+                await _unitOfWork.AnswerRepository.DeleteAsync(id);
+                return true;
             }
             catch (Exception ex)
             {
                 // Log the exception
                 Console.WriteLine(ex.Message);
-                return Task.FromResult(false);
+                throw new Exception($"Error deleting answer with ID '{id}': {ex.Message}", ex);
             }
         }
 
