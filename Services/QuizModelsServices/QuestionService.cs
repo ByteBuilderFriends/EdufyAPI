@@ -33,6 +33,11 @@ namespace EdufyAPI.Services.QuizModelsServices
 
         public async Task<QuestionReadDTO> CreateQuestionAsync(QuestionCreateDTO dto)
         {
+            // Check if quiz exists
+            var quiz = await _unitOfWork.QuizRepository.GetByIdAsync(dto.QuizId);
+            if (quiz == null)
+                throw new KeyNotFoundException($"Quiz not found.");
+
             var question = _mapper.Map<Question>(dto);
             await _unitOfWork.QuestionRepository.AddAsync(question);
             return _mapper.Map<QuestionReadDTO>(question);

@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EdufyAPI.Models.QuizModels
 {
@@ -19,7 +18,6 @@ namespace EdufyAPI.Models.QuizModels
         public int StudentQuizResult { get; set; } = 0;
 
         #region Relationships
-        [Required]
         [ForeignKey(nameof(Lesson))]
         public string LessonId { get; set; } = string.Empty;
         public virtual Lesson Lesson { get; set; }
