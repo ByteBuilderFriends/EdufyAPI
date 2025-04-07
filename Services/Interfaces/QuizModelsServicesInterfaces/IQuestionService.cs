@@ -7,7 +7,7 @@ namespace EdufyAPI.Services.Interfaces.QuizModelsServicesInterfaces
         Task<IEnumerable<QuestionReadDTO>> GetAllQuestionsAsync();
         Task<QuestionReadDTO?> GetQuestionByIdAsync(string id);
         Task<QuestionReadDTO> CreateQuestionAsync(QuestionCreateDTO dto);
-        Task<bool> UpdateQuestionAsync(string id, QuestionUpdateDTO dto);
+        Task<QuestionReadDTO> UpdateQuestionAsync(string id, QuestionUpdateDTO dto);
         Task<bool> DeleteQuestionAsync(string id);
         Task<IEnumerable<QuestionReadDTO>> GetQuizQuestionsAsync(string quizId);
         Task<IEnumerable<QuestionReadDTO>> SearchQuestionsAsync(string quizId, string text, bool isCaseSensitive);

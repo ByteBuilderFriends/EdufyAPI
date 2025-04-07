@@ -38,14 +38,17 @@ namespace EdufyAPI.Services.QuizModelsServices
             return _mapper.Map<QuestionReadDTO>(question);
         }
 
-        public async Task<bool> UpdateQuestionAsync(string id, QuestionUpdateDTO dto)
+        public async Task<QuestionReadDTO> UpdateQuestionAsync(string id, QuestionUpdateDTO dto)
         {
-            var existing = await _unitOfWork.QuestionRepository.GetByIdAsync(id);
-            if (existing == null) return false;
+            var question = await _unitOfWork.QuestionRepository.GetByIdAsync(id);
+            if (question == null)
+                throw new KeyNotFoundException("Question not found.");
 
-            _mapper.Map(dto, existing);
-            await _unitOfWork.QuestionRepository.UpdateAsync(existing);
-            return true;
+            _mapper.Map(dto, question);
+            await _unitOfWork.QuestionRepository.UpdateAsync(question);
+            await _unitOfWork.SaveChangesAsync();
+
+            return _mapper.Map<QuestionReadDTO>(question);
         }
 
         public async Task<bool> DeleteQuestionAsync(string id)

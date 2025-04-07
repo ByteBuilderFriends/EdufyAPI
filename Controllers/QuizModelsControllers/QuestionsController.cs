@@ -36,9 +36,8 @@ namespace EdufyAPI.Controllers.QuizModelsControllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateQuestion(string id, [FromBody] QuestionUpdateDTO dto)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
             var updated = await _questionService.UpdateQuestionAsync(id, dto);
-            return updated ? NoContent() : NotFound("Question not found.");
+            return Ok(updated);
         }
 
         [HttpDelete("{id}")]

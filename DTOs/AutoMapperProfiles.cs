@@ -8,6 +8,7 @@ using EdufyAPI.DTOs.LessonDTOs;
 using EdufyAPI.DTOs.ProgressDTOs;
 using EdufyAPI.DTOs.QuizModelsDTOs.OptionDTOs;
 using EdufyAPI.DTOs.QuizModelsDTOs.QuestionDTOs;
+using EdufyAPI.DTOs.QuizModelsDTOs.QuizDTOs;
 using EdufyAPI.DTOs.StudentCourseDTOs;
 using EdufyAPI.DTOs.StudentDTOs;
 using EdufyAPI.Models;
@@ -93,9 +94,16 @@ namespace EdufyAPI.DTOs
             CreateMap<EnrollmentCreateDTO, Enrollment>();
             #endregion
 
+            #region Quiz AutoMapper
+            CreateMap<Quiz, QuizReadDTO>();
+            CreateMap<QuizCreateDTO, Quiz>();
+            CreateMap<QuizUpdateDTO, Quiz>();
+            #endregion
+
             #region Question AutoMapper
             CreateMap<Question, QuestionReadDTO>();
             CreateMap<QuestionCreateDTO, Question>();
+            CreateMap<QuestionUpdateDTO, Question>();
             #endregion
 
             #region Option AutoMapper

@@ -123,6 +123,7 @@ builder.Services.AddHttpClient<QiblaDirectionService>();
 builder.Services.AddMemoryCache();
 builder.Services.AddScoped<ICacheService, CacheService>(); // Register the cache service
 builder.Services.AddScoped<IQuizEvaluationService, QuizEvaluationService>(); // Register the quiz evaluation service
+builder.Services.AddScoped<IQuizService, QuizService>();
 builder.Services.AddScoped<IQuestionService, QuestionService>();
 #endregion
 
