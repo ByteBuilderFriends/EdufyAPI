@@ -7,7 +7,6 @@
         public string Description { get; set; }
         public int TotalQuestions { get; set; }
         public int TotalMarks { get; set; }
-        public int Duration { get; set; }
         public string LessonId { get; set; }
     }
 }

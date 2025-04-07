@@ -13,7 +13,6 @@ namespace EdufyAPI.Models.QuizModels
         public int TotalQuestions { get; set; } = 0;
 
         public int TotalMarks { get; set; } = 0;
-        public int Duration { get; set; }
 
         //Quiz Attempt
         public int StudentQuizEvaluation { get; set; } = 0;

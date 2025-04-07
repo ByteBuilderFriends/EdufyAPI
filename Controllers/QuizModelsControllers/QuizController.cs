@@ -39,7 +39,7 @@ namespace EdufyAPI.Controllers.QuizModelsControllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateQuiz(string id, [FromBody] QuizUpdateDTO dto)
+        public async Task<IActionResult> UpdateQuiz(string id, [FromForm] QuizUpdateDTO dto)
         {
             var updated = await _quizService.UpdateQuizAsync(id, dto);
             return Ok(updated);
