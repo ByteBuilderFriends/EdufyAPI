@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace EdufyAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class IntialMigration : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -276,18 +276,11 @@ namespace EdufyAPI.Migrations
                     TotalMarks = table.Column<int>(type: "int", nullable: false),
                     StudentQuizEvaluation = table.Column<int>(type: "int", nullable: false),
                     StudentQuizResult = table.Column<int>(type: "int", nullable: false),
-                    LessonId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    StudentId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    LessonId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Quizzes", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Quizzes_AspNetUsers_StudentId",
-                        column: x => x.StudentId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Quizzes_Lessons_LessonId",
                         column: x => x.LessonId,
@@ -451,6 +444,35 @@ namespace EdufyAPI.Migrations
                     { "PROG-1004", false, "2d7df053-81d5-4bb8-994d-76619c341c46", new DateTime(2025, 4, 7, 0, 0, 0, 0, DateTimeKind.Utc), "e452e625-327a-4bf2-9540-3db6577ab68f", 12 }
                 });
 
+            migrationBuilder.InsertData(
+                table: "Quizzes",
+                columns: new[] { "Id", "Description", "LessonId", "StudentQuizEvaluation", "StudentQuizResult", "Title", "TotalMarks", "TotalQuestions" },
+                values: new object[,]
+                {
+                    { "QUIZ-1", "A quiz to test your math skills.", "LESSON-1001", 0, 0, "Math Quiz", 100, 2 },
+                    { "QUIZ-2", "A quiz to test your science knowledge.", "LESSON-1002", 0, 0, "Science Quiz", 100, 10 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Questions",
+                columns: new[] { "Id", "Marks", "QuestionText", "QuizId" },
+                values: new object[,]
+                {
+                    { "QUESTION-1", 5, "What is 2 + 2?", "QUIZ-1" },
+                    { "QUESTION-2", 95, "What is the capital of France?", "QUIZ-1" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Options",
+                columns: new[] { "Id", "IsCorrect", "OptionText", "QuestionId" },
+                values: new object[,]
+                {
+                    { "OPTION-1", false, "3", "QUESTION-1" },
+                    { "OPTION-2", true, "4", "QUESTION-1" },
+                    { "OPTION-3", false, "5", "QUESTION-1" },
+                    { "OPTION-4", false, "6", "QUESTION-1" }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Answers_QuestionId",
                 table: "Answers",
@@ -547,11 +569,6 @@ namespace EdufyAPI.Migrations
                 table: "Quizzes",
                 column: "LessonId",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Quizzes_StudentId",
-                table: "Quizzes",
-                column: "StudentId");
         }
 
         /// <inheritdoc />

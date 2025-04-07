@@ -326,6 +326,36 @@ namespace EdufyAPI.Migrations
                     b.HasIndex("QuestionId");
 
                     b.ToTable("Options");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "OPTION-1",
+                            IsCorrect = false,
+                            OptionText = "3",
+                            QuestionId = "QUESTION-1"
+                        },
+                        new
+                        {
+                            Id = "OPTION-2",
+                            IsCorrect = true,
+                            OptionText = "4",
+                            QuestionId = "QUESTION-1"
+                        },
+                        new
+                        {
+                            Id = "OPTION-3",
+                            IsCorrect = false,
+                            OptionText = "5",
+                            QuestionId = "QUESTION-1"
+                        },
+                        new
+                        {
+                            Id = "OPTION-4",
+                            IsCorrect = false,
+                            OptionText = "6",
+                            QuestionId = "QUESTION-1"
+                        });
                 });
 
             modelBuilder.Entity("EdufyAPI.Models.QuizModels.Question", b =>
@@ -349,6 +379,22 @@ namespace EdufyAPI.Migrations
                     b.HasIndex("QuizId");
 
                     b.ToTable("Questions");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "QUESTION-1",
+                            Marks = 5,
+                            QuestionText = "What is 2 + 2?",
+                            QuizId = "QUIZ-1"
+                        },
+                        new
+                        {
+                            Id = "QUESTION-2",
+                            Marks = 95,
+                            QuestionText = "What is the capital of France?",
+                            QuizId = "QUIZ-1"
+                        });
                 });
 
             modelBuilder.Entity("EdufyAPI.Models.QuizModels.Quiz", b =>
@@ -362,9 +408,6 @@ namespace EdufyAPI.Migrations
 
                     b.Property<string>("LessonId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("StudentId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("StudentQuizEvaluation")
@@ -388,9 +431,31 @@ namespace EdufyAPI.Migrations
                     b.HasIndex("LessonId")
                         .IsUnique();
 
-                    b.HasIndex("StudentId");
-
                     b.ToTable("Quizzes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "QUIZ-1",
+                            Description = "A quiz to test your math skills.",
+                            LessonId = "LESSON-1001",
+                            StudentQuizEvaluation = 0,
+                            StudentQuizResult = 0,
+                            Title = "Math Quiz",
+                            TotalMarks = 100,
+                            TotalQuestions = 2
+                        },
+                        new
+                        {
+                            Id = "QUIZ-2",
+                            Description = "A quiz to test your science knowledge.",
+                            LessonId = "LESSON-1002",
+                            StudentQuizEvaluation = 0,
+                            StudentQuizResult = 0,
+                            Title = "Science Quiz",
+                            TotalMarks = 100,
+                            TotalQuestions = 10
+                        });
                 });
 
             modelBuilder.Entity("EdufyAPI.Models.Roles.AppUser", b =>
@@ -872,11 +937,6 @@ namespace EdufyAPI.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("EdufyAPI.Models.Roles.Student", null)
-                        .WithMany("Quizzes")
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.Navigation("Lesson");
                 });
 
@@ -980,8 +1040,6 @@ namespace EdufyAPI.Migrations
                     b.Navigation("Enrollments");
 
                     b.Navigation("Progresses");
-
-                    b.Navigation("Quizzes");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using EdufyAPI.Seeding;
+using Microsoft.EntityFrameworkCore;
 
 namespace EdufyAPI.RoleSeeding
 {
@@ -21,6 +22,14 @@ namespace EdufyAPI.RoleSeeding
             // Seed Lessons
             LessonSeeding.Seed(modelBuilder);
 
+            // Seed Quizzes
+            QuizSeeding.Seed(modelBuilder);
+
+            // Seed Questions
+            QuestionSeeding.Seed(modelBuilder);
+
+            // Seed Options
+            OptionSeeding.Seed(modelBuilder);
 
         }
     }
