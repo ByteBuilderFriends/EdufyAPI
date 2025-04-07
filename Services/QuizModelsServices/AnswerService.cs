@@ -13,7 +13,7 @@ namespace EdufyAPI.Services.QuizModelsServices
         {
             _unitOfWork = unitOfWork;
         }
-        public Task<bool> AddAnswerAsync(AnswerCreateDTO answer)
+        public async Task<bool> AddAnswerAsync(AnswerCreateDTO answer)
         {
             if (answer == null)
                 throw new ArgumentNullException(nameof(answer));
@@ -26,9 +26,9 @@ namespace EdufyAPI.Services.QuizModelsServices
             };
 
 
-            _unitOfWork.AnswerRepository.AddAsync(answerEntity);
+            await _unitOfWork.AnswerRepository.AddAsync(answerEntity);
 
-            return Task.FromResult(true);
+            return true;
         }
 
         public async Task<bool> DeleteAnswerAsync(string id)
@@ -63,7 +63,7 @@ namespace EdufyAPI.Services.QuizModelsServices
 
         public async Task<IEnumerable<Answer>> GetAnswersByQuestionIdAsync(string questionId)
         {
-            var question = _unitOfWork.QuestionRepository.GetByIdAsync(questionId);
+            var question = await _unitOfWork.QuestionRepository.GetByIdAsync(questionId);
             if (question == null)
                 throw new ArgumentNullException(nameof(question));
 
@@ -76,7 +76,7 @@ namespace EdufyAPI.Services.QuizModelsServices
 
         public async Task<IEnumerable<Answer>> GetAnswersByQuizIdAsync(string quizId)
         {
-            var quiz = _unitOfWork.QuizRepository.GetByIdAsync(quizId);
+            var quiz = await _unitOfWork.QuizRepository.GetByIdAsync(quizId);
             if (quiz == null)
                 throw new ArgumentNullException(nameof(quiz));
             var answers = await _unitOfWork.AnswerRepository.GetByCondition(a => a.Question.QuizId == quizId);
