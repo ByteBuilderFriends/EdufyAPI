@@ -27,7 +27,7 @@ namespace EdufyAPI.Services.QuizModelsServices
             try
             {
                 var questions = await _unitOfWork.QuestionRepository.GetByCondition(q => q.QuizId == quizId);
-
+                var quiz = await _unitOfWork.QuizRepository.GetByIdAsync(quizId);
                 int totalMarks = 0;
 
                 foreach (var question in questions)
@@ -40,6 +40,8 @@ namespace EdufyAPI.Services.QuizModelsServices
                         totalMarks += question.Marks;
                 }
 
+                quiz.TotalMarks = totalMarks;
+                await _unitOfWork.QuizRepository.UpdateAsync(quiz);
                 return totalMarks;
             }
             catch (Exception ex)
@@ -52,6 +54,7 @@ namespace EdufyAPI.Services.QuizModelsServices
         {
             try
             {
+                var quiz = await _unitOfWork.QuizRepository.GetByIdAsync(quizId);
                 var questions = await _unitOfWork.QuestionRepository.GetByCondition(q => q.QuizId == quizId);
                 var questionIds = questions.Select(q => q.Id).ToList();
 
@@ -73,13 +76,15 @@ namespace EdufyAPI.Services.QuizModelsServices
                     }
                 }
 
-                var quiz = await _unitOfWork.QuizRepository.GetByIdAsync(quizId);
+                //int TotalMarks = await GetMarksForQuizAsync(quizId);
 
                 var result = new QuizResultDTO
                 {
                     TotalMarks = quiz.TotalMarks,
                     CorrectAnswers = correctAnswersMarks
                 };
+                quiz.StudentQuizResult = correctAnswersMarks;
+                quiz.StudentQuizEvaluation = result.Score;
 
                 return result;
             }

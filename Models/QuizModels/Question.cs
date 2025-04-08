@@ -17,7 +17,5 @@ namespace EdufyAPI.Models.QuizModels
         public virtual Answer Answer { get; set; }
         public virtual ICollection<Option> Options { get; set; } = new List<Option>();
 
-
-
     }
 }

@@ -18,6 +18,17 @@ namespace EdufyAPI.Controllers.QuizControllers
             _unitOfWork = unitOfWork;
         }
 
+
+        // Quiz Evaluation
+        // POST: api/quiz/evaluate/{quizId}
+        [HttpPost("evaluate/{quizId}")]
+        public async Task<IActionResult> EvaluateQuiz(string quizId)
+        {
+            int marks = await _evaluationService.GetMarksForQuizAsync(quizId);
+            return Ok(marks);
+        }
+
+
         [HttpPost("evaluate/{quizId}/student/{studentId}")]
         public async Task<IActionResult> EvaluateQuiz(string quizId, string studentId)
         {
