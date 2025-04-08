@@ -1,4 +1,5 @@
-﻿using EdufyAPI.DTOs.QuizModelsDTOs.AnswerDTOs;
+﻿using AutoMapper;
+using EdufyAPI.DTOs.QuizModelsDTOs.AnswerDTOs;
 using EdufyAPI.Models.QuizModels;
 using EdufyAPI.Repository.Interfaces;
 using EdufyAPI.Services.Interfaces.QuizModelsServicesInterfaces;
@@ -8,115 +9,68 @@ namespace EdufyAPI.Services.QuizModelsServices
     public class AnswerService : IAnswerService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public AnswerService(IUnitOfWork unitOfWork)
+        public AnswerService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
-        public async Task<bool> AddAnswerAsync(AnswerCreateDTO answer)
+
+        public async Task<IEnumerable<AnswerReadDTO>> GetAllAnswersAsync()
         {
-            if (answer == null)
-                throw new ArgumentNullException(nameof(answer));
+            var answers = await _unitOfWork.AnswerRepository.GetAllAsync();
+            return _mapper.Map<IEnumerable<AnswerReadDTO>>(answers);
+        }
 
-            var answerEntity = new Answer
-            {
-                StudentId = answer.StudentId,
-                QuestionId = answer.QuestionId,
-                SelectedOptionId = answer.SelectedOptionId
-            };
+        public async Task<AnswerReadDTO> GetAnswerByStudentAndQuestionAsync(string studentId, string questionId)
+        {
+            var answer = await _unitOfWork.AnswerRepository
+                .GetSingleByCondition(a => a.StudentId == studentId && a.QuestionId == questionId);
 
+            if (answer == null) return null;
 
-            await _unitOfWork.AnswerRepository.AddAsync(answerEntity);
+            return _mapper.Map<AnswerReadDTO>(answer);
+        }
 
+        public async Task<AnswerReadDTO> CreateAnswerAsync(AnswerCreateDTO answerDTO)
+        {
+            var answer = _mapper.Map<Answer>(answerDTO);
+            await _unitOfWork.AnswerRepository.AddAsync(answer);
+            await _unitOfWork.SaveChangesAsync();
+            return _mapper.Map<AnswerReadDTO>(answer);
+        }
+
+        public async Task<AnswerReadDTO> UpdateAnswerAsync(string studentId, string questionId, AnswerUpdateDTO updatedAnswerDTO)
+        {
+            var existingAnswer = await _unitOfWork.AnswerRepository
+                .GetSingleByCondition(a => a.StudentId == studentId && a.QuestionId == questionId);
+            if (existingAnswer == null) return null;
+
+            // Check if the selected option exists and belongs to the correct question
+            var selectedOption = await _unitOfWork.OptionRepository
+                .GetSingleByCondition(o => o.Id == updatedAnswerDTO.SelectedOptionId);
+            if (selectedOption == null || selectedOption.QuestionId != questionId) return null;
+
+            _mapper.Map(updatedAnswerDTO, existingAnswer);
+
+            await _unitOfWork.AnswerRepository.UpdateAsync(existingAnswer);
+            await _unitOfWork.SaveChangesAsync();
+
+            return _mapper.Map<AnswerReadDTO>(existingAnswer);
+        }
+
+        public async Task<bool> DeleteAnswerAsync(string studentId, string questionId)
+        {
+            var answer = await _unitOfWork.AnswerRepository
+                .GetSingleByCondition(a => a.StudentId == studentId && a.QuestionId == questionId);
+
+            if (answer == null) return false;
+
+            await _unitOfWork.AnswerRepository.DeleteAsync(answer);
+            await _unitOfWork.SaveChangesAsync();
             return true;
         }
-
-        public async Task<bool> DeleteAnswerAsync(string id)
-        {
-            var answer = _unitOfWork.AnswerRepository.GetByIdAsync(id);
-            if (answer == null)
-                throw new ArgumentNullException(nameof(answer));
-
-            try
-            {
-                await _unitOfWork.AnswerRepository.DeleteAsync(id);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                // Log the exception
-                Console.WriteLine(ex.Message);
-                throw new Exception($"Error deleting answer with ID '{id}': {ex.Message}", ex);
-            }
-        }
-
-        public async Task<Answer?> GetAnswerByIdAsync(string id)
-        {
-            var answer = await _unitOfWork.AnswerRepository.GetByIdAsync(id);
-            if (answer == null)
-            {
-                throw new KeyNotFoundException($"Answer with ID '{id}' not found.");
-            }
-            return answer;
-        }
-
-
-        public async Task<IEnumerable<Answer>> GetAnswersByQuestionIdAsync(string questionId)
-        {
-            var question = await _unitOfWork.QuestionRepository.GetByIdAsync(questionId);
-            if (question == null)
-                throw new ArgumentNullException(nameof(question));
-
-            var answers = await _unitOfWork.AnswerRepository.GetByCondition(a => a.QuestionId == questionId);
-            if (answers == null)
-                throw new ArgumentNullException(nameof(answers));
-
-            return answers;
-        }
-
-        public async Task<IEnumerable<Answer>> GetAnswersByQuizIdAsync(string quizId)
-        {
-            var quiz = await _unitOfWork.QuizRepository.GetByIdAsync(quizId);
-            if (quiz == null)
-                throw new ArgumentNullException(nameof(quiz));
-            var answers = await _unitOfWork.AnswerRepository.GetByCondition(a => a.Question.QuizId == quizId);
-            if (answers == null)
-                throw new ArgumentNullException(nameof(answers));
-            return answers;
-        }
-
-        public async Task<IEnumerable<Answer>> GetAnswersByUserIdAsync(string userId)
-        {
-            var student = await _unitOfWork.StudentRepository.GetByIdAsync(userId);
-            if (student == null)
-                throw new ArgumentNullException(nameof(student));
-            var answers = await _unitOfWork.AnswerRepository.GetByCondition(a => a.StudentId == userId);
-            if (answers == null)
-                throw new ArgumentNullException(nameof(answers));
-            return answers;
-        }
-
-        public async Task<IEnumerable<Answer>> GetAnswersByUserIdAsync(string userId, string quizId)
-        {
-            var student = await _unitOfWork.StudentRepository.GetByIdAsync(userId);
-            var quiz = await _unitOfWork.QuizRepository.GetByIdAsync(quizId);
-
-            if (student == null)
-                throw new ArgumentNullException(nameof(student));
-
-            if (quiz == null)
-                throw new ArgumentNullException(nameof(quiz));
-
-            var answers = await _unitOfWork.AnswerRepository.GetByCondition(a => a.StudentId == userId && a.Question.QuizId == quizId);
-            if (answers == null)
-                throw new ArgumentNullException(nameof(answers));
-
-            return answers;
-        }
-
-        public Task<bool> UpdateAnswerAsync(Answer answer)
-        {
-            throw new NotImplementedException();
-        }
     }
+
 }

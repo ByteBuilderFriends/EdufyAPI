@@ -49,7 +49,7 @@ namespace EdufyAPI.Migrations
                     b.HasIndex("ProgressId")
                         .IsUnique();
 
-                    b.ToTable("Certificate");
+                    b.ToTable("Certificate", (string)null);
                 });
 
             modelBuilder.Entity("EdufyAPI.Models.Course", b =>
@@ -78,7 +78,7 @@ namespace EdufyAPI.Migrations
 
                     b.HasIndex("InstructorId");
 
-                    b.ToTable("Courses");
+                    b.ToTable("Courses", (string)null);
 
                     b.HasData(
                         new
@@ -113,7 +113,7 @@ namespace EdufyAPI.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.ToTable("Enrollment");
+                    b.ToTable("Enrollment", (string)null);
 
                     b.HasData(
                         new
@@ -167,7 +167,7 @@ namespace EdufyAPI.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.ToTable("Lessons");
+                    b.ToTable("Lessons", (string)null);
 
                     b.HasData(
                         new
@@ -241,7 +241,7 @@ namespace EdufyAPI.Migrations
                     b.HasIndex("StudentId", "CourseId")
                         .IsUnique();
 
-                    b.ToTable("Progresses");
+                    b.ToTable("Progresses", (string)null);
 
                     b.HasData(
                         new
@@ -304,7 +304,7 @@ namespace EdufyAPI.Migrations
                     b.HasIndex("SelectedOptionId")
                         .IsUnique();
 
-                    b.ToTable("Answers");
+                    b.ToTable("Answers", (string)null);
 
                     b.HasData(
                         new
@@ -341,7 +341,7 @@ namespace EdufyAPI.Migrations
 
                     b.HasIndex("QuestionId");
 
-                    b.ToTable("Options");
+                    b.ToTable("Options", (string)null);
 
                     b.HasData(
                         new
@@ -422,7 +422,7 @@ namespace EdufyAPI.Migrations
 
                     b.HasIndex("QuizId");
 
-                    b.ToTable("Questions");
+                    b.ToTable("Questions", (string)null);
 
                     b.HasData(
                         new
@@ -475,7 +475,7 @@ namespace EdufyAPI.Migrations
                     b.HasIndex("LessonId")
                         .IsUnique();
 
-                    b.ToTable("Quizzes");
+                    b.ToTable("Quizzes", (string)null);
 
                     b.HasData(
                         new

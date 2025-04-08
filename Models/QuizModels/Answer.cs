@@ -24,18 +24,18 @@ namespace EdufyAPI.Models.QuizModels
         [Column(Order = 1)]  // This specifies the order of the key in the composite key.
         [ForeignKey(nameof(Student))]
         public string StudentId { get; set; } = string.Empty;
-        public virtual Student Student { get; set; } = new Student();
+        public virtual Student Student { get; set; }
 
         [Key]
         [Column(Order = 2)]  // This specifies the order of the key in the composite key.
         [ForeignKey(nameof(Question))]
         public string QuestionId { get; set; } = string.Empty;
-        public virtual Question Question { get; set; } = new Question();
+        public virtual Question Question { get; set; }
 
 
         [ForeignKey(nameof(Option))]
         public string SelectedOptionId { get; set; } = string.Empty;
-        public virtual Option Option { get; set; } = new Option();
+        public virtual Option Option { get; set; }
         #endregion
     }
 }

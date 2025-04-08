@@ -121,7 +121,6 @@ namespace EdufyAPI.DTOs
             CreateMap<AnswerCreateDTO, Answer>();
             CreateMap<AnswerUpdateDTO, Answer>()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
-
             #endregion
         }
     }

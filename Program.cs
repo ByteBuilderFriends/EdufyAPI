@@ -126,6 +126,7 @@ builder.Services.AddScoped<IQuizEvaluationService, QuizEvaluationService>(); // 
 builder.Services.AddScoped<IQuizService, QuizService>();
 builder.Services.AddScoped<IQuestionService, QuestionService>();
 builder.Services.AddScoped<IOptionService, OptionService>();
+builder.Services.AddScoped<IAnswerService, AnswerService>();
 #endregion
 
 
