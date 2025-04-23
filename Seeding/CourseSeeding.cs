@@ -1,4 +1,5 @@
-﻿using EdufyAPI.Models;
+﻿using AskAMuslimAPI.Enums;
+using EdufyAPI.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace EdufyAPI.RoleSeeding
@@ -18,6 +19,7 @@ namespace EdufyAPI.RoleSeeding
                     Id = "1c700ea4-ac54-487f-80e4-25c7b348b9e0",
                     Title = "Introduction to C#",
                     Description = "Learn the basics of C# programming, including syntax, OOP concepts, and best practices.",
+                    Category = CourseCategory.QuranMemorization,
                     ThumbnailUrl = "csharp_course_thumbnail.jpg",
                     InstructorId = instructor1Id
                 },
@@ -26,6 +28,7 @@ namespace EdufyAPI.RoleSeeding
                     Id = "2d7df053-81d5-4bb8-994d-76619c341c46",
                     Title = "Advanced .NET Development",
                     Description = "Deep dive into .NET framework, dependency injection, middleware, and microservices.",
+                    Category = CourseCategory.Other,
                     ThumbnailUrl = "dotnet_course_thumbnail.jpg",
                     InstructorId = instructor2Id
                 }

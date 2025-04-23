@@ -1,14 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using AskAMuslimAPI.Enums;
 
 namespace EdufyAPI.DTOs.CourseDTOs
 {
     public class CourseUpdateDTO
     {
-        [Required]
-        public string Title { get; set; } = string.Empty;
-
-        public string Description { get; set; } = string.Empty;
+        public string? Title { get; set; } = string.Empty;
+        public string? Description { get; set; } = string.Empty;
+        public CourseCategory? Category { get; set; } = CourseCategory.Other;
         public IFormFile? Thumbnail { get; set; }
-
     }
 }

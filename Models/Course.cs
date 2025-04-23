@@ -1,4 +1,5 @@
-﻿using EdufyAPI.Models.Roles;
+﻿using AskAMuslimAPI.Enums;
+using EdufyAPI.Models.Roles;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -15,6 +16,7 @@ namespace EdufyAPI.Models
 
         /// The description of the course content.
         public string? Description { get; set; } = string.Empty;
+        public CourseCategory? Category { get; set; } = CourseCategory.Other;
         public string? ThumbnailUrl { get; set; } = string.Empty;
 
         public int NumberOfStudentsEnrolled { get; set; } = 0;
