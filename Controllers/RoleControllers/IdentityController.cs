@@ -466,6 +466,8 @@ namespace EdufyAPI.Controllers.RoleControllers
                         new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName ?? string.Empty), // Correct claim for UserName
                         new Claim(JwtRegisteredClaimNames.Email, user.Email ?? string.Empty),      // Email
                         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),         // Unique Token ID
+                        //new Claim(JwtRegisteredClaimNames.Role) // Add Roole to  headers
+
                 }),
                 NotBefore = now,
                 Expires = now.AddDays(30),

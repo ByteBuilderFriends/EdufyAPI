@@ -174,20 +174,23 @@ namespace EdufyAPI.Controllers
             await _cache.RemoveDataAsync($"student-courses-{enrollmentDto.StudentId}");
             await _cache.RemoveDataAsync($"course-students-{enrollmentDto.CourseId}");
 
+            // Check if already enrolled
             if (await _unitOfWork.EnrollmentRepository.GetAsync(enrollmentDto.StudentId, enrollmentDto.CourseId) != null)
                 return BadRequest("Already enrolled.");
 
+            // Check if course exists
             var course = await _unitOfWork.CourseRepository.GetByIdAsync(enrollmentDto.CourseId);
             if (course == null)
                 return NotFound("Course not found.");
 
-            using var transaction = await _unitOfWork.BeginTransactionAsync();
+            //using var transaction = await _unitOfWork.BeginTransactionAsync();
             try
             {
+                // Add enrollment
                 var enrollment = _mapper.Map<Enrollment>(enrollmentDto);
                 await _unitOfWork.EnrollmentRepository.AddAsync(enrollment);
 
-                // Add course progress for the student
+                // Add progress
                 var progress = new Progress
                 {
                     StudentId = enrollmentDto.StudentId,
@@ -197,19 +200,25 @@ namespace EdufyAPI.Controllers
                 };
                 await _unitOfWork.ProgressRepository.AddAsync(progress);
 
-                // Update the student count before committing
+                // Recalculate and update the student count
                 course.NumberOfStudentsEnrolled = await _unitOfWork.EnrollmentRepository.CountAsync(e => e.CourseId == enrollmentDto.CourseId);
                 await _unitOfWork.CourseRepository.UpdateAsync(course);
 
-                await transaction.CommitAsync();
+
+                // ✅ Commit the transaction
+                //await transaction.CommitAsync();
+
                 return Ok("Enrollment successful.");
             }
             catch (Exception ex)
             {
-                await transaction.RollbackAsync();
+                //await transaction.RollbackAsync();
                 return StatusCode(500, $"An error occurred: {ex.Message}");
             }
         }
+
+
+
 
         /// <summary>
         /// Unenrolls a student from a course.
@@ -228,12 +237,15 @@ namespace EdufyAPI.Controllers
             if (enrollment == null)
                 return NotFound("Enrollment not found.");
 
+            var progress = await _unitOfWork.ProgressRepository.GetByIdAsync(enrollment.Progress.Id);
+            string prgId = progress.Id;
+            if (progress != null)
+            {
+                // Remove progress
+                await _unitOfWork.ProgressRepository.DeleteAsync(prgId);
+            }
             await _unitOfWork.EnrollmentRepository.DeleteAsync(enrollment);
 
-            // Remove course progress if it exists
-            var progress = await _unitOfWork.ProgressRepository.GetAsync(studentId, courseId);
-            if (progress != null)
-                await _unitOfWork.ProgressRepository.DeleteAsync(studentId, courseId);
 
             return Ok("Unenrollment successful.");
         }

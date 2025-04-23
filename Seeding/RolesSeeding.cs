@@ -13,12 +13,6 @@ namespace EdufyAPI.RoleSeeding
             // Seed Courses
             CourseSeeding.Seed(modelBuilder);
 
-            // Seed Enrollments
-            EnrollmentSeeding.Seed(modelBuilder);
-
-            // Seed Progresses
-            ProgressSeeding.Seed(modelBuilder);
-
             // Seed Lessons
             LessonSeeding.Seed(modelBuilder);
 
@@ -31,9 +25,15 @@ namespace EdufyAPI.RoleSeeding
             // Seed Options
             OptionSeeding.Seed(modelBuilder);
 
+            // Seed Enrollments
+            EnrollmentSeeding.Seed(modelBuilder);
+
+
             // Seed Answers
             AnswerSeeding.Seed(modelBuilder);
 
+            // Seed Progresses
+            //ProgressSeeding.Seed(modelBuilder);
         }
     }
 }
