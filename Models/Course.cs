@@ -17,6 +17,7 @@ namespace EdufyAPI.Models
         /// The description of the course content.
         public string? Description { get; set; } = string.Empty;
         public CourseCategory? Category { get; set; } = CourseCategory.Other;
+        public CourseLevel? Level { get; set; } = CourseLevel.AllLevels;
         public string? ThumbnailUrl { get; set; } = string.Empty;
 
         public int NumberOfStudentsEnrolled { get; set; } = 0;

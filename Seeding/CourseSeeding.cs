@@ -17,22 +17,25 @@ namespace EdufyAPI.RoleSeeding
                 new Course
                 {
                     Id = "1c700ea4-ac54-487f-80e4-25c7b348b9e0",
-                    Title = "Introduction to C#",
-                    Description = "Learn the basics of C# programming, including syntax, OOP concepts, and best practices.",
+                    Title = "Quran Memorization for Beginners",
+                    Description = "Start your journey of memorizing the Holy Quran with effective techniques and guidance from experienced teachers.",
                     Category = CourseCategory.QuranMemorization,
-                    ThumbnailUrl = "csharp_course_thumbnail.jpg",
+                    Level = CourseLevel.Beginner,
+                    ThumbnailUrl = "quran_memorization_thumbnail.jpg",
                     InstructorId = instructor1Id
                 },
                 new Course
                 {
                     Id = "2d7df053-81d5-4bb8-994d-76619c341c46",
-                    Title = "Advanced .NET Development",
-                    Description = "Deep dive into .NET framework, dependency injection, middleware, and microservices.",
-                    Category = CourseCategory.Other,
-                    ThumbnailUrl = "dotnet_course_thumbnail.jpg",
+                    Title = "Fiqh of Worship: Advanced Concepts",
+                    Description = "Explore the advanced rulings related to acts of worship including prayer, fasting, and zakat based on classical jurisprudence.",
+                    Category = CourseCategory.IslamicJurisprudence,
+                    Level = CourseLevel.Advanced,
+                    ThumbnailUrl = "fiqh_advanced_thumbnail.jpg",
                     InstructorId = instructor2Id
                 }
             };
+
 
             modelBuilder.Entity<Course>().HasData(courses);
         }

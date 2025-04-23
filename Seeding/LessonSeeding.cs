@@ -11,39 +11,40 @@ namespace EdufyAPI.RoleSeeding
             var course2Id = "2d7df053-81d5-4bb8-994d-76619c341c46";
 
             modelBuilder.Entity<Lesson>().HasData(
-                new Lesson
-                {
-                    Id = "LESSON-1001", // Stronger ID
-                    CourseId = course1Id,
-                    Title = "Introduction to Programming",
-                    Content = "This is the introduction to programming, covering the basics of coding.",
-                    ExternalVideoUrl = "https://example.com/intro-video"
-                },
-                new Lesson
-                {
-                    Id = "LESSON-1002", // Stronger ID
-                    CourseId = course1Id,
-                    Title = "Variables and Data Types",
-                    Content = "This lesson explains variables, constants, and different data types in programming.",
-                    ExternalVideoUrl = "https://example.com/variables-video"
-                },
-                new Lesson
-                {
-                    Id = "LESSON-1003", // Stronger ID
-                    CourseId = course2Id,
-                    Title = "Advanced Algorithms",
-                    Content = "This lesson dives deep into sorting algorithms and their applications.",
-                    ExternalVideoUrl = "https://example.com/algorithms-video"
-                },
-                new Lesson
-                {
-                    Id = "LESSON-1004", // Stronger ID
-                    CourseId = course2Id,
-                    Title = "Data Structures: Trees and Graphs",
-                    Content = "Learn about trees, graphs, and their applications in computer science.",
-                    ExternalVideoUrl = "https://example.com/data-structures-video"
-                }
+                 new Lesson
+                 {
+                     Id = "LESSON-1001",
+                     CourseId = course1Id, // Quran Memorization for Beginners
+                     Title = "Why Memorize the Quran?",
+                     Content = "This lesson discusses the virtues of memorizing the Quran and how it strengthens one’s connection with Allah.",
+                     ExternalVideoUrl = "https://example.com/quran-intro"
+                 },
+                 new Lesson
+                 {
+                     Id = "LESSON-1002",
+                     CourseId = course1Id,
+                     Title = "Daily Routine for Hifz",
+                     Content = "Learn how to build an effective daily schedule for memorization and review.",
+                     ExternalVideoUrl = "https://example.com/hifz-routine"
+                 },
+                 new Lesson
+                 {
+                     Id = "LESSON-1003",
+                     CourseId = course2Id, // Fiqh of Worship: Advanced Concepts
+                     Title = "The Conditions of Salah",
+                     Content = "This lesson explores the advanced rulings on prerequisites of prayer such as purity, timing, and facing the Qibla.",
+                     ExternalVideoUrl = "https://example.com/fiqh-salah"
+                 },
+                 new Lesson
+                 {
+                     Id = "LESSON-1004",
+                     CourseId = course2Id,
+                     Title = "Zakat: Detailed Rulings",
+                     Content = "Understand the technical conditions, types of zakat, and modern-day applications.",
+                     ExternalVideoUrl = "https://example.com/zakat-rulings"
+                 }
             );
+
         }
     }
 }

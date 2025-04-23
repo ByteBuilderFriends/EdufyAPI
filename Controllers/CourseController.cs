@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using AskAMuslimAPI.Enums;
+using AutoMapper;
 using EdufyAPI.DTOs;
 using EdufyAPI.DTOs.CourseDTOs;
 using EdufyAPI.Helpers;
@@ -111,6 +112,80 @@ namespace EdufyAPI.Controllers
                 return StatusCode(500, "An error occurred while fetching data");
             }
 
+        }
+
+        [HttpGet("{categoryId}")]
+        public async Task<ActionResult<IEnumerable<CourseReadDTO>>> GetCourseByCatgory(int categoryId)
+        {
+            const string cacheKeyPrefix = "course_category_";
+            var cacheKey = $"{cacheKeyPrefix}{categoryId}";
+
+            if (!Enum.IsDefined(typeof(CourseCategory), categoryId))
+                return BadRequest("Invalid course category.");
+
+            try
+            {
+                var courseDtos = await _memoryCache.GetDataAsync<IEnumerable<CourseReadDTO>>(cacheKey);
+                if (courseDtos == null)
+                {
+                    var courses = await _unitOfWork.CourseRepository
+                        .GetByCondition(c => c.Category == (CourseCategory)categoryId);
+
+                    if (!courses.Any())
+                        return Ok(Enumerable.Empty<CourseReadDTO>());
+
+                    courseDtos = _mapper.Map<IEnumerable<CourseReadDTO>>(courses);
+
+                    foreach (var courseDto in courseDtos)
+                    {
+                        courseDto.ThumbnailUrl = ConstructFileUrlHelper
+                            .ConstructFileUrl(Request, ThumbnailsFolderName, courseDto.ThumbnailUrl);
+                    }
+
+                    await _memoryCache.SetDataAsync(cacheKey, courseDtos, DateTimeOffset.Now.AddMinutes(5));
+                }
+
+                return Ok(courseDtos);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"An error occurred while fetching courses by category: {ex.Message}", ex);
+                return StatusCode(500, "An error occurred while fetching data.");
+            }
+        }
+
+        // Get Courses by its Level
+        [HttpGet("{levelId}")]
+        public async Task<ActionResult<IEnumerable<CourseReadDTO>>> GetCourseByLevel(int levelId)
+        {
+            const string cacheKeyPrefix = "course_level_";
+            var cacheKey = $"{cacheKeyPrefix}{levelId}";
+            if (!Enum.IsDefined(typeof(CourseLevel), levelId))
+                return BadRequest("Invalid course level.");
+            try
+            {
+                var courseDtos = await _memoryCache.GetDataAsync<IEnumerable<CourseReadDTO>>(cacheKey);
+                if (courseDtos == null)
+                {
+                    var courses = await _unitOfWork.CourseRepository
+                        .GetByCondition(c => c.Level == (CourseLevel)levelId);
+                    if (!courses.Any())
+                        return Ok(Enumerable.Empty<CourseReadDTO>());
+                    courseDtos = _mapper.Map<IEnumerable<CourseReadDTO>>(courses);
+                    foreach (var courseDto in courseDtos)
+                    {
+                        courseDto.ThumbnailUrl = ConstructFileUrlHelper
+                            .ConstructFileUrl(Request, ThumbnailsFolderName, courseDto.ThumbnailUrl);
+                    }
+                    await _memoryCache.SetDataAsync(cacheKey, courseDtos, DateTimeOffset.Now.AddMinutes(5));
+                }
+                return Ok(courseDtos);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"An error occurred while fetching courses by level: {ex.Message}", ex);
+                return StatusCode(500, "An error occurred while fetching data.");
+            }
         }
 
         /// <summary>

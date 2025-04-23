@@ -13,6 +13,8 @@ namespace EdufyAPI.DTOs
         public CourseCategory Category { get; set; }
         //public string CategoryName => Category.ToString();
 
+        public CourseLevel Level { get; set; }
+
         public string InstructorID { get; set; }
         public ICollection<LessonReadDTO> Lessons { get; set; }
 
