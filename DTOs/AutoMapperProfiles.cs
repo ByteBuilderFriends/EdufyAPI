@@ -38,6 +38,8 @@ namespace EdufyAPI.DTOs
             CreateMap<Student, RegisterViewModel>().ReverseMap();
             CreateMap<Student, GetStudentsDTO>().ReverseMap();
 
+            CreateMap<Student, StudentReadDTO>().ReverseMap();
+
             CreateMap<Student, GetStudentsDTO>()
                 .ForMember(dest => dest.EnrolledCourses, opt => opt.MapFrom(src =>
                     src.Enrollments.Select(sc => $"{sc.Course.Title}, {sc.Course.Description}").ToList())) // ✅ Only map course titles
@@ -66,8 +68,9 @@ namespace EdufyAPI.DTOs
             #endregion
 
             #region Course AutoMapper
-            CreateMap<Course, CourseReadDTO>()
-                 .ForMember(dest => dest.NumberOfStudentsEnrolled, opt => opt.MapFrom(src => src.NumberOfStudentsEnrolled)); CreateMap<CourseCreateDTO, Course>();
+            CreateMap<Course, CourseReadDTO>();
+            //.ForMember(dest => dest.NumberOfStudentsEnrolled, opt => opt.MapFrom(src => src.NumberOfStudentsEnrolled));
+            CreateMap<CourseCreateDTO, Course>();
             CreateMap<CourseUpdateDTO, Course>()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null)); //This ensures only non-null properties are mapped, preventing overwriting existing values with null.
 
@@ -89,9 +92,9 @@ namespace EdufyAPI.DTOs
             #endregion
 
             #region Enrollment AutoMapper
-            CreateMap<Enrollment, EnrollmentReadDTO>()
-                .ForMember(dest => dest.StudentName, opt => opt.MapFrom(src => src.Student.FullName))
-                .ForMember(dest => dest.CourseTitle, opt => opt.MapFrom(src => src.Course.Title));
+            CreateMap<Enrollment, EnrollmentReadDTO>();
+            //.ForMember(dest => dest.StudentName, opt => opt.MapFrom(src => src.Student.FullName))
+            //.ForMember(dest => dest.CourseTitle, opt => opt.MapFrom(src => src.Course.Title));
             CreateMap<EnrollmentCreateDTO, Enrollment>();
             #endregion
 

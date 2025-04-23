@@ -181,21 +181,20 @@ app.UseStaticFiles();   // It enables requests to the wwwroot folder, making ima
 #region Middleware Configuration
 // 🔹 Configure middleware
 
-if (app.Environment.IsDevelopment())
+//if (app.Environment.IsDevelopment())
+//{
+app.UseSwagger();
+app.UseSwaggerUI(c =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "EdufyAPI API V1");
-    });
-}
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Ask A Muslim API V1");
+});
+//}
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-;
+//if (app.Environment.IsDevelopment())
+//{
+app.UseSwagger();
+app.UseSwaggerUI();
+//}
 
 app.UseHttpsRedirection();
 
