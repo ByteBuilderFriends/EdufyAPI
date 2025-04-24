@@ -20,8 +20,13 @@ namespace EdufyAPI.Models
         public CourseLevel? Level { get; set; } = CourseLevel.AllLevels;
         public string? ThumbnailUrl { get; set; } = string.Empty;
 
-        public int NumberOfStudentsEnrolled { get; set; } = 0;
-
+        public int NumberOfStudentsEnrolled
+        {
+            get
+            {
+                return Enrollments.Count;
+            }
+        }
 
         #region Relationships
 

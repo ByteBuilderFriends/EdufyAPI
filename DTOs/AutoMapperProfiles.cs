@@ -96,6 +96,10 @@ namespace EdufyAPI.DTOs
             //.ForMember(dest => dest.StudentName, opt => opt.MapFrom(src => src.Student.FullName))
             //.ForMember(dest => dest.CourseTitle, opt => opt.MapFrom(src => src.Course.Title));
             CreateMap<EnrollmentCreateDTO, Enrollment>();
+
+            CreateMap<Enrollment, EnrollmentReadDTO>()
+                .ForMember(dest => dest.StudentName, opt => opt.MapFrom(src => $"{src.Student.FirstName} {src.Student.LastName}"));
+
             #endregion
 
             #region Quiz AutoMapper

@@ -201,8 +201,8 @@ namespace EdufyAPI.Controllers
                 await _unitOfWork.ProgressRepository.AddAsync(progress);
 
                 // Recalculate and update the student count
-                course.NumberOfStudentsEnrolled = await _unitOfWork.EnrollmentRepository.CountAsync(e => e.CourseId == enrollmentDto.CourseId);
-                await _unitOfWork.CourseRepository.UpdateAsync(course);
+                //course.NumberOfStudentsEnrolled = await _unitOfWork.EnrollmentRepository.CountAsync(e => e.CourseId == enrollmentDto.CourseId);
+                //await _unitOfWork.CourseRepository.UpdateAsync(course);
 
 
                 // ✅ Commit the transaction
