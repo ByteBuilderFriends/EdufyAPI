@@ -4,7 +4,7 @@
     {
         public int TotalLessonsCompleted { get; set; }
 
-        public bool CompletedProgress { get; set; } = false;
+        //public bool CompletedProgress { get; set; } = false;
 
     }
 }
