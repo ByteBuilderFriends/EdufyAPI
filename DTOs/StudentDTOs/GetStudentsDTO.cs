@@ -22,6 +22,14 @@ namespace EdufyAPI.DTOs.StudentDTOs
         // ✅ Fix CompletedCourses logic
         public List<string> CompletedCourses { get; set; } = new();
 
+        public int NumberOfCompletedCourses
+        {
+            get
+            {
+                return CompletedCourses.Count;
+            }
+        }
+
         // ✅ Add CourseCount since it's mapped in AutoMapper
         public int CourseCount { get; set; }
 
