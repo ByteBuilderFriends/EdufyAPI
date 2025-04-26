@@ -18,7 +18,9 @@ namespace EdufyAPI.DTOs
         public string InstructorID { get; set; }
         public ICollection<LessonReadDTO> Lessons { get; set; }
 
-        // Add number of students enrolled here
+
+        public int NumberOfLessons { get; set; } = 0;
+
         public int NumberOfStudentsEnrolled { get; set; } = 0;
     }
 }

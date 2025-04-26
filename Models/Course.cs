@@ -20,6 +20,14 @@ namespace EdufyAPI.Models
         public CourseLevel? Level { get; set; } = CourseLevel.AllLevels;
         public string? ThumbnailUrl { get; set; } = string.Empty;
 
+        public int NumberOfLessons
+        {
+            get
+            {
+                return Lessons.Count;
+            }
+        }
+
         public int NumberOfStudentsEnrolled
         {
             get
