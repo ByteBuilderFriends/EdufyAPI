@@ -19,7 +19,7 @@ namespace EdufyAPI.RoleSeeding
                     Id = "1c700ea4-ac54-487f-80e4-25c7b348b9e0",
                     Title = "Quran Memorization for Beginners",
                     Description = "Start your journey of memorizing the Holy Quran with effective techniques and guidance from experienced teachers.",
-                    Category = CourseCategory.QuranMemorization,
+                    Category = CourseCategory.Quran,
                     Level = CourseLevel.Beginner,
                     ThumbnailUrl = "quran_memorization_thumbnail.jpg",
                     InstructorId = instructor1Id
@@ -29,7 +29,7 @@ namespace EdufyAPI.RoleSeeding
                     Id = "2d7df053-81d5-4bb8-994d-76619c341c46",
                     Title = "Fiqh of Worship: Advanced Concepts",
                     Description = "Explore the advanced rulings related to acts of worship including prayer, fasting, and zakat based on classical jurisprudence.",
-                    Category = CourseCategory.IslamicJurisprudence,
+                    Category = CourseCategory.Aqeeda,
                     Level = CourseLevel.Advanced,
                     ThumbnailUrl = "fiqh_advanced_thumbnail.jpg",
                     InstructorId = instructor2Id
