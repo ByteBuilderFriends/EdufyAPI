@@ -114,22 +114,24 @@ namespace EdufyAPI.Controllers
 
         }
 
-        [HttpGet("{categoryId}")]
-        public async Task<ActionResult<IEnumerable<CourseReadDTO>>> GetCourseByCatgory(int categoryId)
+        [HttpGet("ByName/{categoryName}")]
+        public async Task<ActionResult<IEnumerable<CourseReadDTO>>> GetCourseByCategoryName(string categoryName)
         {
-            const string cacheKeyPrefix = "course_category_";
-            var cacheKey = $"{cacheKeyPrefix}{categoryId}";
-
-            if (!Enum.IsDefined(typeof(CourseCategory), categoryId))
-                return BadRequest("Invalid course category.");
+            const string cacheKeyPrefix = "course_category_name_";
+            var cacheKey = $"{cacheKeyPrefix}{categoryName.ToLower()}";
 
             try
             {
                 var courseDtos = await _memoryCache.GetDataAsync<IEnumerable<CourseReadDTO>>(cacheKey);
                 if (courseDtos == null)
                 {
+                    if (!Enum.TryParse(typeof(CourseCategory), categoryName, true, out var categoryEnum))
+                        return BadRequest("Invalid course category name.");
+
+                    var category = (CourseCategory)categoryEnum;
+
                     var courses = await _unitOfWork.CourseRepository
-                        .GetByCondition(c => c.Category == (CourseCategory)categoryId);
+                        .GetByCondition(c => c.Category == category);
 
                     if (!courses.Any())
                         return Ok(Enumerable.Empty<CourseReadDTO>());
@@ -149,44 +151,55 @@ namespace EdufyAPI.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError($"An error occurred while fetching courses by category: {ex.Message}", ex);
+                _logger.LogError($"An error occurred while fetching courses by category name: {ex.Message}", ex);
                 return StatusCode(500, "An error occurred while fetching data.");
             }
         }
+
 
         // Get Courses by its Level
-        [HttpGet("{levelId}")]
-        public async Task<ActionResult<IEnumerable<CourseReadDTO>>> GetCourseByLevel(int levelId)
+        [HttpGet("ByLevelName/{levelName}")]
+        public async Task<ActionResult<IEnumerable<CourseReadDTO>>> GetCourseByLevelName(string levelName)
         {
-            const string cacheKeyPrefix = "course_level_";
-            var cacheKey = $"{cacheKeyPrefix}{levelId}";
-            if (!Enum.IsDefined(typeof(CourseLevel), levelId))
-                return BadRequest("Invalid course level.");
+            const string cacheKeyPrefix = "course_level_name_";
+            var cacheKey = $"{cacheKeyPrefix}{levelName.ToLower()}";
+
             try
             {
                 var courseDtos = await _memoryCache.GetDataAsync<IEnumerable<CourseReadDTO>>(cacheKey);
                 if (courseDtos == null)
                 {
+                    if (!Enum.TryParse(typeof(CourseLevel), levelName, true, out var levelEnum))
+                        return BadRequest("Invalid course level name.");
+
+                    var level = (CourseLevel)levelEnum;
+
                     var courses = await _unitOfWork.CourseRepository
-                        .GetByCondition(c => c.Level == (CourseLevel)levelId);
+                        .GetByCondition(c => c.Level == level);
+
                     if (!courses.Any())
                         return Ok(Enumerable.Empty<CourseReadDTO>());
+
                     courseDtos = _mapper.Map<IEnumerable<CourseReadDTO>>(courses);
+
                     foreach (var courseDto in courseDtos)
                     {
                         courseDto.ThumbnailUrl = ConstructFileUrlHelper
                             .ConstructFileUrl(Request, ThumbnailsFolderName, courseDto.ThumbnailUrl);
                     }
+
                     await _memoryCache.SetDataAsync(cacheKey, courseDtos, DateTimeOffset.Now.AddMinutes(5));
                 }
+
                 return Ok(courseDtos);
             }
             catch (Exception ex)
             {
-                _logger.LogError($"An error occurred while fetching courses by level: {ex.Message}", ex);
+                _logger.LogError($"An error occurred while fetching courses by level name: {ex.Message}", ex);
                 return StatusCode(500, "An error occurred while fetching data.");
             }
         }
+
 
         /// <summary>
         /// Retrieves all courses taught by a specific instructor.

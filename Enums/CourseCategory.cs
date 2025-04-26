@@ -8,13 +8,13 @@ namespace AskAMuslimAPI.Enums
         Tafseer = 1,
 
         [Display(Name = "Sayings of the Prophet (Hadith)")]
-        Hadeeth = 2,
+        Hadith = 2,
 
         [Display(Name = "Islamic Law (Fiqh)")]
         Fiqh = 3,
 
         [Display(Name = "Islamic Beliefs (Aqeedah)")]
-        Aqeedah = 4,
+        Aqeeda = 4,
 
         [Display(Name = "Life of the Prophet (Seerah)")]
         Seerah = 5,
@@ -49,7 +49,13 @@ namespace AskAMuslimAPI.Enums
         [Display(Name = "Stories of the Prophets")]
         BiographyOfProphets = 15,
 
+        [Display(Name = "Quran")]
+        Quran = 16,
+
+        [Display(Name = "Faith")]
+        Faith = 17,
+
         [Display(Name = "Other")]
-        Other = 16
+        Other = 18
     }
 }
