@@ -17,7 +17,7 @@ namespace EdufyAPI.Seeding
                     TotalMarks = 100,
                     StudentQuizEvaluation = 0,
                     StudentQuizResult = 0,
-                    LessonId = "LESSON-1001"
+                    LessonId = "l1q1"
                 },
                 new Quiz
                 {
@@ -28,7 +28,7 @@ namespace EdufyAPI.Seeding
                     TotalMarks = 100,
                     StudentQuizEvaluation = 0,
                     StudentQuizResult = 0,
-                    LessonId = "LESSON-1002"
+                    LessonId = "l2q1"
                 }
             );
         }
