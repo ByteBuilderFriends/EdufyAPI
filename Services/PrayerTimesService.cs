@@ -17,48 +17,86 @@ namespace EdufyAPI.Services
             _cache = cache;
         }
 
-        // ✅ Get and cache user location
-        public async Task<GeoLocationResponse> GetUserLocation()
+        // ✅ Get and cache user location using their IP
+        public async Task<GeoLocationResponse> GetUserLocationAsync(string userIp)
         {
-            const string cacheKey = "UserLocation";
+            if (string.IsNullOrWhiteSpace(userIp))
+                return new GeoLocationResponse(); // return default if IP is missing
 
-            // ✅ Check if location is already cached
+            string cacheKey = $"UserLocation_{userIp}";
+
             if (_cache.TryGetValue(cacheKey, out GeoLocationResponse cachedLocation))
             {
                 return cachedLocation;
             }
 
-            var response = await _httpClient.GetFromJsonAsync<GeoLocationResponse>(GeoApiUrl);
-            var location = response ?? new GeoLocationResponse();
+            try
+            {
+                var response = await _httpClient.GetFromJsonAsync<GeoLocationResponse>($"{GeoApiUrl}{userIp}");
+                var location = response ?? new GeoLocationResponse();
 
-            // ✅ Store in cache for 1 hour
-            _cache.Set(cacheKey, location, TimeSpan.FromMinutes(LocationCacheDurationMinutes));
+                _cache.Set(cacheKey, location, TimeSpan.FromMinutes(LocationCacheDurationMinutes));
 
-            return location;
+                return location;
+            }
+            catch
+            {
+                return new GeoLocationResponse(); // fallback to default if API fails
+            }
         }
 
-        // ✅ Get and cache prayer times
-        public async Task<PrayerTimesResponse> GetPrayerTimes()
+        // ✅ Get and cache prayer times based on user location
+        public async Task<PrayerTimesResponse> GetPrayerTimesAsync(string userIp)
         {
-            var location = await GetUserLocation();
+            var location = await GetUserLocationAsync(userIp);
+
+            if (location.Lat == 0 && location.Lon == 0)
+                return new PrayerTimesResponse(); // No valid location
+
             string cacheKey = $"PrayerTimes_{location.Lat}_{location.Lon}";
 
-            // ✅ Check if prayer times are already cached
             if (_cache.TryGetValue(cacheKey, out PrayerTimesResponse cachedPrayerTimes))
             {
                 return cachedPrayerTimes;
             }
 
-            var response = await _httpClient.GetFromJsonAsync<PrayerTimesResponse>(
-                $"{PrayerApiUrl}?latitude={location.Lat}&longitude={location.Lon}&method=2"
-            );
+            try
+            {
+                var response = await _httpClient.GetFromJsonAsync<PrayerTimesResponse>(
+                    $"{PrayerApiUrl}?latitude={location.Lat}&longitude={location.Lon}&method=2"
+                );
 
-            var prayerTimes = response ?? new PrayerTimesResponse();
+                var prayerTimes = response ?? new PrayerTimesResponse();
 
-            // ✅ Store in cache for 24 hours
-            _cache.Set(cacheKey, prayerTimes, TimeSpan.FromHours(CacheDurationHours));
+                // ✅ Format times to AM/PM
+                if (prayerTimes.Data?.Timings != null)
+                {
+                    var formattedTimings = new Dictionary<string, string>();
 
-            return prayerTimes;
+                    foreach (var timing in prayerTimes.Data.Timings)
+                    {
+                        if (DateTime.TryParse(timing.Value, out DateTime time))
+                        {
+                            formattedTimings[timing.Key] = time.ToString("hh:mm tt"); // <-- AM/PM Format
+                        }
+                        else
+                        {
+                            formattedTimings[timing.Key] = timing.Value; // Keep original if parsing fails
+                        }
+                    }
+
+                    prayerTimes.Data.Timings = formattedTimings;
+                }
+
+                // ✅ Store in cache for 24 hours
+                _cache.Set(cacheKey, prayerTimes, TimeSpan.FromHours(CacheDurationHours));
+
+                return prayerTimes;
+            }
+            catch
+            {
+                return new PrayerTimesResponse(); // fallback to empty if API fails
+            }
         }
 
         // Models
@@ -77,7 +115,7 @@ namespace EdufyAPI.Services
 
         public class PrayerTimings
         {
-            public Dictionary<string, string> Timings { get; set; } // Prayer : Time
+            public Dictionary<string, string> Timings { get; set; } // Prayer Name -> Time
         }
     }
 }

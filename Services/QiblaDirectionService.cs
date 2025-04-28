@@ -18,16 +18,17 @@ namespace EdufyAPI.Services
         }
 
         // ✅ Get Qibla Compass Image
-        public async Task<QiblaCompassResponse?> GetQiblaCompass()
+        public async Task<QiblaCompassResponse?> GetQiblaCompassAsync(string userIp)
         {
-            var location = await _prayerTimesService.GetUserLocation();
+            var location = await _prayerTimesService.GetUserLocationAsync(userIp);
+
             if (location == null || location.Lat == 0 || location.Lon == 0)
             {
                 Console.WriteLine($"❌ Invalid location: {location?.Lat}, {location?.Lon}");
                 return null;
             }
 
-            string cacheKey = $"QiblaCompass-{location.Lat}-{location.Lon}";
+            string cacheKey = $"QiblaCompass_{location.Lat}_{location.Lon}";
 
             if (_cache.TryGetValue(cacheKey, out QiblaCompassResponse cachedCompass))
             {
@@ -41,16 +42,18 @@ namespace EdufyAPI.Services
 
                 var compassImageUrl = new QiblaCompassResponse { ImageUrl = requestUrl };
 
+                // Cache the result
                 _cache.Set(cacheKey, compassImageUrl, TimeSpan.FromHours(CacheDurationHours));
 
                 return compassImageUrl;
             }
-            catch (HttpRequestException ex)
+            catch (Exception ex)
             {
-                Console.WriteLine($"❌ HTTP Error: {ex.Message}");
+                Console.WriteLine($"❌ Error while fetching Qibla Compass: {ex.Message}");
                 return null;
             }
         }
+
     }
 
     public class QiblaCompassResponse

@@ -1,7 +1,7 @@
 ﻿using EdufyAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace EdufyAPI.Controllers.ServiceContollers
+namespace EdufyAPI.Controllers.ServiceControllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -16,13 +16,22 @@ namespace EdufyAPI.Controllers.ServiceContollers
             _logger = logger;
         }
 
+        // ✅ Get Prayer Times
         [HttpGet]
         public async Task<IActionResult> GetPrayerTimes()
         {
             try
             {
-                _logger.LogInformation("Fetching prayer times...");
-                var result = await _prayerTimesService.GetPrayerTimes();
+                var userIp = GetUserIpAddress();
+                if (string.IsNullOrWhiteSpace(userIp))
+                {
+                    _logger.LogWarning("User IP address not found.");
+                    return BadRequest(new { message = "User IP address could not be determined." });
+                }
+
+                _logger.LogInformation("Fetching prayer times for IP: {UserIp}", userIp);
+
+                var result = await _prayerTimesService.GetPrayerTimesAsync(userIp);
 
                 if (result == null)
                 {
@@ -40,13 +49,22 @@ namespace EdufyAPI.Controllers.ServiceContollers
             }
         }
 
+        // ✅ Get User Location
         [HttpGet("location")]
         public async Task<IActionResult> GetUserLocation()
         {
             try
             {
-                _logger.LogInformation("Fetching user location...");
-                var location = await _prayerTimesService.GetUserLocation();
+                var userIp = GetUserIpAddress();
+                if (string.IsNullOrWhiteSpace(userIp))
+                {
+                    _logger.LogWarning("User IP address not found.");
+                    return BadRequest(new { message = "User IP address could not be determined." });
+                }
+
+                _logger.LogInformation("Fetching user location for IP: {UserIp}", userIp);
+
+                var location = await _prayerTimesService.GetUserLocationAsync(userIp);
 
                 if (location == null || location.Lat == 0 || location.Lon == 0)
                 {
@@ -68,6 +86,13 @@ namespace EdufyAPI.Controllers.ServiceContollers
                 _logger.LogError(ex, "An error occurred while fetching user location.");
                 return StatusCode(500, new { message = "An unexpected error occurred." });
             }
+        }
+
+        // ✅ Helper method to get User IP
+        private string? GetUserIpAddress()
+        {
+            return Request.Headers["X-Forwarded-For"].FirstOrDefault()
+                   ?? HttpContext.Connection.RemoteIpAddress?.ToString();
         }
     }
 }

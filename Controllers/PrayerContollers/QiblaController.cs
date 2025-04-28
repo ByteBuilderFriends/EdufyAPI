@@ -18,13 +18,26 @@ namespace EdufyAPI.Controllers.PrayerControllers
         [HttpGet("direction")]
         public async Task<IActionResult> GetQiblaDirection()
         {
-            var qiblaDirection = await _qiblaService.GetQiblaCompass();
+            // 🧠 Get User IP Address
+            var userIp = Request.Headers["X-Forwarded-For"].FirstOrDefault()
+                         ?? HttpContext.Connection.RemoteIpAddress?.ToString();
+
+            if (string.IsNullOrWhiteSpace(userIp))
+            {
+                return BadRequest(new { message = "Unable to detect user IP address." });
+            }
+
+            // 📍 Pass user IP to the service
+            var qiblaDirection = await _qiblaService.GetQiblaCompassAsync(userIp);
 
             if (qiblaDirection == null)
+            {
                 return NotFound(new { message = "Could not determine Qibla direction." });
+            }
 
             return Ok(qiblaDirection);
         }
+
 
     }
 }
