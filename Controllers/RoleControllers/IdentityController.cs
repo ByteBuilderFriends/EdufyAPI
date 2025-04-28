@@ -122,10 +122,15 @@ namespace EdufyAPI.Controllers.RoleControllers
                     await _unitOfWork.InstructorRepository.AddAsync(instructor);
                     break;
             }
-
+            // Generate and return JWT token
+            var token = GenerateJwtToken(user);
             // Log the successful login
             _logger.LogInformation($"User {user.Id} registered successfully.");
-            return Ok(new { Message = "User registered successfully!" });
+            return Ok(new
+            {
+                Message = $"User registered successfully! The Id is {user.Id}",
+                Token = token
+            });
         }
 
         /// <summary>
