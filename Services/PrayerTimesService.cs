@@ -63,7 +63,7 @@ namespace EdufyAPI.Services
             try
             {
                 var response = await _httpClient.GetFromJsonAsync<PrayerTimesResponse>(
-                    $"{PrayerApiUrl}?latitude={location.Lat}&longitude={location.Lon}&method=2"
+                    $"{PrayerApiUrl}?latitude={location.Lat}&longitude={location.Lon}"
                 );
 
                 var prayerTimes = response ?? new PrayerTimesResponse();
