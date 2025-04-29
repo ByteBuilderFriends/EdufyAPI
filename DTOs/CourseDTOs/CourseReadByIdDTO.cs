@@ -1,8 +1,9 @@
 ﻿using AskAMuslimAPI.Enums;
+using EdufyAPI.DTOs.LessonDTOs;
 
-namespace AskAMuslimAPI.DTOs.CourseDTOs
+namespace EdufyAPI.DTOs
 {
-    public class CourseReadDTO
+    public class CourseReadByIdDTO
     {
         public string Id { get; set; }
         public string Title { get; set; } = string.Empty;
@@ -17,6 +18,8 @@ namespace AskAMuslimAPI.DTOs.CourseDTOs
         public string InstructorID { get; set; }
 
         public string InstructorName { get; set; } = string.Empty;
+        public ICollection<LessonReadDTO> Lessons { get; set; }
+
 
         public int NumberOfLessons { get; set; } = 0;
 

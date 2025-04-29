@@ -6,7 +6,7 @@
 
         //public Dictionary<string, string> Courses { get; set; }
 
-        public List<CourseReadDTO> courses { get; set; } = new List<CourseReadDTO>();
+        public List<CourseReadByIdDTO> courses { get; set; } = new List<CourseReadByIdDTO>();
 
         //public List<string> CoursesTitle { get; set; } = new List<string>();
 

@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using AskAMuslimAPI.DTOs.CourseDTOs;
+using AutoMapper;
 using EduConnectAPI.Models;
 using EdufyAPI.DTOs.CertificateDTOs;
 using EdufyAPI.DTOs.CourseDTOs;
@@ -68,11 +69,14 @@ namespace EdufyAPI.DTOs
             #endregion
 
             #region Course AutoMapper
-            CreateMap<Course, CourseReadDTO>();
+            CreateMap<Course, CourseReadByIdDTO>().
+                ForMember(dest => dest.InstructorName, opt => opt.MapFrom(src => src.Instructor.FullName));
             //.ForMember(dest => dest.NumberOfStudentsEnrolled, opt => opt.MapFrom(src => src.NumberOfStudentsEnrolled));
             CreateMap<CourseCreateDTO, Course>();
             CreateMap<CourseUpdateDTO, Course>()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null)); //This ensures only non-null properties are mapped, preventing overwriting existing values with null.
+            CreateMap<Course, CourseReadDTO>().
+               ForMember(dest => dest.InstructorName, opt => opt.MapFrom(src => src.Instructor.FullName));
 
 
             #endregion

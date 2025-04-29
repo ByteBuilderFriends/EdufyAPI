@@ -109,7 +109,7 @@ namespace EdufyAPI.Controllers
             var cacheKey = $"student-courses-{studentId}";
             try
             {
-                var courseDtos = await _cache.GetDataAsync<IEnumerable<CourseReadDTO>>(cacheKey);
+                var courseDtos = await _cache.GetDataAsync<IEnumerable<CourseReadByIdDTO>>(cacheKey);
 
                 if (courseDtos == null)
                 {
@@ -117,7 +117,7 @@ namespace EdufyAPI.Controllers
                     if (!enrollments.Any())
                         return NotFound("No enrollments found for this student.");
 
-                    courseDtos = _mapper.Map<IEnumerable<CourseReadDTO>>(enrollments.Select(e => e.Course));
+                    courseDtos = _mapper.Map<IEnumerable<CourseReadByIdDTO>>(enrollments.Select(e => e.Course));
                     await _cache.SetDataAsync(cacheKey, courseDtos, DateTimeOffset.Now.AddMinutes(10));
                 }
 

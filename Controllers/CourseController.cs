@@ -1,4 +1,5 @@
-﻿using AskAMuslimAPI.Enums;
+﻿using AskAMuslimAPI.DTOs.CourseDTOs;
+using AskAMuslimAPI.Enums;
 using AutoMapper;
 using EdufyAPI.DTOs;
 using EdufyAPI.DTOs.CourseDTOs;
@@ -81,14 +82,14 @@ namespace EdufyAPI.Controllers
         /// <param name="id">The unique identifier of the course.</param>
         /// <returns>The course details if found; otherwise, NotFound.</returns>
         [HttpGet("{id}")]
-        public async Task<ActionResult<CourseReadDTO>> GetCourseById(string id)
+        public async Task<ActionResult<CourseReadByIdDTO>> GetCourseById(string id)
         {
             const string cacheKeyPrefix = "course_";  // Cache prefix for individual course.
             var cacheKey = $"{cacheKeyPrefix}{id}";
 
             try
             {
-                var courseDto = await _memoryCache.GetDataAsync<CourseReadDTO>(cacheKey);
+                var courseDto = await _memoryCache.GetDataAsync<CourseReadByIdDTO>(cacheKey);
 
                 if (courseDto == null)
                 {
@@ -97,7 +98,7 @@ namespace EdufyAPI.Controllers
                     if (course == null)
                         return NotFound("Course not found.");
 
-                    courseDto = _mapper.Map<CourseReadDTO>(course);
+                    courseDto = _mapper.Map<CourseReadByIdDTO>(course);
                     courseDto.ThumbnailUrl = ConstructFileUrlHelper.ConstructFileUrl(Request, ThumbnailsFolderName, courseDto.ThumbnailUrl);
 
                     await _memoryCache.SetDataAsync(cacheKey, courseDto, DateTimeOffset.Now.AddMinutes(5));
@@ -115,14 +116,14 @@ namespace EdufyAPI.Controllers
         }
 
         [HttpGet("ByName/{categoryName}")]
-        public async Task<ActionResult<IEnumerable<CourseReadDTO>>> GetCourseByCategoryName(string categoryName)
+        public async Task<ActionResult<IEnumerable<CourseReadByIdDTO>>> GetCourseByCategoryName(string categoryName)
         {
             const string cacheKeyPrefix = "course_category_name_";
             var cacheKey = $"{cacheKeyPrefix}{categoryName.ToLower()}";
 
             try
             {
-                var courseDtos = await _memoryCache.GetDataAsync<IEnumerable<CourseReadDTO>>(cacheKey);
+                var courseDtos = await _memoryCache.GetDataAsync<IEnumerable<CourseReadByIdDTO>>(cacheKey);
                 if (courseDtos == null)
                 {
                     if (!Enum.TryParse(typeof(CourseCategory), categoryName, true, out var categoryEnum))
@@ -134,9 +135,9 @@ namespace EdufyAPI.Controllers
                         .GetByCondition(c => c.Category == category);
 
                     if (!courses.Any())
-                        return Ok(Enumerable.Empty<CourseReadDTO>());
+                        return Ok(Enumerable.Empty<CourseReadByIdDTO>());
 
-                    courseDtos = _mapper.Map<IEnumerable<CourseReadDTO>>(courses);
+                    courseDtos = _mapper.Map<IEnumerable<CourseReadByIdDTO>>(courses);
 
                     foreach (var courseDto in courseDtos)
                     {
@@ -159,14 +160,14 @@ namespace EdufyAPI.Controllers
 
         // Get Courses by its Level
         [HttpGet("ByLevelName/{levelName}")]
-        public async Task<ActionResult<IEnumerable<CourseReadDTO>>> GetCourseByLevelName(string levelName)
+        public async Task<ActionResult<IEnumerable<CourseReadByIdDTO>>> GetCourseByLevelName(string levelName)
         {
             const string cacheKeyPrefix = "course_level_name_";
             var cacheKey = $"{cacheKeyPrefix}{levelName.ToLower()}";
 
             try
             {
-                var courseDtos = await _memoryCache.GetDataAsync<IEnumerable<CourseReadDTO>>(cacheKey);
+                var courseDtos = await _memoryCache.GetDataAsync<IEnumerable<CourseReadByIdDTO>>(cacheKey);
                 if (courseDtos == null)
                 {
                     if (!Enum.TryParse(typeof(CourseLevel), levelName, true, out var levelEnum))
@@ -178,9 +179,9 @@ namespace EdufyAPI.Controllers
                         .GetByCondition(c => c.Level == level);
 
                     if (!courses.Any())
-                        return Ok(Enumerable.Empty<CourseReadDTO>());
+                        return Ok(Enumerable.Empty<CourseReadByIdDTO>());
 
-                    courseDtos = _mapper.Map<IEnumerable<CourseReadDTO>>(courses);
+                    courseDtos = _mapper.Map<IEnumerable<CourseReadByIdDTO>>(courses);
 
                     foreach (var courseDto in courseDtos)
                     {
@@ -207,12 +208,12 @@ namespace EdufyAPI.Controllers
         /// <param name="instructorId">The unique identifier of the instructor.</param>
         /// <returns>A list of courses assigned to the instructor.</returns>
         [HttpGet("{instructorId}")]
-        public async Task<ActionResult<IEnumerable<CourseReadDTO>>> GetInstructorCourses(string instructorId)
+        public async Task<ActionResult<IEnumerable<CourseReadByIdDTO>>> GetInstructorCourses(string instructorId)
         {
             const string cacheKeyPrefix = "instructor_courses_";  // Cache prefix for courses by instructor.
             var cacheKey = $"{cacheKeyPrefix}{instructorId}";
 
-            var courseDtos = await _memoryCache.GetDataAsync<IEnumerable<CourseReadDTO>>(cacheKey);
+            var courseDtos = await _memoryCache.GetDataAsync<IEnumerable<CourseReadByIdDTO>>(cacheKey);
 
             try
             {
@@ -221,9 +222,9 @@ namespace EdufyAPI.Controllers
                     // Cache is empty, so retrieve from database.
                     var courses = await _unitOfWork.CourseRepository.GetByCondition(c => c.InstructorId == instructorId);
                     if (!courses.Any())
-                        return Ok(Enumerable.Empty<CourseReadDTO>());
+                        return Ok(Enumerable.Empty<CourseReadByIdDTO>());
 
-                    courseDtos = _mapper.Map<IEnumerable<CourseReadDTO>>(courses);
+                    courseDtos = _mapper.Map<IEnumerable<CourseReadByIdDTO>>(courses);
                     foreach (var courseDto in courseDtos)
                     {
                         courseDto.ThumbnailUrl = ConstructFileUrlHelper.ConstructFileUrl(Request, ThumbnailsFolderName, courseDto.ThumbnailUrl);
@@ -249,7 +250,7 @@ namespace EdufyAPI.Controllers
         /// <param name="courseCreateDto">The course creation request object.</param>
         /// <returns>The created course details.</returns>
         [HttpPost]
-        public async Task<ActionResult<CourseReadDTO>> CreateCourse([FromForm] CourseCreateDTO courseCreateDto)
+        public async Task<ActionResult<CourseReadByIdDTO>> CreateCourse([FromForm] CourseCreateDTO courseCreateDto)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
@@ -263,7 +264,7 @@ namespace EdufyAPI.Controllers
                 course.ThumbnailUrl = imageUrl;
                 await _unitOfWork.CourseRepository.AddAsync(course);
                 await _unitOfWork.SaveChangesAsync();
-                var courseReadDto = _mapper.Map<CourseReadDTO>(course);
+                var courseReadDto = _mapper.Map<CourseReadByIdDTO>(course);
 
                 // Invalidate the cache for all courses after a new course is created.
                 await _memoryCache.RemoveDataAsync("all_courses");
@@ -308,7 +309,7 @@ namespace EdufyAPI.Controllers
                 // Invalidate the cache for all courses after an update.
                 await _memoryCache.RemoveDataAsync("all_courses");
 
-                return Ok(_mapper.Map<CourseReadDTO>(course));
+                return Ok(_mapper.Map<CourseReadByIdDTO>(course));
             }
             catch (Exception ex)
             {
