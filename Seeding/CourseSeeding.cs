@@ -17,8 +17,6 @@ namespace EdufyAPI.RoleSeeding
             var ibnUthaymeen = "a3456789-01bc-4fgh-9g23-45678901cdef";
             var ibnFarooq = "b4567890-12cd-5ghi-0h34-56789012def0";
 
-            // Define the courses list
-            string directory = "https://ask-a-muslim.runasp.net/uploads/course-thumbnails/";
 
             var courses = new List<Course>
             {
@@ -30,7 +28,7 @@ namespace EdufyAPI.RoleSeeding
                     Description = "Learn to memorize the Quran with effective techniques.",
                     Category = CourseCategory.Quran,
                     Level = CourseLevel.Beginner,
-                    ThumbnailUrl = $"{directory}q1.jpg",
+                    ThumbnailUrl = "q1.jpg",
                     InstructorId = muftiMenk
                 },
                 new Course
@@ -40,7 +38,7 @@ namespace EdufyAPI.RoleSeeding
                     Description = "Master the basics of Tajweed for proper Quran recitation.",
                     Category = CourseCategory.Quran,
                     Level = CourseLevel.Beginner,
-                    ThumbnailUrl = $"{directory}q2.jpg",
+                    ThumbnailUrl = "q2.jpg",
                     InstructorId = mujahidHussain
                 },
                 new Course
@@ -50,7 +48,7 @@ namespace EdufyAPI.RoleSeeding
                     Description = "Enhance your recitation skills with proper Makharij and Sifaat.",
                     Category = CourseCategory.Quran,
                     Level = CourseLevel.Intermediate,
-                    ThumbnailUrl = $"{directory}q3.jpg",
+                    ThumbnailUrl = "q3.jpg",
                     InstructorId = assimAlhakeem
                 },
                 new Course
@@ -60,7 +58,7 @@ namespace EdufyAPI.RoleSeeding
                     Description = "Dive deeper into Quranic understanding and reflection.",
                     Category = CourseCategory.Quran,
                     Level = CourseLevel.Advanced,
-                    ThumbnailUrl = $"{directory}q4.jpg",
+                    ThumbnailUrl = "q4.jpg",
                     InstructorId = muftiMenk
                 },
                 #endregion
@@ -73,7 +71,7 @@ namespace EdufyAPI.RoleSeeding
                     Description = "Welcome to the **Comprehensive Hadith Course - Mishkat-ul-Masabih**...",
                     Category = CourseCategory.Hadith,
                     Level = CourseLevel.Beginner,
-                    ThumbnailUrl = $"{directory}h1.jpg",
+                    ThumbnailUrl = "h1.jpg",
                     InstructorId = mujahidHussain
                 },
                 new Course
@@ -83,7 +81,7 @@ namespace EdufyAPI.RoleSeeding
                     Description = "The Free Advanced Diploma Course in Quran and Hadith...",
                     Category = CourseCategory.Hadith,
                     Level = CourseLevel.Advanced,
-                    ThumbnailUrl = $"{directory}h2.jpg",
+                    ThumbnailUrl = "h2.jpg",
                     InstructorId = mujahidHussain
                 },
                 new Course
@@ -93,7 +91,7 @@ namespace EdufyAPI.RoleSeeding
                     Description = "An in-depth study of Sahih Bukhari collections.",
                     Category = CourseCategory.Hadith,
                     Level = CourseLevel.Beginner,
-                    ThumbnailUrl = $"{directory}h3.jpg",
+                    ThumbnailUrl = "h3.jpg",
                     InstructorId = muhammadSalah
                 },
                 new Course
@@ -103,7 +101,7 @@ namespace EdufyAPI.RoleSeeding
                     Description = "Study the top authentic Hadith books.",
                     Category = CourseCategory.Hadith,
                     Level = CourseLevel.Intermediate,
-                    ThumbnailUrl = $"{directory}h4.jpg",
+                    ThumbnailUrl = "h4.jpg",
                     InstructorId = ibnUthaymeen
                 },
                 #endregion
@@ -116,7 +114,7 @@ namespace EdufyAPI.RoleSeeding
                     Description = "Learn the fundamentals of Islamic beliefs and Aqeedah.",
                     Category = CourseCategory.Aqeeda,
                     Level = CourseLevel.Beginner,
-                    ThumbnailUrl = $"{directory}a1.jpg",
+                    ThumbnailUrl = "a1.jpg",
                     InstructorId = aam
                 },
                 new Course
@@ -126,7 +124,7 @@ namespace EdufyAPI.RoleSeeding
                     Description = "Explore advanced topics in Islamic beliefs and theology.",
                     Category = CourseCategory.Aqeeda,
                     Level = CourseLevel.Advanced,
-                    ThumbnailUrl = $"{directory}a2.jpg",
+                    ThumbnailUrl = "a2.jpg",
                     InstructorId = ibnUthaymeen
                 },
                 new Course
@@ -136,7 +134,7 @@ namespace EdufyAPI.RoleSeeding
                     Description = "Study the beliefs of Ahlus Sunnah wal Jama'ah.",
                     Category = CourseCategory.Aqeeda,
                     Level = CourseLevel.Intermediate,
-                    ThumbnailUrl = $"{directory}a3.jpg",
+                    ThumbnailUrl = "a3.jpg",
                     InstructorId = ibnFarooq
                 },
                 new Course
@@ -146,7 +144,7 @@ namespace EdufyAPI.RoleSeeding
                     Description = "Learn the fundamentals of Islamic beliefs and Aqeedah.",
                     Category = CourseCategory.Aqeeda,
                     Level = CourseLevel.Beginner,
-                    ThumbnailUrl = $"{directory}a4.jpg",
+                    ThumbnailUrl = "a4.jpg",
                     InstructorId = assimAlhakeem
                 },
                 #endregion
@@ -159,7 +157,7 @@ namespace EdufyAPI.RoleSeeding
                     Description = "Learn the principles of Islamic law and jurisprudence.",
                     Category = CourseCategory.Fiqh,
                     Level = CourseLevel.Intermediate,
-                    ThumbnailUrl = $"{directory}f1.jpg",
+                    ThumbnailUrl = "f1.jpg",
                     InstructorId = aam
                 },
                 new Course
@@ -169,7 +167,7 @@ namespace EdufyAPI.RoleSeeding
                     Description = "Explore advanced topics in Islamic law and jurisprudence.",
                     Category = CourseCategory.Fiqh,
                     Level = CourseLevel.Beginner,
-                    ThumbnailUrl = $"{directory}f2.jpg",
+                    ThumbnailUrl = "f2.jpg",
                     InstructorId = assimAlhakeem
                 },
                 new Course
@@ -179,7 +177,7 @@ namespace EdufyAPI.RoleSeeding
                     Description = "Study the principles of Islamic law and ethics.",
                     Category = CourseCategory.Fiqh,
                     Level = CourseLevel.Intermediate,
-                    ThumbnailUrl = $"{directory}f3.jpg",
+                    ThumbnailUrl = "f3.jpg",
                     InstructorId = assimAlhakeem
                 },
                 new Course
@@ -189,7 +187,7 @@ namespace EdufyAPI.RoleSeeding
                     Description = "Learn the principles of Islamic law and jurisprudence.",
                     Category = CourseCategory.Fiqh,
                     Level = CourseLevel.Beginner,
-                    ThumbnailUrl = $"{directory}f4.jpg",
+                    ThumbnailUrl = "f4.jpg",
                     InstructorId = ibnFarooq
                 },
                 #endregion
@@ -202,7 +200,7 @@ namespace EdufyAPI.RoleSeeding
                     Description = "Learn the fundamentals of Islamic beliefs and Aqeedah.",
                     Category = CourseCategory.Faith,
                     Level = CourseLevel.Beginner,
-                    ThumbnailUrl = $"{directory}fa1.jpg",
+                    ThumbnailUrl = "fa1.jpg",
                     InstructorId = aam
                 },
                 new Course
@@ -212,7 +210,7 @@ namespace EdufyAPI.RoleSeeding
                     Description = "Explore advanced topics in Islamic beliefs and theology.",
                     Category = CourseCategory.Faith,
                     Level = CourseLevel.Advanced,
-                    ThumbnailUrl = $"{directory}fa2.jpg",
+                    ThumbnailUrl = "fa2.jpg",
                     InstructorId = aam
                 },
                 new Course
@@ -222,7 +220,7 @@ namespace EdufyAPI.RoleSeeding
                     Description = "Study the beliefs of Ahlus Sunnah wal Jama'ah.",
                     Category = CourseCategory.Faith,
                     Level = CourseLevel.Beginner,
-                    ThumbnailUrl = $"{directory}fa3.jpg",
+                    ThumbnailUrl = "fa3.jpg",
                     InstructorId = assimAlhakeem
                 },
                 new Course
@@ -232,7 +230,7 @@ namespace EdufyAPI.RoleSeeding
                     Description = "Learn the fundamentals of Islamic beliefs and Aqeedah.",
                     Category = CourseCategory.Faith,
                     Level = CourseLevel.Beginner,
-                    ThumbnailUrl = $"{directory}fa4.jpg",
+                    ThumbnailUrl = "fa4.jpg",
                     InstructorId = ibnFarooq
                 }
                 #endregion

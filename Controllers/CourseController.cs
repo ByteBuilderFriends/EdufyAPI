@@ -18,8 +18,8 @@ namespace EdufyAPI.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly ICacheService _memoryCache;
-        private readonly string ThumbnailsFolderName = "course-thumbnails";
         private readonly ILogger<CourseController> _logger;
+        private readonly string ThumbnailsFolderName = "course-thumbnails";
 
         public CourseController(
             IUnitOfWork unitOfWork,

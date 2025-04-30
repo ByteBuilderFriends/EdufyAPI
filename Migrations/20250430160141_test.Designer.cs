@@ -4,6 +4,7 @@ using EdufyAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AskAMuslimAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250430160141_test")]
+    partial class test
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -86,12 +89,22 @@ namespace AskAMuslimAPI.Migrations
                     b.HasData(
                         new
                         {
+                            Id = "tester",
+                            Category = 16,
+                            Description = "tester",
+                            InstructorId = "2c179b2d-1d3b-42a3-8d6f-d2fd86b73c29",
+                            Level = 1,
+                            ThumbnailUrl = "myPhoto.jpeg",
+                            Title = "tester"
+                        },
+                        new
+                        {
                             Id = "q1",
                             Category = 16,
                             Description = "Learn to memorize the Quran with effective techniques.",
                             InstructorId = "2c179b2d-1d3b-42a3-8d6f-d2fd86b73c29",
                             Level = 1,
-                            ThumbnailUrl = "q1.jpg",
+                            ThumbnailUrl = "https://ask-a-muslim.runasp.net/uploads/course-thumbnails/q1.jpg",
                             Title = "Qur'an tafseer by Mufti menk"
                         },
                         new
@@ -101,7 +114,7 @@ namespace AskAMuslimAPI.Migrations
                             Description = "Master the basics of Tajweed for proper Quran recitation.",
                             InstructorId = "9a5c21b2-2d92-4d0f-bad3-47d4bbd4e611",
                             Level = 1,
-                            ThumbnailUrl = "q2.jpg",
+                            ThumbnailUrl = "https://ask-a-muslim.runasp.net/uploads/course-thumbnails/q2.jpg",
                             Title = "Complete Quran Tafseer"
                         },
                         new
@@ -111,7 +124,7 @@ namespace AskAMuslimAPI.Migrations
                             Description = "Enhance your recitation skills with proper Makharij and Sifaat.",
                             InstructorId = "d1234567-89ab-4cde-8f01-23456789abcd",
                             Level = 2,
-                            ThumbnailUrl = "q3.jpg",
+                            ThumbnailUrl = "https://ask-a-muslim.runasp.net/uploads/course-thumbnails/q3.jpg",
                             Title = "TAFSEER OF QUR'AN |Sheikh Assim Al Hakeem"
                         },
                         new
@@ -121,7 +134,7 @@ namespace AskAMuslimAPI.Migrations
                             Description = "Dive deeper into Quranic understanding and reflection.",
                             InstructorId = "2c179b2d-1d3b-42a3-8d6f-d2fd86b73c29",
                             Level = 3,
-                            ThumbnailUrl = "q4.jpg",
+                            ThumbnailUrl = "https://ask-a-muslim.runasp.net/uploads/course-thumbnails/q4.jpg",
                             Title = "Mufti Menk - Quran Tafseer"
                         },
                         new
@@ -131,7 +144,7 @@ namespace AskAMuslimAPI.Migrations
                             Description = "Welcome to the **Comprehensive Hadith Course - Mishkat-ul-Masabih**...",
                             InstructorId = "9a5c21b2-2d92-4d0f-bad3-47d4bbd4e611",
                             Level = 1,
-                            ThumbnailUrl = "h1.jpg",
+                            ThumbnailUrl = "https://ask-a-muslim.runasp.net/uploads/course-thumbnails/h1.jpg",
                             Title = "Comprehensive Hadith Course - Mishkat-ul-Masabih"
                         },
                         new
@@ -141,7 +154,7 @@ namespace AskAMuslimAPI.Migrations
                             Description = "The Free Advanced Diploma Course in Quran and Hadith...",
                             InstructorId = "9a5c21b2-2d92-4d0f-bad3-47d4bbd4e611",
                             Level = 3,
-                            ThumbnailUrl = "h2.jpg",
+                            ThumbnailUrl = "https://ask-a-muslim.runasp.net/uploads/course-thumbnails/h2.jpg",
                             Title = "Advanced Islamic Diploma Course in Quran and Hadith"
                         },
                         new
@@ -151,7 +164,7 @@ namespace AskAMuslimAPI.Migrations
                             Description = "An in-depth study of Sahih Bukhari collections.",
                             InstructorId = "f2345678-90ab-4def-9f12-34567890bcde",
                             Level = 1,
-                            ThumbnailUrl = "h3.jpg",
+                            ThumbnailUrl = "https://ask-a-muslim.runasp.net/uploads/course-thumbnails/h3.jpg",
                             Title = "Hadith - Semester 1 | Shaykh Dr. Muhammad Salah"
                         },
                         new
@@ -161,7 +174,7 @@ namespace AskAMuslimAPI.Migrations
                             Description = "Study the top authentic Hadith books.",
                             InstructorId = "a3456789-01bc-4fgh-9g23-45678901cdef",
                             Level = 2,
-                            ThumbnailUrl = "h4.jpg",
+                            ThumbnailUrl = "https://ask-a-muslim.runasp.net/uploads/course-thumbnails/h4.jpg",
                             Title = "Al Nawawi's Forty Hadith"
                         },
                         new
@@ -171,7 +184,7 @@ namespace AskAMuslimAPI.Migrations
                             Description = "Learn the fundamentals of Islamic beliefs and Aqeedah.",
                             InstructorId = "626b8c7f-f4d4-4467-bb37-570f1aa6fd66",
                             Level = 1,
-                            ThumbnailUrl = "a1.jpg",
+                            ThumbnailUrl = "https://ask-a-muslim.runasp.net/uploads/course-thumbnails/a1.jpg",
                             Title = "principles of belief"
                         },
                         new
@@ -181,7 +194,7 @@ namespace AskAMuslimAPI.Migrations
                             Description = "Explore advanced topics in Islamic beliefs and theology.",
                             InstructorId = "a3456789-01bc-4fgh-9g23-45678901cdef",
                             Level = 3,
-                            ThumbnailUrl = "a2.jpg",
+                            ThumbnailUrl = "https://ask-a-muslim.runasp.net/uploads/course-thumbnails/a2.jpg",
                             Title = "Aqeedah/Creed"
                         },
                         new
@@ -191,7 +204,7 @@ namespace AskAMuslimAPI.Migrations
                             Description = "Study the beliefs of Ahlus Sunnah wal Jama'ah.",
                             InstructorId = "b4567890-12cd-5ghi-0h34-56789012def0",
                             Level = 2,
-                            ThumbnailUrl = "a3.jpg",
+                            ThumbnailUrl = "https://ask-a-muslim.runasp.net/uploads/course-thumbnails/a3.jpg",
                             Title = "Islamic Beliefs and Practices"
                         },
                         new
@@ -201,7 +214,7 @@ namespace AskAMuslimAPI.Migrations
                             Description = "Learn the fundamentals of Islamic beliefs and Aqeedah.",
                             InstructorId = "d1234567-89ab-4cde-8f01-23456789abcd",
                             Level = 1,
-                            ThumbnailUrl = "a4.jpg",
+                            ThumbnailUrl = "https://ask-a-muslim.runasp.net/uploads/course-thumbnails/a4.jpg",
                             Title = "Fundamentals of Aqeedah"
                         },
                         new
@@ -211,7 +224,7 @@ namespace AskAMuslimAPI.Migrations
                             Description = "Learn the principles of Islamic law and jurisprudence.",
                             InstructorId = "626b8c7f-f4d4-4467-bb37-570f1aa6fd66",
                             Level = 2,
-                            ThumbnailUrl = "f1.jpg",
+                            ThumbnailUrl = "https://ask-a-muslim.runasp.net/uploads/course-thumbnails/f1.jpg",
                             Title = "Fiqh Of Ramadan"
                         },
                         new
@@ -221,7 +234,7 @@ namespace AskAMuslimAPI.Migrations
                             Description = "Explore advanced topics in Islamic law and jurisprudence.",
                             InstructorId = "d1234567-89ab-4cde-8f01-23456789abcd",
                             Level = 1,
-                            ThumbnailUrl = "f2.jpg",
+                            ThumbnailUrl = "https://ask-a-muslim.runasp.net/uploads/course-thumbnails/f2.jpg",
                             Title = "Fiqh - Semester 1 | Shaykh Assim Al-Hakeem"
                         },
                         new
@@ -231,7 +244,7 @@ namespace AskAMuslimAPI.Migrations
                             Description = "Study the principles of Islamic law and ethics.",
                             InstructorId = "d1234567-89ab-4cde-8f01-23456789abcd",
                             Level = 2,
-                            ThumbnailUrl = "f3.jpg",
+                            ThumbnailUrl = "https://ask-a-muslim.runasp.net/uploads/course-thumbnails/f3.jpg",
                             Title = "Islamic Fiqh"
                         },
                         new
@@ -241,7 +254,7 @@ namespace AskAMuslimAPI.Migrations
                             Description = "Learn the principles of Islamic law and jurisprudence.",
                             InstructorId = "b4567890-12cd-5ghi-0h34-56789012def0",
                             Level = 1,
-                            ThumbnailUrl = "f4.jpg",
+                            ThumbnailUrl = "https://ask-a-muslim.runasp.net/uploads/course-thumbnails/f4.jpg",
                             Title = "FIQH IN ISLAM based on Sharh al-Umdah"
                         },
                         new
@@ -251,7 +264,7 @@ namespace AskAMuslimAPI.Migrations
                             Description = "Learn the fundamentals of Islamic beliefs and Aqeedah.",
                             InstructorId = "626b8c7f-f4d4-4467-bb37-570f1aa6fd66",
                             Level = 1,
-                            ThumbnailUrl = "fa1.jpg",
+                            ThumbnailUrl = "https://ask-a-muslim.runasp.net/uploads/course-thumbnails/fa1.jpg",
                             Title = "Faith in Islam"
                         },
                         new
@@ -261,7 +274,7 @@ namespace AskAMuslimAPI.Migrations
                             Description = "Explore advanced topics in Islamic beliefs and theology.",
                             InstructorId = "626b8c7f-f4d4-4467-bb37-570f1aa6fd66",
                             Level = 3,
-                            ThumbnailUrl = "fa2.jpg",
+                            ThumbnailUrl = "https://ask-a-muslim.runasp.net/uploads/course-thumbnails/fa2.jpg",
                             Title = "The Six Articles of Faith in Islam"
                         },
                         new
@@ -271,7 +284,7 @@ namespace AskAMuslimAPI.Migrations
                             Description = "Study the beliefs of Ahlus Sunnah wal Jama'ah.",
                             InstructorId = "d1234567-89ab-4cde-8f01-23456789abcd",
                             Level = 1,
-                            ThumbnailUrl = "fa3.jpg",
+                            ThumbnailUrl = "https://ask-a-muslim.runasp.net/uploads/course-thumbnails/fa3.jpg",
                             Title = "Islamic Faith"
                         },
                         new
@@ -281,7 +294,7 @@ namespace AskAMuslimAPI.Migrations
                             Description = "Learn the fundamentals of Islamic beliefs and Aqeedah.",
                             InstructorId = "b4567890-12cd-5ghi-0h34-56789012def0",
                             Level = 1,
-                            ThumbnailUrl = "fa4.jpg",
+                            ThumbnailUrl = "https://ask-a-muslim.runasp.net/uploads/course-thumbnails/fa4.jpg",
                             Title = "Islamic Reminders"
                         });
                 });
