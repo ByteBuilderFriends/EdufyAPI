@@ -7,7 +7,7 @@
         {
             //Request.Scheme = hhtp/https - Request.Host = localhost:5000 or example.com - Path.GetFileName(lesson.ThumbnailUrl) = Example: image1.jpg
             //For example: https://localhost:5000/lesson-thumbnails/image1.jpg
-            return $"{request.Scheme}://{request.Host}/{folder}/{Path.GetFileName(fileName)}";
+            return $"{request.Scheme}://{request.Host}/wwwroot/uploads/{folder}/{Path.GetFileName(fileName)}";
         }
     }
 }
