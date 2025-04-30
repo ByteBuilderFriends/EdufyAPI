@@ -463,6 +463,8 @@ namespace EdufyAPI.Controllers.RoleControllers
             var tokenHandler = new JwtSecurityTokenHandler();
             var now = DateTime.UtcNow;
 
+            int TokenExpirationDays = int.TryParse(jwtSettings["TokenExpirationDays"], out var days) ? days : 10; // Default to 10 days if not set
+
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[]
@@ -475,7 +477,7 @@ namespace EdufyAPI.Controllers.RoleControllers
 
                 }),
                 NotBefore = now,
-                Expires = now.AddDays(30),
+                Expires = now.AddDays(TokenExpirationDays),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256),
                 Issuer = jwtSettings["Issuer"],
                 Audience = jwtSettings["Audience"],
