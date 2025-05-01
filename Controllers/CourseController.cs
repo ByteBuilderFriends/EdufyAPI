@@ -123,7 +123,7 @@ namespace EdufyAPI.Controllers
 
             try
             {
-                var courseDtos = await _memoryCache.GetDataAsync<IEnumerable<CourseReadByIdDTO>>(cacheKey);
+                var courseDtos = await _memoryCache.GetDataAsync<IEnumerable<CourseReadDTO>>(cacheKey);
                 if (courseDtos == null)
                 {
                     if (!Enum.TryParse(typeof(CourseCategory), categoryName, true, out var categoryEnum))
@@ -135,9 +135,9 @@ namespace EdufyAPI.Controllers
                         .GetByCondition(c => c.Category == category);
 
                     if (!courses.Any())
-                        return Ok(Enumerable.Empty<CourseReadByIdDTO>());
+                        return Ok(Enumerable.Empty<CourseReadDTO>());
 
-                    courseDtos = _mapper.Map<IEnumerable<CourseReadByIdDTO>>(courses);
+                    courseDtos = _mapper.Map<IEnumerable<CourseReadDTO>>(courses);
 
                     foreach (var courseDto in courseDtos)
                     {
