@@ -1,4 +1,5 @@
 ﻿using AskAMuslimAPI.Configurations;
+using AskAMuslimAPI.Middlewares;
 using AskAMuslimAPI.Services;
 using AskAMuslimAPI.Services.Interfaces;
 using EdufyAPI.DTOs;
@@ -188,25 +189,25 @@ app.UseStaticFiles();   // It enables requests to the wwwroot folder, making ima
 #region Middleware Configuration
 // 🔹 Configure middleware
 
-//if (app.Environment.IsDevelopment())
-//{
+
+// Swagger 
 app.UseSwagger();
+app.UseSwaggerUI();
+
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Ask A Muslim API V1");
 });
-//}
 
-//if (app.Environment.IsDevelopment())
-//{
-app.UseSwagger();
-app.UseSwaggerUI();
-//}
 
-app.UseHttpsRedirection();
+
+
+if (app.Environment.IsDevelopment())
+    app.UseMiddleware<ProfilingMiddleware>();
 
 app.UseCors("AllowAll");
 
+app.UseHttpsRedirection();
 // 🔹 Enable Authentication & Authorization middleware
 app.UseAuthentication(); // Must come before Authorization
 app.UseAuthorization();
