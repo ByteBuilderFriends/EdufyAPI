@@ -167,7 +167,7 @@ namespace EdufyAPI.Controllers
 
             try
             {
-                var courseDtos = await _memoryCache.GetDataAsync<IEnumerable<CourseReadByIdDTO>>(cacheKey);
+                var courseDtos = await _memoryCache.GetDataAsync<IEnumerable<CourseReadDTO>>(cacheKey);
                 if (courseDtos == null)
                 {
                     if (!Enum.TryParse(typeof(CourseLevel), levelName, true, out var levelEnum))
@@ -179,9 +179,9 @@ namespace EdufyAPI.Controllers
                         .GetByCondition(c => c.Level == level);
 
                     if (!courses.Any())
-                        return Ok(Enumerable.Empty<CourseReadByIdDTO>());
+                        return Ok(Enumerable.Empty<CourseReadDTO>());
 
-                    courseDtos = _mapper.Map<IEnumerable<CourseReadByIdDTO>>(courses);
+                    courseDtos = _mapper.Map<IEnumerable<CourseReadDTO>>(courses);
 
                     foreach (var courseDto in courseDtos)
                     {
@@ -213,7 +213,7 @@ namespace EdufyAPI.Controllers
             const string cacheKeyPrefix = "instructor_courses_";  // Cache prefix for courses by instructor.
             var cacheKey = $"{cacheKeyPrefix}{instructorId}";
 
-            var courseDtos = await _memoryCache.GetDataAsync<IEnumerable<CourseReadByIdDTO>>(cacheKey);
+            var courseDtos = await _memoryCache.GetDataAsync<IEnumerable<CourseReadDTO>>(cacheKey);
 
             try
             {
@@ -222,9 +222,9 @@ namespace EdufyAPI.Controllers
                     // Cache is empty, so retrieve from database.
                     var courses = await _unitOfWork.CourseRepository.GetByCondition(c => c.InstructorId == instructorId);
                     if (!courses.Any())
-                        return Ok(Enumerable.Empty<CourseReadByIdDTO>());
+                        return Ok(Enumerable.Empty<CourseReadDTO>());
 
-                    courseDtos = _mapper.Map<IEnumerable<CourseReadByIdDTO>>(courses);
+                    courseDtos = _mapper.Map<IEnumerable<CourseReadDTO>>(courses);
                     foreach (var courseDto in courseDtos)
                     {
                         courseDto.ThumbnailUrl = ConstructFileUrlHelper.ConstructFileUrl(Request, ThumbnailsFolderName, courseDto.ThumbnailUrl);
