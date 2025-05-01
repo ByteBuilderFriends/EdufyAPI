@@ -157,6 +157,20 @@ namespace EdufyAPI.RoleSeeding
                     PhoneNumber = "0334455667",
                     ConcurrencyStamp = "fixed-concurrency-stamp-8",
                     SecurityStamp = "fixed-security-stamp-8"
+                },
+                new Instructor
+                {
+                    Id = "b4567890-12cd-5ghi-0h34-56789012def1",
+                    FirstName = "Zad",
+                    LastName = "Academy",
+                    Email = "zad.academy@example.com",
+                    NormalizedEmail = "ZAD.ACADEMY@EXAMPLE.COM",
+                    UserName = "zad.academy",
+                    NormalizedUserName = "ZAD.ACADEMY",
+                    PasswordHash = "AQAAAAIAAYagAAAAEDy4zHzmVDpQm3uvHQclPBfiD/NvWb8IlA6tbjdzGp5B0V5RBoTxAjB4vKnV8qvG8w==",
+                    PhoneNumber = "0334455667",
+                    ConcurrencyStamp = "fixed-concurrency-stamp-9",
+                    SecurityStamp = "fixed-security-stamp-9"
                 }
                 };
 

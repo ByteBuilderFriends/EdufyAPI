@@ -116,7 +116,7 @@ namespace EdufyAPI.Controllers
         }
 
         [HttpGet("ByName/{categoryName}")]
-        public async Task<ActionResult<IEnumerable<CourseReadByIdDTO>>> GetCourseByCategoryName(string categoryName)
+        public async Task<ActionResult<IEnumerable<CourseReadDTO>>> GetCourseByCategoryName(string categoryName)
         {
             const string cacheKeyPrefix = "course_category_name_";
             var cacheKey = $"{cacheKeyPrefix}{categoryName.ToLower()}";
@@ -160,7 +160,7 @@ namespace EdufyAPI.Controllers
 
         // Get Courses by its Level
         [HttpGet("ByLevelName/{levelName}")]
-        public async Task<ActionResult<IEnumerable<CourseReadByIdDTO>>> GetCourseByLevelName(string levelName)
+        public async Task<ActionResult<IEnumerable<CourseReadDTO>>> GetCourseByLevelName(string levelName)
         {
             const string cacheKeyPrefix = "course_level_name_";
             var cacheKey = $"{cacheKeyPrefix}{levelName.ToLower()}";
@@ -208,7 +208,7 @@ namespace EdufyAPI.Controllers
         /// <param name="instructorId">The unique identifier of the instructor.</param>
         /// <returns>A list of courses assigned to the instructor.</returns>
         [HttpGet("{instructorId}")]
-        public async Task<ActionResult<IEnumerable<CourseReadByIdDTO>>> GetInstructorCourses(string instructorId)
+        public async Task<ActionResult<IEnumerable<CourseReadDTO>>> GetInstructorCourses(string instructorId)
         {
             const string cacheKeyPrefix = "instructor_courses_";  // Cache prefix for courses by instructor.
             var cacheKey = $"{cacheKeyPrefix}{instructorId}";
