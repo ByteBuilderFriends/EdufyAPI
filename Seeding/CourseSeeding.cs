@@ -16,6 +16,7 @@ namespace EdufyAPI.RoleSeeding
             var muhammadSalah = "f2345678-90ab-4def-9f12-34567890bcde";
             var ibnUthaymeen = "a3456789-01bc-4fgh-9g23-45678901cdef";
             var ibnFarooq = "b4567890-12cd-5ghi-0h34-56789012def0";
+            var zadAcademy = "b4567890-12cd-5ghi-0h34-56789012def1";
 
 
             var courses = new List<Course>
@@ -61,6 +62,36 @@ namespace EdufyAPI.RoleSeeding
                     ThumbnailUrl = "q4.jpg",
                     InstructorId = muftiMenk
                 },
+                new Course
+                {
+                    Id = "q5",
+                    Title = "Scientific Miracles In The Quran",
+                    Description = "Learn the fundamentals of Quranic Arabic grammar.",
+                    Category = CourseCategory.Quran,
+                    Level = CourseLevel.Beginner,
+                    ThumbnailUrl = "q5.jpg",
+                    InstructorId = aam
+                },
+                new Course
+                {
+                    Id = "q6",
+                    Title = "Muhammad Salah - Tafseer Quran",
+                    Description = "Explore the linguistic miracles of the Quran.",
+                    Category = CourseCategory.Quran,
+                    Level = CourseLevel.Advanced,
+                    ThumbnailUrl = "q6.jpg",
+                    InstructorId = muhammadSalah
+                },
+                new Course
+                {
+                    Id = "q7",
+                    Title = "Tafsir - Semester 1 - Zad Academy",
+                    Description = "Learn the fundamentals of Quranic Arabic grammar.",
+                    Category = CourseCategory.Quran,
+                    Level = CourseLevel.Beginner,
+                    ThumbnailUrl = "q7.jpg",
+                    InstructorId = zadAcademy
+                },
                 #endregion
 
                 #region Hadith Courses
@@ -68,7 +99,7 @@ namespace EdufyAPI.RoleSeeding
                 {
                     Id = "h1",
                     Title = "Comprehensive Hadith Course - Mishkat-ul-Masabih",
-                    Description = "Welcome to the **Comprehensive Hadith Course - Mishkat-ul-Masabih**...",
+                    Description = "Welcome to the Comprehensive Hadith Course - Mishkat-ul-Masabih.",
                     Category = CourseCategory.Hadith,
                     Level = CourseLevel.Beginner,
                     ThumbnailUrl = "h1.jpg",
@@ -103,6 +134,36 @@ namespace EdufyAPI.RoleSeeding
                     Level = CourseLevel.Intermediate,
                     ThumbnailUrl = "h4.jpg",
                     InstructorId = ibnUthaymeen
+                },
+                new Course
+                {
+                    Id = "h5",
+                    Title = "Characteristics of Prophet Ash Shama'il Al Muhammadiyah",
+                    Description = "An in-depth study of Sahih Muslim collections.",
+                    Category = CourseCategory.Hadith,
+                    Level = CourseLevel.Beginner,
+                    ThumbnailUrl = "h5.jpg",
+                    InstructorId = assimAlhakeem
+                },
+                new Course
+                {
+                    Id = "h6",
+                    Title = "Hadith - Semester 2 | Shaykh Dr. Muhammad Salah",
+                    Description = "An in-depth study of Sahih Muslim collections.",
+                    Category = CourseCategory.Hadith,
+                    Level = CourseLevel.Advanced,
+                    ThumbnailUrl = "h6.jpg",
+                    InstructorId = muhammadSalah
+                },
+                new Course
+                {
+                    Id = "h7",
+                    Title = "Hadith with Mufti Menk",
+                    Description = "An in-depth study of Sahih Muslim collections.",
+                    Category = CourseCategory.Hadith,
+                    Level = CourseLevel.Advanced,
+                    ThumbnailUrl = "h7.jpg",
+                    InstructorId = muftiMenk
                 },
                 #endregion
 
@@ -147,6 +208,36 @@ namespace EdufyAPI.RoleSeeding
                     ThumbnailUrl = "a4.jpg",
                     InstructorId = assimAlhakeem
                 },
+                new Course
+                {
+                    Id = "a5",
+                    Title = "Aqeedah - Semester 1 | Zad Academy",
+                    Description = "Explore advanced topics in Islamic beliefs and theology.",
+                    Category = CourseCategory.Aqeeda,
+                    Level = CourseLevel.Beginner,
+                    ThumbnailUrl = "a5.jpg",
+                    InstructorId = zadAcademy
+                },
+                new Course
+                {
+                    Id = "a6",
+                    Title = "Aqeedah - Semester 2 | Zad Academy",
+                    Description = "Study the beliefs of Ahlus Sunnah wal Jama'ah.",
+                    Category = CourseCategory.Aqeeda,
+                    Level = CourseLevel.Intermediate,
+                    ThumbnailUrl = "a6.jpg",
+                    InstructorId = zadAcademy
+                },
+                new Course
+                {
+                    Id = "a7",
+                    Title = "Aqeedah - Semester 3 | Zad Academy",
+                    Description = "Study the beliefs of Ahlus Sunnah wal Jama'ah.",
+                    Category = CourseCategory.Aqeeda,
+                    Level = CourseLevel.Advanced,
+                    ThumbnailUrl = "a7.jpg",
+                    InstructorId = zadAcademy
+                },
                 #endregion
 
                 #region Fiqh Courses
@@ -190,6 +281,36 @@ namespace EdufyAPI.RoleSeeding
                     ThumbnailUrl = "f4.jpg",
                     InstructorId = ibnFarooq
                 },
+                new Course
+                {
+                    Id = "f5",
+                    Title = "Fiqh - Semester 2 | Shaykh Assim Al-Hakeem",
+                    Description = "Explore advanced topics in Islamic law and jurisprudence.",
+                    Category = CourseCategory.Fiqh,
+                    Level = CourseLevel.Advanced,
+                    ThumbnailUrl = "f5.jpg",
+                    InstructorId = assimAlhakeem
+                },
+                new Course
+                {
+                    Id = "f6",
+                    Title = "Fiqh - Semester 3 | Shaykh Assim Al-Hakeem",
+                    Description = "Study the principles of Islamic law and ethics.",
+                    Category = CourseCategory.Fiqh,
+                    Level = CourseLevel.Advanced,
+                    ThumbnailUrl = "f6.jpg",
+                    InstructorId = assimAlhakeem
+                },
+                new Course
+                {
+                    Id = "f7",
+                    Title = "Fiqh Reflections",
+                    Description = "Study the principles of Islamic law and ethics.",
+                    Category = CourseCategory.Fiqh,
+                    Level = CourseLevel.Intermediate,
+                    ThumbnailUrl = "f7.jpg",
+                    InstructorId = aam
+                },
                 #endregion
 
                 #region Faith Courses
@@ -232,9 +353,39 @@ namespace EdufyAPI.RoleSeeding
                     Level = CourseLevel.Beginner,
                     ThumbnailUrl = "fa4.jpg",
                     InstructorId = ibnFarooq
-                }
+                },
+                new Course
+                {
+                    Id = "fa5",
+                    Title = "Tarbiyah Islamiyah - Semester 1 | Zad Academy",
+                    Description = "Explore advanced topics in Islamic beliefs and theology.",
+                    Category = CourseCategory.Faith,
+                    Level = CourseLevel.Beginner,
+                    ThumbnailUrl = "fa5.jpg",
+                    InstructorId = zadAcademy
+                },
+                new Course
+                {
+                    Id = "fa6",
+                    Title = "Tarbiyah Islamiyah - Semester 2 | Zad Academy",
+                    Description = "Study the beliefs of Ahlus Sunnah wal Jama'ah.",
+                    Category = CourseCategory.Faith,
+                    Level = CourseLevel.Intermediate,
+                    ThumbnailUrl = "fa6.jpg",
+                    InstructorId = zadAcademy
+                },
+                new Course
+                {
+                    Id = "fa7",
+                    Title = "Tarbiyah Islamiyah - Semester 3 | Zad Academy",
+                    Description = "Study the beliefs of Ahlus Sunnah wal Jama'ah.",
+                    Category = CourseCategory.Faith,
+                    Level = CourseLevel.Advanced,
+                    ThumbnailUrl = "fa7.jpg",
+                    InstructorId = zadAcademy
+                },
                 #endregion
-        };
+            };
 
             // Add the courses to the model builder
             modelBuilder.Entity<Course>().HasData(courses);

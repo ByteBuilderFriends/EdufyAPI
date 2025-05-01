@@ -12,22 +12,41 @@ namespace EdufyAPI.RoleSeeding
             var q2 = "q2";
             var q3 = "q3";
             var q4 = "q4";
+            var q5 = "q5";
+            var q6 = "q6";
+            var q7 = "q7";
+
             var h1 = "h1";
             var h2 = "h2";
             var h3 = "h3";
             var h4 = "h4";
+            var h5 = "h5";
+            var h6 = "h6";
+            var h7 = "h7";
+
             var a1 = "a1";
             var a2 = "a2";
             var a3 = "a3";
             var a4 = "a4";
+            var a5 = "a5";
+            var a6 = "a6";
+            var a7 = "a7";
+
             var f1 = "f1";
             var f2 = "f2";
             var f3 = "f3";
             var f4 = "f4";
+            var f5 = "f5";
+            var f6 = "f6";
+            var f7 = "f7";
+
             var fa1 = "fa1";
             var fa2 = "fa2";
             var fa3 = "fa3";
             var fa4 = "fa4";
+            var fa5 = "fa5";
+            var fa6 = "fa6";
+            var fa7 = "fa7";
 
 
             modelBuilder.Entity<Lesson>().HasData(
@@ -96,6 +115,54 @@ namespace EdufyAPI.RoleSeeding
                     Content = "This lesson discusses the significance of memorizing and reciting the Quran regularly.",
                     ExternalVideoUrl = "https://youtu.be/2XMyXyLs1fc?si=wAAyLxgvWZtKqsQk"
                 },
+                new Lesson
+                {
+                    Id = "l1q5",
+                    CourseId = q5,
+                    Title = "Sun's Orbit | Scientific Miracles In The Quran",
+                    Content = "This lesson covers the importance of understanding the meanings of the Quran.",
+                    ExternalVideoUrl = "https://youtu.be/CBYnOQL4M9U?si=0DNylkvKZg_u2Ffr"
+                },
+                new Lesson
+                {
+                    Id = "l2q5",
+                    CourseId = q5,
+                    Title = "Big Bang | Scientific Miracles In The Quarn",
+                    Content = "This lesson discusses the significance of applying the teachings of the Quran in daily life.",
+                    ExternalVideoUrl = "https://youtu.be/mtDDmeWdjEY?si=l0b5c2I0FyIQWCUA"
+                },
+                new Lesson
+                {
+                    Id = "l1q6",
+                    CourseId = q6,
+                    Title = "Why is Tafsir al-Tabari not translated in English? | Dr Muhammad Salah",
+                    Content = "This lesson emphasizes the importance of understanding the Quran as a guide for life.",
+                    ExternalVideoUrl = "https://youtu.be/85fygWT-dt8?si=ddGH27LhXxlEJEMl"
+                },
+                new Lesson
+                {
+                    Id = "l2q6",
+                    CourseId = q6,
+                    Title = "If we stay away from major sins, will Allah grant us Paradise? | Dr Muhammad Salah",
+                    Content = "This lesson discusses the significance of understanding the Quran as a source of guidance.",
+                    ExternalVideoUrl = "https://youtu.be/-6GEhL3T2cQ?si=CEEDF7rDIAPLUTfp"
+                },
+                new Lesson
+                {
+                    Id = "l1q7",
+                    CourseId = q7,
+                    Title = "Tafsir - Semester 1 - Introduction | Shaykh Dr. Ahmad ibn Saifuddin | Zad Academy English",
+                    Content = "This lesson covers the importance of understanding the Quran as a source of wisdom.",
+                    ExternalVideoUrl = "https://youtu.be/084DT4u1CnA?si=GTnc4c7pF5-9ZCd_"
+                },
+                new Lesson
+                {
+                    Id = "l2q7",
+                    CourseId = q7,
+                    Title = "Tafsir - Semester 1 - Lecture 1 | Shaykh Dr. Ahmad ibn Saifuddin | Zad Academy English",
+                    Content = "This lesson discusses the significance of understanding the Quran as a source of knowledge.",
+                    ExternalVideoUrl = "https://youtu.be/cElkGs8Aw8k?si=39JOdVcD8MDTw7X9"
+                },
             #endregion
 
             #region Hadith Lessons
@@ -162,6 +229,55 @@ namespace EdufyAPI.RoleSeeding
                     Title = "03-Explanation of the third Hadith ''Islam is built upon five'' by Ibn Uthaymeen",
                     Content = "This lesson discusses the significance of perseverance in the face of challenges.",
                     ExternalVideoUrl = "https://youtu.be/yB0IK5iF5sI?si=9BPv146lsh6p-uLF"
+                },
+                new Lesson
+                {
+                    Id = "l1h5",
+                    CourseId = h5,
+                    Title = "Characteristics of Prophet Ash Shama'il Al Muhammadiyah VS Seerah &Benefits of learning this science",
+                    Content = "This lesson covers the importance of seeking knowledge with a pure intention.",
+                    ExternalVideoUrl = "https://youtu.be/rmLwEI3Vl5Q?si=05Dp5yDxdwqduBkL"
+                },
+                new Lesson
+                {
+                    Id = "l2h5",
+                    CourseId = h5,
+                    Title = "How did Prophet ﷺ look like? (Part 1) Noble features of the Prophet ﷺ #islam #quran assim al hakeem",
+                    Content = "This lesson discusses the significance of applying knowledge in daily life.",
+                    ExternalVideoUrl = "https://youtu.be/5pfF2PU_7iQ?si=dmxH0161Xah_mFav"
+                },
+                new Lesson
+                {
+                    Id = "l1h6",
+                    CourseId = h6,
+                    Title = "Hadith - Semester 2 - Introduction | Shaykh Dr. Muhammad Salah | Zad Academy English",
+                    Content = "This lesson emphasizes the importance of seeking knowledge with humility.",
+                    ExternalVideoUrl = "https://youtu.be/B5jp7shbu5A?si=NQaXOPD-aqLONTbG"
+                },
+                new Lesson
+                {
+                    Id = "l2h6",
+                    CourseId = h6,
+                    Title = "Hadith - Semester 2 - Lecture 1 | Shaykh Dr. Muhammad Salah | Zad Academy English.",
+                    Content = "This lesson covers the importance of seeking knowledge with sincerity",
+                    ExternalVideoUrl = "https://youtu.be/KXeyOFyJEm8?si=4gZXI1Dkytts9whl"
+                },
+
+                new Lesson
+                {
+                    Id = "l1h7",
+                    CourseId = h7,
+                    Title = "Immorality - What do you do? - Mufti Menk",
+                    Content = "This lesson covers the importance of seeking knowledge with sincerity.",
+                    ExternalVideoUrl = "https://youtu.be/4-X4mF_MlDs?si=XDLI8dCwK-rQTcoG"
+                },
+                new Lesson
+                {
+                    Id = "l2h7",
+                    CourseId = h7,
+                    Title = "What to do when you see something wrong - Mufti Menk",
+                    Content = "This lesson discusses the significance of seeking knowledge with a pure heart.",
+                    ExternalVideoUrl = "https://youtu.be/q6jXoxHNL6E?si=9pUx8u2cLt5xTli6"
                 },
             #endregion
 
@@ -230,6 +346,54 @@ namespace EdufyAPI.RoleSeeding
                     Content = "This lesson discusses the significance of belief in Divine Decree.",
                     ExternalVideoUrl = "https://youtu.be/1Rj5EtLGnKU?si=q595x4yKEz0sIMVj"
                 },
+                new Lesson
+                {
+                    Id = "l1a5",
+                    CourseId = a5,
+                    Title = "Aqeedah - Semester 1 - Introduction | Shaykh Ahmad Al Romh | Zad Academy English",
+                    Content = "This lesson covers the importance of understanding the concept of Iman.",
+                    ExternalVideoUrl = "https://youtu.be/iz2p-5Hj89E?si=i4IftM-viksIrtJJ"
+                },
+                new Lesson
+                {
+                    Id = "l2a5",
+                    CourseId = a5,
+                    Title = "Aqeedah - Semester 1 - Lecture 1 | Shaykh Ahmad Al Romh | Zad Academy English",
+                    Content = "This lesson discusses the significance of understanding the concept of Kufr.",
+                    ExternalVideoUrl = "https://youtu.be/fsB2W88_en0?si=8fthYQO9c4k8V4YZ"
+                },
+                new Lesson
+                {
+                    Id = "l1a6",
+                    CourseId = a6,
+                    Title = "Aqeedah - Semester 2 - Introduction | Shaykh Ibrahim Zidan | Zad Academy English",
+                    Content = "This lesson emphasizes the importance of understanding the concept of Nifaq.",
+                    ExternalVideoUrl = "https://youtu.be/GY_puy17iTg?si=_1DCoM4GlVso4vfn"
+                },
+                new Lesson
+                {
+                    Id = "l2a6",
+                    CourseId = a6,
+                    Title = "Aqeedah - Semester 2 - Lecture 1 | Shaykh Ahmad Al Romh | Zad Academy English",
+                    Content = "This lesson discusses the significance of understanding the concept of Tawheed.",
+                    ExternalVideoUrl = "https://youtu.be/luJZ1e46ezI?si=jsSgGBEW7T_R7l5w"
+                },
+                new Lesson
+                {
+                    Id = "l1a7",
+                    CourseId = a7,
+                    Title = "Aqeedah - Semester 3 - Introduction | Shaykh Ibrahim Zidan | Zad Academy English",
+                    Content = "This lesson covers the importance of understanding the concept of Iman.",
+                    ExternalVideoUrl = "https://youtu.be/MKGNQRdNnuU?si=vmnuIMV5sCPMbfGH"
+                },
+                new Lesson
+                {
+                    Id = "l2a7",
+                    CourseId = a7,
+                    Title = "Aqeedah - Semester 3 - Lecture 1 | Shaykh Ibrahim Zidan | Zad Academy English",
+                    Content = "This lesson discusses the significance of understanding the concept of Kufr.",
+                    ExternalVideoUrl = "https://youtu.be/NAf-tkZ3jlg?si=XAtfaY1FKuq7kgIy"
+                },
             #endregion
 
             #region Fiqh Lessons
@@ -297,6 +461,54 @@ namespace EdufyAPI.RoleSeeding
                     Content = "This lesson discusses the significance of understanding the rules of inheritance.",
                     ExternalVideoUrl = "https://youtu.be/PJrknK2MZck?si=EF4dkX9mXtJefR4w"
                 },
+                new Lesson
+                {
+                    Id = "l1f5",
+                    CourseId = f5,
+                    Title = "Fiqh - Semester 2 - Introduction | Shaykh Assim Al-Hakeem | Zad Academy English",
+                    Content = "This lesson covers the importance of understanding the rules of purification.",
+                    ExternalVideoUrl = "https://youtu.be/klqoNWM4VAY?si=ri8J8zol4qXqQbWS"
+                },
+                new Lesson
+                {
+                    Id = "l2f5",
+                    CourseId = f5,
+                    Title = "Fiqh - Semester 2 - Lecture 1 | Shaykh Assim Al-Hakeem | Zad Academy English",
+                    Content = "This lesson discusses the significance of understanding the rules of prayer.",
+                    ExternalVideoUrl = "https://youtu.be/wxuWOrtPHaQ?si=CaNUCTRT4VXGSPSk"
+                },
+                new Lesson
+                {
+                    Id = "l1f6",
+                    CourseId = f6,
+                    Title = "Fiqh - Semester 3 - Introduction | Shaykh Assim Al-Hakeem | Zad Academy English",
+                    Content = "This lesson emphasizes the importance of understanding the rules of fasting.",
+                    ExternalVideoUrl = "https://youtu.be/tZWh2Kjk8w8?si=me3EoJxXSXPRAhoO"
+                },
+                new Lesson
+                {
+                    Id = "l2f6",
+                    CourseId = f6,
+                    Title = "Fiqh - Semester 3 - Lecture 1 | Shaykh Assim Al-Hakeem | Zad Academy English",
+                    Content = "This lesson discusses the significance of understanding the rules of Zakat.",
+                    ExternalVideoUrl = "https://youtu.be/zx4Xg6DKkBQ?si=GO6XCeWC3eH8ExtR"
+                },
+                new Lesson
+                {
+                    Id = "l1f7",
+                    CourseId = f7,
+                    Title = "What is the difference between clean water and cleansing water? | Fiqh Reflections",
+                    Content = "This lesson covers the importance of understanding the rules of Hajj.",
+                    ExternalVideoUrl = "https://youtu.be/StPVvgAzm5M?si=bIIHaJKiuQc-Jn92"
+                },
+                new Lesson
+                {
+                    Id = "l2f7",
+                    CourseId = f7,
+                    Title = "Types Of Water I Can Use To Make Wudu | Fiqh Reflections",
+                    Content = "This lesson discusses the significance of understanding the rules of family matters.",
+                    ExternalVideoUrl = "https://youtu.be/CTS6Hv9qTHw?si=nAEyQOfJ0LA0JEp6"
+                },
             #endregion
 
             #region Faith
@@ -363,6 +575,54 @@ namespace EdufyAPI.RoleSeeding
                     Title = "Message to those who sell out their Deen",
                     Content = "This lesson discusses the significance of understanding the concept of Iman.",
                     ExternalVideoUrl = "https://youtu.be/uioedvBAZb4?si=CjnPuUvnVSyJ1X41"
+                },
+                new Lesson
+                {
+                    Id = "l1fa5",
+                    CourseId = fa5,
+                    Title = "Tarbiyah Islamiyah - Semester 1 - Introduction | Shaykh Ibrahim Zidan | Zad Academy English",
+                    Content = "This lesson covers the importance of understanding the concept of Tawheed.",
+                    ExternalVideoUrl = "https://youtu.be/hFCP7SPGsHQ?si=G9gxXRItQUX8Eom4"
+                },
+                new Lesson
+                {
+                    Id = "l2fa5",
+                    CourseId = fa5,
+                    Title = "Tarbiyah Islamiyah - Semester 1 - Lecture 1 | Shaykh Ibrahim Zidan | Zad Academy English",
+                    Content = "This lesson discusses the significance of understanding the concept of Shirk.",
+                    ExternalVideoUrl = "https://youtu.be/G3TtwBDR508?si=d4x7gDw1jcmiPm45"
+                },
+                new Lesson
+                {
+                    Id = "l1fa6",
+                    CourseId = fa6,
+                    Title = "Tarbiyah Islamiyah - Semester 2 - Introduction | Shaykh Ibrahim Zidan | Zad Academy English",
+                    Content = "This lesson emphasizes the importance of understanding the concept of Iman.",
+                    ExternalVideoUrl = "https://youtu.be/PB3XpZde2JU?si=-MexgBEKCDZFtu7W"
+                },
+                new Lesson
+                {
+                    Id = "l2fa6",
+                    CourseId = fa6,
+                    Title = "Tarbiyah Islamiyah - Semester 2 - Lecture 1 | Shaykh Ibrahim Zidan | Zad Academy English",
+                    Content = "This lesson discusses the significance of understanding the concept of Kufr.",
+                    ExternalVideoUrl = "https://youtu.be/2apUdbF6fh4?si=77IbQwMKDKH-KBNV"
+                },
+                new Lesson
+                {
+                    Id = "l1fa7",
+                    CourseId = fa7,
+                    Title = "Tarbiyah Islamiyah - Semester 3 - Introduction | Shaykh Ibrahim Zidan | Zad Academy English",
+                    Content = "This lesson covers the importance of understanding the concept of Nifaq.",
+                    ExternalVideoUrl = "https://youtu.be/JohV6BNKrzc?si=B4wCGVYkcOd8Cac3"
+                },
+                new Lesson
+                {
+                    Id = "l2fa7",
+                    CourseId = fa7,
+                    Title = "Tarbiyah Islamiyah - Semester 3 - Lecture 1 | Shaykh Ibrahim Zidan | Zad Academy English",
+                    Content = "This lesson discusses the significance of understanding the concept of Tawheed.",
+                    ExternalVideoUrl = "https://youtu.be/W5R0IWE1HAY?si=TL6pScVxgSIrluh2"
                 }
                 #endregion
             );
