@@ -1,7 +1,7 @@
-﻿using AutoMapper;
+﻿using AskAMuslimAPI.Services.Interfaces;
+using AutoMapper;
 using EdufyAPI.DTOs.LessonDTOs;
 using EdufyAPI.Helpers;
-using EdufyAPI.Models;
 using EdufyAPI.Repository.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,15 +11,30 @@ namespace EdufyAPI.Controllers
     [ApiController]
     public class LessonController : ControllerBase
     {
+        private readonly ILessonService _lessonService;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly string ThumbnailsFolderName = "lesson-thumbnails";
         private readonly string VideosFolderName = "lesson-videos";
 
-        public LessonController(IUnitOfWork unitOfWork, IMapper mapper)
+        public LessonController(IUnitOfWork unitOfWork, IMapper mapper, ILessonService lessonService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _lessonService = lessonService;
+        }
+
+        /// <summary>
+        /// Creates a new lesson.
+        /// </summary>
+        /// <param name="createLessonDto">The lesson data.</param>
+        /// <returns>The created lesson.</returns>
+        [HttpPost]
+        public async Task<ActionResult<LessonReadDTO>> CreateLesson(LessonCreateDTO createLessonDto)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            var lesson = _lessonService.CreateLesson(createLessonDto);
+            return CreatedAtAction(nameof(GetLessonByID), new { id = lesson.Id }, lesson);
         }
 
         /// <summary>
@@ -27,27 +42,10 @@ namespace EdufyAPI.Controllers
         /// </summary>
         /// <returns>A list of lessons with their details.</returns>
         [HttpGet]
+        [ProducesResponseType(typeof(IEnumerable<LessonReadDTO>), StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<LessonReadDTO>>> GetAllLessons()
         {
-            var lessons = await _unitOfWork.LessonRepository.GetAllAsync();
-            if (!lessons.Any())
-            {
-                return Ok(Enumerable.Empty<LessonReadDTO>());
-            }
-
-            var lessonDtos = _mapper.Map<IEnumerable<LessonReadDTO>>(lessons);
-            foreach (var lessonDto in lessonDtos)
-            {
-                if (!string.IsNullOrEmpty(lessonDto.ThumbnailUrl))
-                {
-                    lessonDto.ThumbnailUrl = ConstructFileUrlHelper.ConstructFileUrl(Request, ThumbnailsFolderName, lessonDto.ThumbnailUrl);
-                }
-                if (!string.IsNullOrEmpty(lessonDto.VideoUrl))
-                {
-                    lessonDto.VideoUrl = ConstructFileUrlHelper.ConstructFileUrl(Request, VideosFolderName, lessonDto.VideoUrl);
-                }
-            }
-            return Ok(lessonDtos);
+            return await _lessonService.GetAllLessons();
         }
 
         /// <summary>
@@ -102,23 +100,7 @@ namespace EdufyAPI.Controllers
             return Ok(lessonDtos);
         }
 
-        /// <summary>
-        /// Creates a new lesson.
-        /// </summary>
-        /// <param name="createLessonDto">The lesson data.</param>
-        /// <returns>The created lesson.</returns>
-        [HttpPost]
-        public async Task<ActionResult<LessonReadDTO>> CreateLesson(LessonCreateDTO createLessonDto)
-        {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            var lesson = _mapper.Map<Lesson>(createLessonDto);
-            await _unitOfWork.LessonRepository.AddAsync(lesson);
-            await _unitOfWork.SaveChangesAsync();
-
-            var lessonReadDto = _mapper.Map<LessonReadDTO>(lesson);
-            return CreatedAtAction(nameof(GetLessonByID), new { id = lesson.Id }, lessonReadDto);
-        }
 
         /// <summary>
         /// Updates an existing lesson.

@@ -1,4 +1,7 @@
-﻿using EdufyAPI.DTOs;
+﻿using AskAMuslimAPI.Configurations;
+using AskAMuslimAPI.Services;
+using AskAMuslimAPI.Services.Interfaces;
+using EdufyAPI.DTOs;
 using EdufyAPI.Helpers;
 using EdufyAPI.Models;
 using EdufyAPI.Models.Roles;
@@ -118,6 +121,9 @@ builder.Services.AddAuthentication(options =>
 #endregion
 
 
+
+builder.Services.Configure<CacheSettings>(builder.Configuration.GetSection("CacheSettings"));
+
 #region Register services for dependency injection
 // 🔹 Register UnitOfWork and Generic Repository for dependency injection
 
@@ -138,6 +144,7 @@ builder.Services.AddScoped<IQuizService, QuizService>();
 builder.Services.AddScoped<IQuestionService, QuestionService>();
 builder.Services.AddScoped<IOptionService, OptionService>();
 builder.Services.AddScoped<IAnswerService, AnswerService>();
+builder.Services.AddScoped<ILessonService, LessonService>();
 #endregion
 
 
