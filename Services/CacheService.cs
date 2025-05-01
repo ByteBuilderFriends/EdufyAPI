@@ -25,7 +25,7 @@ namespace EdufyAPI.Services
             }
             catch
             {
-                throw;
+                throw new Exception($"Error retrieving data from cache for key: {key}");
             }
         }
 
@@ -41,7 +41,7 @@ namespace EdufyAPI.Services
             }
             catch
             {
-                throw;
+                throw new Exception($"Error setting data in cache for key: {key}");
             }
         }
 
@@ -54,7 +54,7 @@ namespace EdufyAPI.Services
             }
             catch
             {
-                throw;
+                throw new Exception($"Error removing data from cache for key: {key}");
             }
         }
     }
