@@ -34,10 +34,5 @@ namespace EdufyAPI.ViewModels
 
         public IFormFile? ProfilePicture { get; set; }
 
-        // will be implemented in the future
-        //[Display(Name = "Profile Picture")]
-        //public IFormFile ProfilePicture { get; set; }
-
-
     }
 }
