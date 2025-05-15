@@ -15,9 +15,6 @@ namespace EdufyAPI.ViewModels
         [Display(Name = "Email")]
         public string Email { get; set; }
 
-        //[Required]
-        //[Display(Name = "Username")]
-        //public string UserName { get; set; }
 
         [Required]
         [MinLength(6)]
