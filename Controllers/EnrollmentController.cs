@@ -7,6 +7,7 @@ using EdufyAPI.Models;
 using EdufyAPI.Repository.Interfaces;
 using EdufyAPI.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace EdufyAPI.Controllers
 {
